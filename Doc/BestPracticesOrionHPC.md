@@ -1,10 +1,13 @@
 # Basic exercises for best practices in Orion
 v2, February, 2022 Author: Arturo Vera-Ponce de Leon
 
+### What is this?
+This document is intended to be a quick reference guide on basic usage of the NMBU-Orion HPC cluster. For a complete reference please refere to documentation on [Orion](https://orion.nmbu.no/en/home)
+
 **Login into orion** 
 
-To login into Orin we need two things:
-- Establish a VPN connection
+To login into Orion cluster we need two things:
+- Establish a [VPN](https://nmbuhjelp.nmbu.no/tas/public/ssp/content/detail/knowledgeitem?unid=4c4870bb-f0fc-4c9f-b0f5-0c036951436f) connection (if not in a NMBU network)
 - Use a secure-shell command [ssh](https://en.wikipedia.org/wiki/SSH_(Secure_Shell))
 
 For login just type something like this. 
@@ -12,7 +15,7 @@ For login just type something like this.
 ```bash
 $ ssh bio326-21-0@login.orion.nmbu.no
 ```
-*Remember to change to your username bio326-21-x*
+*Remember to change to your username bio326-y-x*
 
 This will ask for your password. Type it
 
@@ -63,8 +66,8 @@ How can I be sure of the number of CPUs and RAM of this "login" computer node an
 * RAM: We need to look for the "Total memory". All this info is allocated in the meminfo file at /proc directory. So we can use the grep command to look for this into the file.
 
 ```
-bio326-21-0@login ~]$ grep MemTotal /proc/meminfo
-MemTotal:       32744196 kB
+[bio326-21-0@login ~]$ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
+MemTotal: 32.7442 GB
 ```
 
 As you can see, this computer is not well suitable for "heavy" computational work. So if we want to do some work (e.g. run BLAST or assembly a genome) we need to send this (job) into a compute node.
@@ -94,49 +97,61 @@ For example we can display the Partition, No. of CPUs, Memmory ammount of each n
 
 ```bash
 [bio326-21-0@login ~]$ sinfo --long --Node
-Thu Mar 11 15:20:21 2021
-NODELIST   NODES    PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON              
-cn-1           1      hugemem       mixed 144    4:18:2 309453        0      1 cpu_xeon none                
-cn-1           1  interactive       mixed 144    4:18:2 309453        0      1 cpu_xeon none                
-cn-2           1      hugemem   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-2           1  interactive   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-3           1       orion*       mixed 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-3           1      hugemem       mixed 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-3           1  interactive       mixed 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-4           1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-4           1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-4           1 verysmallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1     smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1 verysmallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1 verysmallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-7           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-7           1 verysmallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-7           1       lowpri       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-8           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-8           1     smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-8           1 verysmallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1     smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1 verysmallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1       lowpri   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1 verysmallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-12          1     smallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-12          1 verysmallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-13          1       orion*       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
-cn-13          1 verysmallmem       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
-cn-14          1      hugemem       mixed 256    2:64:2 205153        0      1 cpu_amd, none                
-cn-14          1  interactive       mixed 256    2:64:2 205153        0      1 cpu_amd, none                
-gn-0           1          gpu completing* 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-1           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-1           1  interactive       mixed 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-2           1          gpu     drained 64     2:16:2 257710        0      1 cpu_amd, Kill task failed    
-gn-2           1  interactive     drained 64     2:16:2 257710        0      1 cpu_amd, Kill task failed    
-gn-3           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none   
+Thu Feb 10 14:40:12 2022
+NODELIST   NODES   PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON              
+cn-1           1      orion*     drained 144    4:18:2 309453        0      1 cpu_xeon maint               
+cn-1           1     hugemem     drained 144    4:18:2 309453        0      1 cpu_xeon maint               
+cn-2           1     hugemem   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
+cn-2           1 interactive   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
+cn-3           1     hugemem   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
+cn-3           1 interactive   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
+cn-4           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-4           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-4           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-5           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-5           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-5           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-6           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-6           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-6           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-7           1      orion*     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
+cn-7           1    smallmem     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
+cn-7           1      lowpri     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
+cn-7           1 interactive     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
+cn-8           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-8           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-8           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-9           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-9           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-9           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-10          1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-10          1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-10          1      lowpri        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-10          1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
+cn-11          1      orion*   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
+cn-11          1    smallmem   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
+cn-11          1 interactive   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
+cn-12          1      orion*       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-12          1    smallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-12          1 interactive       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-13          1      orion*       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
+cn-13          1    smallmem       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
+cn-14          1     hugemem   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
+cn-14          1      orion*   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
+cn-14          1 interactive   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
+cn-15          1      orion*        idle 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-15          1     hugemem        idle 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-15          1 interactive        idle 32      2:8:2 257738        0      1 cpu_xeon none                
+cn-16          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
+cn-16          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
+cn-16          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
+cn-17          1      orion*        idle 256    2:64:2 103176        0      1 cpu_amd, none                
+cn-17          1     hugemem        idle 256    2:64:2 103176        0      1 cpu_amd, none                
+cn-17          1 interactive        idle 256    2:64:2 103176        0      1 cpu_amd, none                
+gn-0           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
+gn-1           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
+gn-2           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
+gn-3           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none  
 ```
 In this case, the State column showed the status of the node. It means, how many resources can be allocated per node, in this example there are 4 different status: 
 
@@ -152,87 +167,87 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 As a user you can check the ammount of space used in different directories. To check all the disks and partitions in Orion we can run the following command:
 
 ```bash
-bio326-21-0@login ~]$ df -h 
-Filesystem                                   Size  Used Avail Use% Mounted on
-devtmpfs                                      16G     0   16G   0% /dev
-tmpfs                                         16G  316K   16G   1% /dev/shm
-tmpfs                                         16G  837M   15G   6% /run
-tmpfs                                         16G     0   16G   0% /sys/fs/cgroup
-/dev/mapper/centos_login--0-root              28G   18G  9.8G  65% /
-/dev/sdb                                     100G   29G   72G  29% /work
-/dev/sda2                                   1014M  214M  801M  22% /boot
-/dev/sda1                                    200M   12M  189M   6% /boot/efi
-fs-1:/                                       973M  6.0M  967M   1% /net/fs-1
-fs-1:/projects01                              95T   93T  2.3T  98% /net/fs-1/projects01
-fs-1:/home01                                  76T   75T  1.8T  98% /net/fs-1/home01
-tmpfs                                        3.2G  4.0K  3.2G   1% /run/user/1035
-cn-1:/mnt/SCRATCH                             77T   66T   12T  86% /net/cn-1/mnt/SCRATCH
-fs-1:/Transpose                               38T   38T  615G  99% /net/fs-1/Transpose
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10023
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10197
-cn-1:/mnt/labdata01                           81T   79T  1.8T  98% /net/cn-1/mnt/labdata01
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1034
-tmpfs                                        3.2G  8.0K  3.2G   1% /run/user/10209
-fs-1:/SandveLab                               29T   22T  6.7T  77% /net/fs-1/SandveLab
-cn-13:/mnt/SCRATCH2                          148T  145T  3.0T  99% /net/cn-13/mnt/SCRATCH2
-cvmfs2                                       4.9G  3.4G  1.6G  69% /cvmfs/cvmfs-config.galaxyproject.org
-cvmfs2                                       4.9G  3.4G  1.6G  69% /cvmfs/singularity.galaxyproject.org
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1018
-fs-1:/Geno                                    29T   29T  103M 100% /net/fs-1/Geno
-tmpfs                                        3.2G     0  3.2G   0% /run/user/30048
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1004
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10192
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10184
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1028
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10207
-fs-1:/Ngoc                                   2.0T  1.2T  744G  62% /net/fs-1/Ngoc
-fs-1:/Ngoc/.snapshot/weekly.2021-01-17_0010  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/weekly.2021-01-17_0010
-fs-1:/PEPomics01                              34T   31T  2.4T  93% /net/fs-1/PEPomics01
-fs-1:/Ngoc/.snapshot/daily.2021-01-28_0005   103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/daily.2021-01-28_0005
-fs-1:/Ngoc/.snapshot/daily.2021-01-29_0005   103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/daily.2021-01-29_0005
-fs-1:/Ngoc/.snapshot/hourly.2021-01-29_0000  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-29_0000
-fs-1:/Ngoc/.snapshot/hourly.2021-01-28_2100  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-28_2100
-fs-1:/Ngoc/.snapshot/hourly.2021-01-29_0100  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-29_0100
-fs-1:/Ngoc/.snapshot/hourly.2021-01-28_2200  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-28_2200
-fs-1:/Ngoc/.snapshot/hourly.2021-01-28_2300  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-28_2300
-fs-1:/Ngoc/.snapshot/hourly.2021-01-28_2000  103G  103G     0 100% /net/fs-1/Ngoc/.snapshot/hourly.2021-01-28_2000
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10305
-tmpfs                                        3.2G     0  3.2G   0% /run/user/40015
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1080
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1002
-tmpfs                                        3.2G     0  3.2G   0% /run/user/30053
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1029
-tmpfs                                        3.2G     0  3.2G   0% /run/user/30064
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10027
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10205
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1032
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10230
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1011
-tmpfs                                        3.2G     0  3.2G   0% /run/user/10297
-fs-1:/IPVProjects01                           57T   55T  2.4T  96% /net/fs-1/IPVProjects01
-fs-1:/Foreco                                  12T  1.5T   10T  13% /net/fs-1/Foreco
-fs-1:/AmazonAcoustics                        9.5T  3.2T  6.4T  33% /net/fs-1/AmazonAcoustics
-fs-1:/Home_alme                              973G  348G  626G  36% /net/fs-1/Home_alme
-fs-1:/Home_rush                              973G  168G  806G  18% /net/fs-1/Home_rush
-fs-1:/Home_turhamar                          973G  686G  288G  71% /net/fs-1/Home_turhamar
-fs-1:/PreventADALL                           4.8T  1.4T  3.4T  30% /net/fs-1/PreventADALL
-fs-1:/TestFile                               973G  774M  973G   1% /net/fs-1/TestFile
-fs-1:/results01                               95T   90T  5.8T  94% /net/fs-1/results01
-cvmfs2                                       4.9G  3.4G  1.6G  69% /cvmfs/main.galaxyproject.org
-cn-13:/mnt/BACKUP                             71T   34T   38T  48% /net/cn-13/mnt/BACKUP
-10.222.0.101:/mnt/SALMON-SEQDATA              37T   37T  168G 100% /net/10.222.0.101/mnt/SALMON-SEQDATA
-fs-1:/results03                               48T   45T  3.3T  94% /net/fs-1/results03
-fs-1:/HumGut                                  19T   15T  4.7T  76% /net/fs-1/HumGut
-fs-1:/AquaGen                                 19T   13T  7.0T  64% /net/fs-1/AquaGen
-//10.209.0.10/Completed_projects             932G  507G  425G  55% /mnt/smb/GT1
-//10.209.0.205/Completed_Projects            932G  405G  527G  44% /mnt/smb/GT2
-//10.209.0.204/Completed_Projects            932G  427G  505G  46% /mnt/smb/GT3
-//10.209.0.203/Completed_Projects            932G  339G  594G  37% /mnt/smb/GT4
-//10.209.0.202/Completed_Projects            932G  456G  477G  49% /mnt/smb/GT5
-tmpfs                                        3.2G     0  3.2G   0% /run/user/30049
-tmpfs                                        3.2G     0  3.2G   0% /run/user/30047
-tmpfs                                        3.2G     0  3.2G   0% /run/user/1033
-tmpfs                                        3.2G     0  3.2G   0% /run/user/4000
+[bio326-21-0@login ~]$ df -h
+Filesystem                         Size  Used Avail Use% Mounted on
+devtmpfs                            16G     0   16G   0% /dev
+tmpfs                               16G     0   16G   0% /dev/shm
+tmpfs                               16G  1.2G   15G   8% /run
+tmpfs                               16G     0   16G   0% /sys/fs/cgroup
+/dev/mapper/centos_login--0-root    28G   20G  7.6G  73% /
+/dev/sda2                         1014M  287M  728M  29% /boot
+/dev/sdb                           100G  2.5G   98G   3% /work
+/dev/sda1                          200M   12M  189M   6% /boot/efi
+tmpfs                              5.0G   29M  5.0G   1% /tmp
+fs-1:/                             973M   11M  963M   2% /net/fs-1
+fs-1:/projects01                    95T   95T  686G 100% /net/fs-1/projects01
+fs-1:/home01                        76T   62T   15T  81% /net/fs-1/home01
+cn-1:/mnt/SCRATCH                   77T   76T  1.3T  99% /net/cn-1/mnt/SCRATCH
+tmpfs                              3.2G     0  3.2G   0% /run/user/1035
+fs-1:/Geno                          29T   21T  8.1T  72% /net/fs-1/Geno
+tmpfs                              3.2G     0  3.2G   0% /run/user/1018
+tmpfs                              3.2G     0  3.2G   0% /run/user/10023
+tmpfs                              3.2G     0  3.2G   0% /run/user/1004
+cn-13:/mnt/BACKUP                   71T   43T   29T  61% /net/cn-13/mnt/BACKUP
+fs-1:/results01                     95T   87T  8.3T  92% /net/fs-1/results01
+fs-1:/Transpose                     38T   38T   18G 100% /net/fs-1/Transpose
+tmpfs                              3.2G     0  3.2G   0% /run/user/10305
+tmpfs                              3.2G     0  3.2G   0% /run/user/10274
+tmpfs                              3.2G     0  3.2G   0% /run/user/50043
+tmpfs                              3.2G     0  3.2G   0% /run/user/50045
+tmpfs                              3.2G     0  3.2G   0% /run/user/50102
+tmpfs                              3.2G     0  3.2G   0% /run/user/50067
+tmpfs                              3.2G     0  3.2G   0% /run/user/10197
+tmpfs                              3.2G     0  3.2G   0% /run/user/30055
+tmpfs                              3.2G     0  3.2G   0% /run/user/50095
+tmpfs                              3.2G     0  3.2G   0% /run/user/40023
+tmpfs                              3.2G     0  3.2G   0% /run/user/1034
+cvmfs2                             4.9G  2.2G  2.7G  45% /cvmfs/singularity.galaxyproject.org
+cn-13:/mnt/SCRATCH2                148T  147T  691G 100% /net/cn-13/mnt/SCRATCH2
+fs-1:/SandveLab                     38T   36T  1.7T  96% /net/fs-1/SandveLab
+fs-1:/PEPomics01                    34T   29T  4.8T  86% /net/fs-1/PEPomics01
+tmpfs                              3.2G     0  3.2G   0% /run/user/50090
+tmpfs                              3.2G     0  3.2G   0% /run/user/30047
+tmpfs                              3.2G     0  3.2G   0% /run/user/10191
+tmpfs                              3.2G     0  3.2G   0% /run/user/50120
+tmpfs                              3.2G     0  3.2G   0% /run/user/10209
+tmpfs                              3.2G     0  3.2G   0% /run/user/10069
+tmpfs                              3.2G     0  3.2G   0% /run/user/1080
+tmpfs                              3.2G     0  3.2G   0% /run/user/50131
+tmpfs                              3.2G     0  3.2G   0% /run/user/40015
+tmpfs                              3.2G     0  3.2G   0% /run/user/10200
+tmpfs                              3.2G     0  3.2G   0% /run/user/1010
+tmpfs                              3.2G     0  3.2G   0% /run/user/10181
+fs-1:/HumGut                        19T   15T  4.8T  76% /net/fs-1/HumGut
+fs-1:/results03                     48T   44T  4.0T  92% /net/fs-1/results03
+cn-1:/mnt/SALMON-SEQDATA            37T   37T  313G 100% /net/cn-1/mnt/SALMON-SEQDATA
+fs-1:/Ngoc                         2.0T  1.2T  759G  61% /net/fs-1/Ngoc
+fs-1:/TestFile                     973G  2.7G  971G   1% /net/fs-1/TestFile
+cn-1:/mnt/labdata01                 81T   70T   11T  87% /net/cn-1/mnt/labdata01
+fs-1:/IPVProjects01                 57T   54T  3.7T  94% /net/fs-1/IPVProjects01
+cn-1:/mnt/homearchive               37T   24T   13T  66% /net/cn-1/mnt/homearchive
+fs-1:/Foreco                        12T  1.9T  9.6T  17% /net/fs-1/Foreco
+fs-1:/PreventADALL                 4.8T  2.4T  2.4T  50% /net/fs-1/PreventADALL
+fs-1:/Home_turhamar                973G  691G  283G  71% /net/fs-1/Home_turhamar
+fs-1:/Home_alme                    973G  396G  578G  41% /net/fs-1/Home_alme
+fs-1:/Home_rush                    973G  167G  807G  18% /net/fs-1/Home_rush
+//10.209.0.205/Completed_Projects  932G  583G  349G  63% /mnt/smb/GT2
+//10.209.0.10/Completed_projects   932G  585G  348G  63% /mnt/smb/GT1
+//10.209.0.203/Completed_Projects  932G  538G  395G  58% /mnt/smb/GT4
+//10.209.0.204/Completed_Projects  932G  578G  355G  62% /mnt/smb/GT3
+//10.209.0.202/Completed_Projects  932G  509G  424G  55% /mnt/smb/GT5
+cvmfs2                             4.9G  2.2G  2.7G  45% /cvmfs/cvmfs-config.galaxyproject.org
+tmpfs                              3.2G     0  3.2G   0% /run/user/1002
+tmpfs                              3.2G     0  3.2G   0% /run/user/10028
+tmpfs                              3.2G     0  3.2G   0% /run/user/10201
+tmpfs                              3.2G     0  3.2G   0% /run/user/10289
+tmpfs                              3.2G     0  3.2G   0% /run/user/1032
+tmpfs                              3.2G     0  3.2G   0% /run/user/50157
+tmpfs                              3.2G     0  3.2G   0% /run/user/1003
+tmpfs                              3.2G     0  3.2G   0% /run/user/10205
+tmpfs                              3.2G     0  3.2G   0% /run/user/50133
+tmpfs                              3.2G     0  3.2G   0% /run/user/1027
+tmpfs                              3.2G     0  3.2G   0% /run/user/4000
+tmpfs                              3.2G     0  3.2G   0% /run/user/50094
 ```
 
 As you can notice there are plenty of directories in Orion, but let's focus in the $HOME partition. To do that you need to run:
@@ -240,7 +255,7 @@ As you can notice there are plenty of directories in Orion, but let's focus in t
 ```
 [bio326-21-0@login ~]$ df -h .
 Filesystem      Size  Used Avail Use% Mounted on
-fs-1:/home01     76T   75T  1.8T  98% /net/fs-1/home01
+fs-1:/home01     76T   62T   15T  81% /net/fs-1/home01
 ```
 
 **All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
@@ -466,7 +481,7 @@ And then try the command:
 Illegal instruction
 ```
 
-As we can see in this node the blastp is not working. **Particularly in node cn-3 and cn-2, old nodes, module command shows multiple issues.** In that case we can use the singularity container. Singularity is a container platform. It allows you to create and run containers that package up pieces of software in a way that is portable and reproducible. Singularity can works in all nodes. For more information please read the [Introduction to Singularity](https://sylabs.io/guides/3.7/user-guide/introduction.html) Read the Docs.
+As we can see in this node the blastp is not working. **Particularly in node cn-3 and cn-2, old nodes, module command shows multiple issues.** In that case we can use the singularity container. Singularity is a container platform. It allows you to create and run "containers" that package up pieces of software in a way that is portable and reproducible. Singularity can works in all nodes. For more information please read the [Introduction to Singularity](https://sylabs.io/guides/3.7/user-guide/introduction.html) Read the Docs.
 
 Let's take a look into this singularity:
 
