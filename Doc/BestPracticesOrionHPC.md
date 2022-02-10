@@ -1,4 +1,5 @@
 # Basic exercises for best practices in Orion
+v2, February, 2022 Author: Arturo Vera-Ponce de Leon
 
 **Login into orion** 
 
