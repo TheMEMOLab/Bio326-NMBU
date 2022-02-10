@@ -65,7 +65,7 @@ How can I be sure of the number of CPUs and RAM of this "login" computer node an
 
 * RAM: We need to look for the "Total memory". All this info is allocated in the meminfo file at /proc directory. So we can use the grep command to look for this into the file.
 
-```
+```bash
 [bio326-21-0@login ~]$ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
 MemTotal: 32.7442 GB
 ```
