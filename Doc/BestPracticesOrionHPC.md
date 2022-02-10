@@ -358,7 +358,7 @@ By using the $SLURM_JOB_ID we can further identify what job we are running.
 Let's enter to that directory and then copy some fasta files from the **$SCRATCH**, that is a good directory to put raw data. In this class we are using the files from **/mnt/SCRATCH/bio326-21/BestPracticesOrion_031221** path.
 
 ```
-[bio326-21-0@cn-3 bio326-21-0]$ cd work.dir.of.12314866/
+[bio326-21-0@cn-3 bio326-21-0]$ cd work.dir.of.$SLURM_JOB_ID 
 [bio326-21-0@cn-3 work.dir.of.12314866]$ pwd
 /home/work/bio326-21-0/work.dir.of.12314866
 ```
@@ -408,8 +408,8 @@ This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragil
 
 
 ```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ blast
-bash: blast: command not found
+[bio326-21-0@cn-3 work.dir.of.12314866]$ lastp
+bash: blastp: command not found
 ```
 
 It seems not to be installed as a default software.
@@ -475,6 +475,43 @@ Lets **load** the newest **BLAST+/2.10.1-gompi-2020a**
 ```
 
 And then try the command:
+
+```bash
+[bio326-21-0@cn-13 work.dir.of.14241644]$ blastp -h
+USAGE
+  blastp [-h] [-help] [-import_search_strategy filename]
+    [-export_search_strategy filename] [-task task_name] [-db database_name]
+    [-dbsize num_letters] [-gilist filename] [-seqidlist filename]
+    [-negative_gilist filename] [-negative_seqidlist filename]
+    [-taxids taxids] [-negative_taxids taxids] [-taxidlist filename]
+    [-negative_taxidlist filename] [-ipglist filename]
+    [-negative_ipglist filename] [-entrez_query entrez_query]
+    [-db_soft_mask filtering_algorithm] [-db_hard_mask filtering_algorithm]
+    [-subject subject_input_file] [-subject_loc range] [-query input_file]
+    [-out output_file] [-evalue evalue] [-word_size int_value]
+    [-gapopen open_penalty] [-gapextend extend_penalty]
+    [-qcov_hsp_perc float_value] [-max_hsps int_value]
+    [-xdrop_ungap float_value] [-xdrop_gap float_value]
+    [-xdrop_gap_final float_value] [-searchsp int_value] [-seg SEG_options]
+    [-soft_masking soft_masking] [-matrix matrix_name]
+    [-threshold float_value] [-culling_limit int_value]
+    [-best_hit_overhang float_value] [-best_hit_score_edge float_value]
+    [-subject_besthit] [-window_size int_value] [-lcase_masking]
+    [-query_loc range] [-parse_deflines] [-outfmt format] [-show_gis]
+    [-num_descriptions int_value] [-num_alignments int_value]
+    [-line_length line_length] [-html] [-sorthits sort_hits]
+    [-sorthsps sort_hsps] [-max_target_seqs num_sequences]
+    [-num_threads int_value] [-ungapped] [-remote] [-comp_based_stats compo]
+    [-use_sw_tback] [-version]
+
+DESCRIPTION
+   Protein-Protein BLAST 2.10.1+
+
+Use '-help' to print detailed descriptions of command line arguments
+
+```
+
+**However, there are some modules like cn-3 and cn-2 that the following could happen:**
 
 ```
 [bio326-21-0@cn-3 ~]$ blastp -h
