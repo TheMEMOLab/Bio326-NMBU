@@ -679,7 +679,7 @@ You can see now we return to the main **login bio326-21-0** node.
 
 ## Submit the same BLAST job but using a SLURM script.
 
-Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what an script is.
+Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
 
 SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
 
