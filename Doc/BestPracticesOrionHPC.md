@@ -2,15 +2,15 @@
 v2, February, 2022 Author: Arturo Vera-Ponce de Leon
 
 ### What is this?
-This document is intended to be a quick reference guide on basic usage of the NMBU-Orion HPC cluster. For a complete reference please refere to documentation on [Orion](https://orion.nmbu.no/en/home)
+This document is intended to be a quick reference guide on the basic usage of the NMBU-Orion HPC cluster. For a complete reference please referer to the full documentation of [Orion](https://orion.nmbu.no/en/home)
 
 **Login into orion** 
 
 To login into Orion cluster we need two things:
-- Establish a [VPN](https://nmbuhjelp.nmbu.no/tas/public/ssp/content/detail/knowledgeitem?unid=4c4870bb-f0fc-4c9f-b0f5-0c036951436f) connection (if not in a NMBU network)
-- Use a secure-shell command [ssh](https://en.wikipedia.org/wiki/SSH_(Secure_Shell))
+- Establish a [VPN](https://nmbuhjelp.nmbu.no/tas/public/ssp/content/detail/knowledgeitem?unid=4c4870bb-f0fc-4c9f-b0f5-0c036951436f) connection (if not using a NMBU network)
+- Use a secure-shell command [ssh](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) via the command line
 
-For login just type something like this. 
+For login open a Unix terminal and type something like this. 
 
 ```bash
 $ ssh bio326-21-0@login.orion.nmbu.no
@@ -153,7 +153,7 @@ gn-1           1         gpu        idle 64     2:16:2 257710        0      1 cp
 gn-2           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
 gn-3           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none  
 ```
-In this case, the State column showed the status of the node. It means, how many resources can be allocated per node, in this example there are 4 different status: 
+In this case, the *State* column shows the status of the node. It means, how many resources can be allocated per node, in this example there are 4 different status: 
 
 * allocated: The node has been allocated to one or more jobs.
 * completing* : All jobs associated with this node are in the process of COMPLETING. This node state will be removed when all of the job's processes have terminated
@@ -164,7 +164,7 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 
 ## Disk space quota in $HOME, $SCRATCH and $TMPDIR 
 
-As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and partitions in Orion we can run the following command:
+As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
 
 ```bash
 [bio326-21-0@login ~]$ df -h
@@ -250,13 +250,13 @@ tmpfs                              3.2G     0  3.2G   0% /run/user/4000
 tmpfs                              3.2G     0  3.2G   0% /run/user/50094
 ```
 
-As you can notice there are plenty of directories in Orion, but let's focus in the $HOME partition. To do that you need to run:
-
+As you can notice there are plenty of directories in Orion, but let's focus in the $HOME partition:
 ```
 [bio326-21-0@login ~]$ df -h .
 Filesystem      Size  Used Avail Use% Mounted on
 fs-1:/home01     76T   62T   15T  81% /net/fs-1/home01
 ```
+*syntaxis: d(isk)f(ree) -h(uman redable) .(the directory I am now) *
 
 **All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
 
@@ -327,7 +327,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 [bio326-21-0@cn-3 bio326-21-0]$ 
 ```
 
-You can notice that now the prompt has changed and shows the node we are running on. In this case the node "cn-3". Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node and number of CPUs requested in this job you can print the values of that SLURM variable by applying the command "echo" follows by the name of the variable:
+You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node "cn-3". Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
 
 ```
 [bio326-21-0@cn-3 bio326-21-0]$ echo $SLURM_NODELIST 
@@ -340,8 +340,8 @@ Here we can run short parsing scripts, test software with a small datasets, etc.
 
 ### Temporary working directory, faster and more efficient Jobs
 
-Generaly any software can read (data) and write (results) from any partition of the cluster (i.e. $HOME, $SCRATCH, $PROJECT), however, I/O (reading and writing) from those locations uses a lot of network-trafic resources resulting in a high inefficenfy for heavy jobs (e.g mapping reads to large genomes or metagenomes). Also if multiple users run in the same way the traffic in the network, even using the infiniband, makes the jobs super slow. 
-To avoid this we can take advantage of the **$TMPDIR** partition. This is a physical hard-drive allocated in each of the compute nodes. We can migrate the data to here for I/O. Often, quite some efficiency can be gained by doing this.
+Generaly any software can read (data) and write (results) from any partition of the cluster (i.e. $HOME, $SCRATCH, $PROJECT), however, I/O (reading and writing) from those locations uses a lot of network-trafic resources resulting in a high inefficenfy for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembly genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the infiniband, makes the jobs super slow. 
+To avoid this we can take advantage of the **$TMPDIR** partition. This is a physical hard-drive allocated in each of the computer nodes. We can migrate the data to there for faster I/O. Often, quite some efficiency can be gained by doing this.
 
 Let's take a look, first we need to check if our **$USER** exists in that **$TMPDIR**
 
@@ -388,9 +388,9 @@ total 17072
 -rw-rw-r-- 1 auve bio326-21   280161 Mar 11 16:29 Bacteroides51.tab
 ```
 
-*Tip: Having more than one terminal open will help to faster look into multiple directories*
+*Tip: Having more than one terminal open does help to faster look into multiple directories*
 
-As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $TMPDIR/workdirectoryforthejob
+As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
 
 ```
 [bio326-21-0@cn-3 work.dir.of.12314866]$ cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/*.fa* .
@@ -418,19 +418,19 @@ ELGYDYSIEENGRTGKKPVKWEYYDDASRKALYDTYAKLMTLRNANTELFDTSALFSWQVKGNTNWLNGR
 FLTLEGGGKKLVVAGNFTNQAGSYTVTFPHTGTWYNYMTGESVSVSATNQTISIPAHEFKLFVDFQSN
 ```
 
-This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragilis, I would like to know if an homologue of this sequence is present in the set of sequences of **Bacteroides51.faa** (Bacteroides sp. from cockroaches). The easy way is doing a BLAST search. But is BLAST installed?
+This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragilis, I would like to know if an homologue of this sequence is present in the set of sequences of **Bacteroides51.faa** (Bacteroides sp. from cockroaches). The easiest way is by doing a BLAST search. But is BLAST already installed?
 
 
 ```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ lastp
+[bio326-21-0@cn-3 work.dir.of.12314866]$ blastp
 bash: blastp: command not found
 ```
 
-It seems not to be installed as a default software.
+It seems blastp is not installed as a default software in Orion.
 
 ### Modules and singularity
 
-In order to use non default software (e.g BLAST, HMMER, SPADES), we need to load the corresponding module first.The Modules package is a tool that simplifies shell initialization and lets users easily modify their environment during a session using modulefiles. You can read more about this on the [Environment Modules](https://modules.readthedocs.io/en/latest/) website.
+In order to use non default software (e.g BLAST, HMMER, SPADES), we need to load the corresponding module first.The Modules package is a tool that simplifies shell initialization and allows the users easily modify their environment during a session using modulefiles. You can read more about this on the [Environment Modules](https://modules.readthedocs.io/en/latest/) website.
 
 The following commands let us manage modules in our workflow:
 
@@ -443,7 +443,7 @@ module unload # unload loaded modules
 module purge # unload all loaded modules
 ```
 
-If we want to knwo what modules are already instaled in Orion we can use the following command:
+If we want to know what modules are already instaled in Orion we can use the following command:
 
 ```
 [bio326-21-0@cn-3 work.dir.of.12314866]$ module available
@@ -534,7 +534,7 @@ Illegal instruction
 
 As we can see in this node the blastp is not working. **Particularly in node cn-3 and cn-2, old nodes, module command shows multiple issues.** In that case we can use the singularity container. Singularity is a container platform. It allows you to create and run "containers" that package up pieces of software in a way that is portable and reproducible. Singularity can works in all nodes. For more information please read the [Introduction to Singularity](https://sylabs.io/guides/3.7/user-guide/introduction.html) Read the Docs.
 
-Let's take a look into this singularity:
+Let's take a look into this singularity container:
 
 First purge all modules:
 
@@ -623,14 +623,14 @@ Take a look into the results:
 WP_024997086.1	D0T87_RS12665	57.772	772	301	13	8	763	28	790	0.0	908
 ```
 
-It seems the amylase of B. fragilis has a match wiht the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
+It seems the amylase of *B. fragilis* has a match wiht the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
 
 ```
 [bio326-21-0@cn-3 work.dir.of.12314866]$ grep D0T87_RS12665 Bacteroides51.faa
 >D0T87_RS12665	alpha-amylase	WP_163175496.1
 ```
 
-We found the amylase.
+We found the amylase!!!
 
 ### Copy results to the $SCRATCH, remove work.directory and exit the job.
 
