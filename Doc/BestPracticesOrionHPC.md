@@ -266,20 +266,33 @@ There are two dierectories designed to this:
 * $SCRATCH
 * $PROJECT
 
-As a student of this course, we are using the $SCRATCH partition to keep our raw sequencing files and final results. This partition in contrast to the $HOME and $PROJECT is not backed up. **Remember to make a copy of your important files into another location!!!** All students have a directory in that partition: /mnt/SCRATCH/bio326-21-x ; where x is the student number.
+As a student of this course, we are using the $SCRATCH folder to keep our raw sequencing files and final results. This directory, in contrast to the $HOME and $PROJECT, is not backed up. **Remember to make a copy of your important files into another (permanent) location!!!** All students have a directory in the $SCRATCH: /mnt/SCRATCH/bio326-22-x ; where x is the student number.
 
-Let's move into that partition:
+Let's move into that folder:
 
 ```
 [bio326-21-0@login ~]$ cd /mnt/SCRATCH/bio326-21-0
 ```
+
+### Queues for different RAM usage:
+
+Orion offers three primary job queues, or partitions: hugemem, smallmem and gpu. You are encouraged to choose the most appropriate partition.
+
+|Partition 	|Job memory requirements| 	Available resources|
+|-----------|-----------------------|----------------------|
+|hugemem 	|> 100 GB RAM 	|2 x (1 TB RAM, 80 cores)|
+|smallmem |	1-100 GB RAM 	|7 x (192 GB RAM, 32 cores)|
+|gpu 	|1-100 GB RAM 	|4 x (256 GB RAM, 64 cores, 3 Quadro RTX 8000)|
+
+To select the correct partition queue we can use the **SLURM** command: *--partition=<partition>* anc choose the appropriate partition.
+In general, there is a shorter job queue in smallmem than the hugemem queue. Also, be prepared to wait for your job to start if you need to use the hugemem queue.
 
 ## Running an interactive job to test programs and get used to working in the cluster
 
 The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can book a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
 
 ```
-[bio326-21-0@login bio326-21-0]$ srun --cpus-per-task 4 --mem=4G --time=01:00:00 --pty bash -i
+[bio326-21-0@login bio326-21-0]$ srun --partition=smallmem --cpus-per-task 4 --mem=4G --time=01:00:00 --pty bash -i
 srun: job 12314004 queued and waiting for resources
 ```
 
