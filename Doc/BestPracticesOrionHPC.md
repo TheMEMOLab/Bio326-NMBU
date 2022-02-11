@@ -970,7 +970,7 @@ I am done at
 Thu Mar 11 21:40:11 CET 2021
 ```
 
-As you can see it seems the Job runs smoothly and produces the result:
+As you can see it seems the Job ran smoothly and produced the result:
 
 ```
 [bio326-21-0@login bio326-21-0]$ ls
@@ -1003,7 +1003,7 @@ And then check for the status:
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
 ```
 
-If no slurm.out file is created and no job is showing by sque, it meand the job has been canceled.
+If no slurm.out file is created and no job is showing by the squeue command, it means the job has been canceled.
 
 ## Bulletpoints
 
