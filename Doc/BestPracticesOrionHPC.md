@@ -430,7 +430,7 @@ It seems blastp is not installed as a default software in Orion.
 
 ### Modules and singularity
 
-In order to use non-default software (e.g BLAST, HMMER, SPADES), we need to load the corresponding module first into the computer node.The Modules package is a tool that simplifies shell initialization and allows the users easily modify their environment during a session using modulefiles. **In other words it tells the computer where to look for all the executables and packages used by a particular softwer/tool**. You can read more about this on the [Environment Modules](https://modules.readthedocs.io/en/latest/) website.
+In order to use non-default software (e.g BLAST, HMMER, SPADES), we need to load the corresponding module first into the computer node.The Modules package is a tool that simplifies shell initialization and allows the users easily modify their environment during a session using modulefiles. **In other words it tells the computer where to look for all the executables and dependencies used by a particular software/tool**. You can read more about this on the [Environment Modules](https://modules.readthedocs.io/en/latest/) website.
 
 The following commands let us manage modules in our workflow:
 
