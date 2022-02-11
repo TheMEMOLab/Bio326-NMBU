@@ -162,9 +162,9 @@ In this case, the State column showed the status of the node. It means, how many
 
 Summarizing, the only nodes that can accept jobs under the previous conditions are those with "MIXED" status. 
 
-## Memory quota in $HOME, $SCRATCH and $TMPDIR 
+## Disk space quota in $HOME, $SCRATCH and $TMPDIR 
 
-As a user you can check the ammount of space used in different directories. To check all the disks and partitions in Orion we can run the following command:
+As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and partitions in Orion we can run the following command:
 
 ```bash
 [bio326-21-0@login ~]$ df -h
