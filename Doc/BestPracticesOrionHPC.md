@@ -284,7 +284,7 @@ Orion offers three primary job queues, or partitions: hugemem, smallmem and gpu.
 |smallmem |	1-100 GB RAM 	|7 x (192 GB RAM, 32 cores)|
 |gpu 	|1-100 GB RAM 	|4 x (256 GB RAM, 64 cores, 3 Quadro RTX 8000)|
 
-To select the correct partition queue we can use the **SLURM** command: *--partition=<partition>* anc choose the appropriate partition.
+To select the correct partition queue we can use the **SLURM** command: --partition=<partition> anc choose the appropriate partition.
 In general, there is a shorter job queue in smallmem than the hugemem queue. Also, be prepared to wait for your job to start if you need to use the hugemem queue.
 
 ## Running an interactive job to test programs and get used to working in the cluster
