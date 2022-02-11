@@ -276,12 +276,13 @@ Let's move into that partition:
 
 ## Running an interactive job to test programs and get used to working in the cluster
 
-The easiest way to test software and to look into huhge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can book a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
+The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can book a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
 
 ```
 [bio326-21-0@login bio326-21-0]$ srun --cpus-per-task 4 --mem=4G --time=01:00:00 --pty bash -i
 srun: job 12314004 queued and waiting for resources
 ```
+
 *Basic syntaxis the command:
  srun \<slurm-options> \<software-name/path>*
   
