@@ -461,7 +461,7 @@ Let's do the same for the PromethiON results:
 ```console
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$ cd PromethiONReads/
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiONReads]$ NNanoPlot -t 4 --fastq PromethiON.fastq --N50 --loglength -p PromethiON. -o PromethiON.Nanoplot.out
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiONReads]$ NanoPlot -t 4 --fastq PromethiON.fastq --N50 --loglength -p PromethiON. -o PromethiON.Nanoplot.out
 /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:702: MatplotlibDeprecationWarning:
 
 The global colormaps dictionary is no longer considered public API.
