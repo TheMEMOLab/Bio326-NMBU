@@ -379,31 +379,8 @@ PS: We are on Teams: https://bit.ly/orion-teams
 *Now that TMUX is active you can deattach the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
 
 ```console
-[bio326-21-0@login GenomeAssembly2022]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
-srun: job 14301977 queued and waiting for resources
-srun: job 14301977 has been allocated resources
-
-Welcome to the NMBU Orion compute cluster environment.
-
-You are logged in to a machine that can be used to access your home directory,
-edit your scripts, manage your files, and submit jobs to the cluster environment.
-Do not run any jobs on this machine, as they might be automatically terminated.
-
-IMPORTANT:
-  - Orion introduction: https://orion.nmbu.no/
-  - Orion can handle small-scale projects. Need more CPU hours? Please consider
-    applying for national infrastructure resources: https://www.sigma2.no/
-  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
-    using i.e. pigz.
-
-NEWS:
-  - 2020-10-08: Orion has been re-built. We are still working out many details.
-    Please email us if you miss anything, or notice any issues.
-
-For any Orion related enquiry: orion-support@nmbu.no
-PS: We are on Teams: https://bit.ly/orion-teams
-
-[bio326-21-0@cn-12 GenomeAssembly2022]$
+[bio326-21-0@login GenomeAssembly2022]$ tmux a -t ONP
+[bio326-21-0@cn-11 GenomeAssembly2022]$
 ```
 
 As we moved into a new computer, we should activate Anaconda3 and the ONPTools environment before start working:
@@ -550,5 +527,5 @@ From the FiltLong github:
 
 We will use this software to remove those "bad" reads and clean the samples.
 
-The easiest way is by submmiting the 
+The easiest way is by submmiting a batch script as the follow:
 
