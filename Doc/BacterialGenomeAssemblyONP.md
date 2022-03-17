@@ -841,10 +841,50 @@ Top 5 longest reads and their mean basecall quality score
 ```
 It seems there was a little improvment after FiltLong selection. We could keep opening all the NanoStats files and compare manualy, this is easy when you have 2 or 3 files but what happen if you get 100? Manual inspection will take forever. So as bioinformaticians we can create our own scripts to parse the information from NanoPlot and display all this info in some kind of plots.
 
-* Go to the GenomeAssembly2022 directory and let's gather all the NanoStatsFiles into a single directory. Again a ```for loop``` will be super useful here:
+* Go to the GenomeAssembly2022 directory and let's gather all the NanoStatsFiles into a single directory (e.g ```NanoStats.dir```). Again a ```for loop``` will be super useful here:
 
 ```console
 bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ cd $SCRATCH/GenomeAssembly2022
+[bio326-21-0@login NanoStats.dir]$ mkdir NanoStats.dir
 [bio326-21-0@login GenomeAssembly2022]$ for i in *Reads; do BN=$(basename $i Reads); cp $i/$BN.Nanoplot.out/*NanoStats.txt NanoStats.dir/; cp $i/$BN.NanoplotFiltlong.dir/*NanoStats.txt NanoStats.dir/;done
 ```
+* Then got to the new directory and check our for loop worked:
 
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cd NanoStats.dir/
+[bio326-21-0@login NanoStats.dir]$ ls
+MiniON.filtlong.NanoStats.txt  MiniON.NanoStats.txt  PromethiON.filtlong.NanoStats.txt  PromethiON.NanoStats.txt
+```
+
+We will use some scripts so let's ask for a computing node:
+
+```console
+[bio326-21-0@login NanoStats.dir]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
+srun: job 14302254 queued and waiting for resources
+srun: job 14302254 has been allocated resources
+
+Welcome to the NMBU Orion compute cluster environment.
+
+You are logged in to a machine that can be used to access your home directory,
+edit your scripts, manage your files, and submit jobs to the cluster environment.
+Do not run any jobs on this machine, as they might be automatically terminated.
+
+IMPORTANT:
+  - Orion introduction: https://orion.nmbu.no/
+  - Orion can handle small-scale projects. Need more CPU hours? Please consider
+    applying for national infrastructure resources: https://www.sigma2.no/
+  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
+    using i.e. pigz.
+
+NEWS:
+  - 2020-10-08: Orion has been re-built. We are still working out many details.
+    Please email us if you miss anything, or notice any issues.
+
+For any Orion related enquiry: orion-support@nmbu.no
+PS: We are on Teams: https://bit.ly/orion-teams
+
+[bio326-21-0@cn-11 NanoStats.dir]$
+```
+* We will use R to plot, R is also installed as a conda environment, activate this:
+
+```console
