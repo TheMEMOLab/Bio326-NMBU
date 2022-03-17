@@ -762,4 +762,80 @@ Final fastq and Nanoplot results are in: /net/cn-1/mnt/SCRATCH/bio326-21-0/Genom
 I've done at
 Thu Mar 17 21:24:51 CET 2022
 ```
+It looks like our script worked okay. Accordingly to the slurm-out file the results are in ```/net/cn-1/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/PromethiONReads```. Let's go there and see what we got:
 
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cd /net/cn-1/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/PromethiONReads
+[bio326-21-0@login PromethiONReads]$ ls
+PromethiON.fastq  PromethiON.filtlong.fq.gz  PromethiON.NanoplotFiltlong.dir  PromethiON.Nanoplot.out
+[bio326-21-0@login PromethiONReads]$ cd PromethiON.NanoplotFiltlong.dir/
+[bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ ls
+PromethiON.filtlong.Dynamic_Histogram_Read_length.html            PromethiON.filtlong.NanoPlot_20220317_2122.log
+PromethiON.filtlong.HistogramReadlength.png                       PromethiON.filtlong.NanoPlot-report.html
+PromethiON.filtlong.LengthvsQualityScatterPlot_dot.png            PromethiON.filtlong.NanoStats.txt
+PromethiON.filtlong.LengthvsQualityScatterPlot_kde.png            PromethiON.filtlong.Weighted_HistogramReadlength.png
+PromethiON.filtlong.LengthvsQualityScatterPlot_loglength_dot.png  PromethiON.filtlong.Weighted_LogTransformed_HistogramReadlength.png
+PromethiON.filtlong.LengthvsQualityScatterPlot_loglength_kde.png  PromethiON.filtlong.Yield_By_Length.png
+PromethiON.filtlong.LogTransformed_HistogramReadlength.png
+```
+It seems everything works, let's display the NanoStats:
+
+```console
+[bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ more PromethiON.filtlong.NanoStats.txt
+eneral summary:
+Mean read length:                11,276.5
+Mean read quality:                   13.3
+Median read length:               5,085.0
+Median read quality:                 13.5
+Number of reads:                 91,499.0
+Read length N50:                 24,931.0
+STDEV read length:               14,439.0
+Total bases:              1,031,784,865.0
+Number, percentage and megabases of reads above quality cutoffs
+>Q5:    91499 (100.0%) 1031.8Mb
+>Q7:    91499 (100.0%) 1031.8Mb
+>Q10:   84389 (92.2%) 905.2Mb
+>Q12:   66622 (72.8%) 696.9Mb
+>Q15:   21354 (23.3%) 203.9Mb
+Top 5 highest mean basecall quality scores and their read lengths
+1:      21.5 (1414)
+2:      20.8 (1245)
+3:      20.6 (1252)
+4:      20.5 (1387)
+5:      20.3 (2425)
+Top 5 longest reads and their mean basecall quality score
+1:      240794 (8.6)
+2:      196851 (8.
+```
+We can compare this with the "raw" PromethiON NanoStats:
+
+```console
+[bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ more ../PromethiON.Nanoplot.out/PromethiON.NanoStats.txt
+General summary:
+Mean read length:                 6,935.2
+Mean read quality:                   12.6
+Median read length:               2,029.0
+Median read quality:                 12.7
+Number of reads:                165,305.0
+Read length N50:                 23,747.0
+STDEV read length:               12,384.9
+Total bases:              1,146,423,404.0
+Number, percentage and megabases of reads above quality cutoffs
+>Q5:    165305 (100.0%) 1146.4Mb
+>Q7:    165305 (100.0%) 1146.4Mb
+>Q10:   135154 (81.8%) 934.6Mb
+>Q12:   99363 (60.1%) 715.0Mb
+>Q15:   29523 (17.9%) 208.5Mb
+Top 5 highest mean basecall quality scores and their read lengths
+1:      22.9 (629)
+2:      22.6 (282)
+3:      22.1 (219)
+4:      21.5 (262)
+5:      21.5 (1414)
+Top 5 longest reads and their mean basecall quality score
+1:      261876 (7.6)
+2:      240794 (8.6)
+3:      196851 (8.0)
+4:      189140 (7.9)
+5:      184049 (9.3)
+```
