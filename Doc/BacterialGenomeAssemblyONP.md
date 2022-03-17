@@ -399,7 +399,7 @@ Let's run NanoPlot to generate some nice Plots. First let's run on the MiniONRea
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$ cd MiniONReads/
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ ls
 MiniON.fastq
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ NanoPlot -t 4 --fastq MiniON.fastq --N50 --loglength -o MiniON.Nanoplot.out
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ NanoPlot -t 4 --fastq MiniON.fastq --N50 --loglength -p MiniON. -o MiniON.Nanoplot.out
 /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:702: MatplotlibDeprecationWarning:
 
 The global colormaps dictionary is no longer considered public API.
@@ -416,16 +416,16 @@ The results are storage in the MiniON.Nanoplot.out directory. Take a look:
 ```console
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ cd MiniON.Nanoplot.out/
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ ls
-Dynamic_Histogram_Read_length.html  LengthvsQualityScatterPlot_loglength_dot.png  NanoPlot-report.html                             Yield_By_Length.png
-HistogramReadlength.png             LengthvsQualityScatterPlot_loglength_kde.png  NanoStats.txt
-LengthvsQualityScatterPlot_dot.png  LogTransformed_HistogramReadlength.png        Weighted_HistogramReadlength.png
-LengthvsQualityScatterPlot_kde.png  NanoPlot_20220317_1602.log                    Weighted_LogTransformed_HistogramReadlength.png
+MiniON.Dynamic_Histogram_Read_length.html  MiniON.LengthvsQualityScatterPlot_loglength_dot.png  MiniON.NanoPlot-report.html                             MiniON.Yield_By_Length.png
+MiniON.HistogramReadlength.png             MiniON.LengthvsQualityScatterPlot_loglength_kde.png  MiniON.NanoStats.txt
+MiniON.LengthvsQualityScatterPlot_dot.png  MiniON.LogTransformed_HistogramReadlength.png        MiniON.Weighted_HistogramReadlength.png
+MiniON.LengthvsQualityScatterPlot_kde.png  MiniON.NanoPlot_20220317_1748.log                    MiniON.Weighted_LogTransformed_HistogramReadlength.png
 ```
 
 There are plenty of tables, pictures and reports. We can do a qick check of the NanoStats.txt report:
 
 ```console
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ more NanoStats.txt                                                       [5/100]
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ more MiniON.NanoStats.txt
 General summary:
 Mean read length:                4,266.4
 Mean read quality:                  10.2
@@ -453,6 +453,7 @@ Top 5 longest reads and their mean basecall quality score
 3:      68986 (7.5)
 4:      66931 (8.2)
 5:      63998 (8.6)
+
 ```
 
 Let's do the same for the PromethiON results:
@@ -460,7 +461,7 @@ Let's do the same for the PromethiON results:
 ```console
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$ cd PromethiONReads/
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiONReads]$ NanoPlot -t 4 --fastq PromethiON.fastq --N50 --loglength -o PromethiON.Nanoplot.out
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiONReads]$ NNanoPlot -t 4 --fastq PromethiON.fastq --N50 --loglength -p PromethiON. -o PromethiON.Nanoplot.out
 /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:702: MatplotlibDeprecationWarning:
 
 The global colormaps dictionary is no longer considered public API.
@@ -468,12 +469,8 @@ The global colormaps dictionary is no longer considered public API.
 /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:720: MatplotlibDeprecationWarning:
 
 The global colormaps dictionary is no longer considered public API.
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ ls
-Dynamic_Histogram_Read_length.html  LengthvsQualityScatterPlot_loglength_dot.png  NanoPlot-report.html                             Yield_By_Length.png
-HistogramReadlength.png             LengthvsQualityScatterPlot_loglength_kde.png  NanoStats.txt
-LengthvsQualityScatterPlot_dot.png  LogTransformed_HistogramReadlength.png        Weighted_HistogramReadlength.png
-LengthvsQualityScatterPlot_kde.png  NanoPlot_20220317_1615.log                    Weighted_LogTransformed_HistogramReadlength.png
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ more NanoStats.txt
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ cd PromethiON.Nanoplot.out/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ more PromethiON.NanoStats.txt
 General summary:
 Mean read length:                 6,935.2
 Mean read quality:                   12.6
@@ -501,6 +498,7 @@ Top 5 longest reads and their mean basecall quality score
 3:      196851 (8.0)
 4:      189140 (7.9)
 5:      184049 (9.3)
+
 ```
 
 NanoPlot also proudces a .html report with these data. To vizualise this it is necesary to copy the html to our computer and open it then in a browser.
