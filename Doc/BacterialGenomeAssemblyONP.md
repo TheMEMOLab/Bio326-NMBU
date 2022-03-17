@@ -888,3 +888,52 @@ PS: We are on Teams: https://bit.ly/orion-teams
 * We will use R to plot, R is also installed as a conda environment, activate this:
 
 ```console
+[bio326-21-0@cn-11 NanoStats.dir]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+Activating Anaconda module for bio326-21-0
+conda is running. Please type conda activate to load the basic conda functions...
+[bio326-21-0@cn-11 NanoStats.dir]$ conda activate /net/fs-1/home01/auve/mycondaenvs/R_env
+```
+* The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will produce the bar plots. Let's use it:
+
+```console
+(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
+Reading File MiniON.NanoStats.txt
+Reading File PromethiON.NanoStats.txt
+Reading File MiniON.filtlong.NanoStats.txt
+Reading File PromethiON.filtlong.NanoStats.txt
+Ploting stats...
+
+Loading required package: tidyverse
+── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+✔ tibble  3.1.4     ✔ dplyr   1.0.7
+✔ tidyr   1.1.3     ✔ stringr 1.4.0
+✔ readr   2.0.1     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+Loading required package: patchwork
+Rows: 4 Columns: 5
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (1): Sample
+dbl (1): Longest
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+[1] "Saving plots into Barplots.NanoStats.pdf"
+I've done.
+Thank you!
+```
+
+* This script produces a pdf with the plots. To open it, we need to transfer the file to our computer by rsync: 
+
+```console
+(base) avera@L003772:~$ rsync -aP bio326-21-0@login.orion.nmbu.no:/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/NanoStats.dir/*.pdf .
+bio326-21-0@login.orion.nmbu.no's password:
+receiving incremental file list
+Barplots.NanoStats.pdf
+          5,288 100%    5.04MB/s    0:00:00 (xfr#1, to-chk=0/1)
+```
+
+The PDF has something like this ![barplot](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/barplot.png)
