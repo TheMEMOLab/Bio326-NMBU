@@ -937,3 +937,5 @@ Barplots.NanoStats.pdf
 ```
 
 The PDF has something like this ![barplot](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/barplot.png)
+
+## Do you think FiltLong improve the quality of the Nanopore sequences????
