@@ -291,8 +291,8 @@ Now we can delete the fastqFiles directory in each folder:
 The first steep after obtaining the fastq files form the sequencer is to know how is the quality in means of No. of reads, size, and ![Phred quality score](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/fastqC.png):
 
 * Nanoplot and most of the software we will use in this course are installed in a condaenvironment. Let's activate the environment and test Nanoplot:
-**NOTE: CONDA and all its features have to be loaded by a module names Anaconda3 and then configure some of the env variables to be able to use conda.
-For your conveniance we have crated a bash script that do all this for you, just type the following to activate conda:**
+**NOTE: CONDA and all its features have to be loaded by a module named ```Anaconda3``` and then configure some of the environment variables to be able to properly use conda.
+For your convenience we have crated a bash script that does all this for you, just type the following to activate conda:**
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
