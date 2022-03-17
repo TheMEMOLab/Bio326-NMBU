@@ -290,9 +290,9 @@ Now we can delete the fastqFiles directory in each folder:
 
 The first steep after obtaining the fastq files form the sequencer is to know how is the quality in means of No. of reads, size, and ![Phred quality score](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/fastqC.png):
 
-* Nanoplot and most of the software we will use in this course are installed in a condaenvironment. Let's activate the environment and test Nanoplot:
-**NOTE: CONDA and all its features have to be loaded by a module named ```Anaconda3``` and then configure some of the environment variables to be able to properly use conda.
-For your convenience we have crated a bash script that does all this for you, just type the following to activate conda:**
+* Nanoplot and most of the software we will use in this course are installed in a condaenvironment. Let's activate the environment and test Nanoplot.
+
+**NOTE: CONDA and all its features have to be loaded by a module named ```Anaconda3``` and then configure some of the environment variables to be able to properly use conda. For your convenience we have crated a bash script that does all this for you, just type the following to activate conda:**
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
@@ -376,7 +376,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 
 [bio326-21-0@cn-12 GenomeAssembly2022]$
 ```
-*Now that TMUX is active you can deatach the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
+*Now that TMUX is active you can deattach the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
@@ -533,10 +533,17 @@ We can do this by scp or rsync commands **IN YOUR COMPUTER NOT ORION**:
 (base) avera@L003772:auve$ rsync -aP bio326-21-0@login.orion.nmbu.no:/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/PromethiONReads/PromethiON.Nanoplot.out/*.html .
 ```
 
-
 What can we conclude on these results???
 
+Now we can finish the interactive job and the tmux session:
 
+```console
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ exit
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@login Nanoplot.out]$ exit
+[exited]
+```
+
+## Filtering lowquality reads and short reads by [FiltLong]()
 
 
 
