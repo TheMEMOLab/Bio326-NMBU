@@ -848,7 +848,7 @@ bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ cd $SCRATCH/GenomeAssembly20
 [bio326-21-0@login NanoStats.dir]$ mkdir NanoStats.dir
 [bio326-21-0@login GenomeAssembly2022]$ for i in *Reads; do BN=$(basename $i Reads); cp $i/$BN.Nanoplot.out/*NanoStats.txt NanoStats.dir/; cp $i/$BN.NanoplotFiltlong.dir/*NanoStats.txt NanoStats.dir/;done
 ```
-* Then got to the new directory and check our for loop worked:
+* Then got to the new directory and check if our ```for loop``` worked:
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ cd NanoStats.dir/
@@ -856,7 +856,7 @@ bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ cd $SCRATCH/GenomeAssembly20
 MiniON.filtlong.NanoStats.txt  MiniON.NanoStats.txt  PromethiON.filtlong.NanoStats.txt  PromethiON.NanoStats.txt
 ```
 
-We will use some scripts so let's ask for a computing node:
+We will use some scripts to perform some task so let's ask for a computing node and not work in the loggin node:
 
 ```console
 [bio326-21-0@login NanoStats.dir]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
