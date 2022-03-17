@@ -378,6 +378,166 @@ PS: We are on Teams: https://bit.ly/orion-teams
 ```
 *Now that TMUX is active you can deatach the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
 
+```console
+[bio326-21-0@login GenomeAssembly2022]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
+srun: job 14301977 queued and waiting for resources
+srun: job 14301977 has been allocated resources
+
+Welcome to the NMBU Orion compute cluster environment.
+
+You are logged in to a machine that can be used to access your home directory,
+edit your scripts, manage your files, and submit jobs to the cluster environment.
+Do not run any jobs on this machine, as they might be automatically terminated.
+
+IMPORTANT:
+  - Orion introduction: https://orion.nmbu.no/
+  - Orion can handle small-scale projects. Need more CPU hours? Please consider
+    applying for national infrastructure resources: https://www.sigma2.no/
+  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
+    using i.e. pigz.
+
+NEWS:
+  - 2020-10-08: Orion has been re-built. We are still working out many details.
+    Please email us if you miss anything, or notice any issues.
+
+For any Orion related enquiry: orion-support@nmbu.no
+PS: We are on Teams: https://bit.ly/orion-teams
+
+[bio326-21-0@cn-12 GenomeAssembly2022]$
+```
+
+As we moved into a new computer, we should activate Anaconda3 and the ONPTools environment:
+
+```console
+[bio326-21-0@cn-11 GenomeAssembly2022]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+Activating Anaconda module for bio326-21-0
+conda is running. Please type conda activate to load the basic conda functions...
+[bio326-21-0@cn-11 GenomeAssembly2022]$ conda activate  /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$
+```
+
+Let's run NanoPlot to generate some nice Plots. First let's run on the MiniONReads:
+
+```console
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$ cd MiniONReads/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ ls
+MiniON.fastq
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ NanoPlot -t 4 --fastq MiniON.fastq --N50 --loglength -o MiniON.Nanoplot.out
+/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:702: MatplotlibDeprecationWarning:
+
+The global colormaps dictionary is no longer considered public API.
+
+/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:720: MatplotlibDeprecationWarning:
+
+The global colormaps dictionary is no longer considered public API.
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ ls
+MiniON.fastq  MiniON.Nanoplot.out
+```
+
+The results are storage in the MiniON.Nanoplot.out directory. Take a look:
+
+```console
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniONReads]$ cd MiniON.Nanoplot.out/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ ls
+Dynamic_Histogram_Read_length.html  LengthvsQualityScatterPlot_loglength_dot.png  NanoPlot-report.html                             Yield_By_Length.png
+HistogramReadlength.png             LengthvsQualityScatterPlot_loglength_kde.png  NanoStats.txt
+LengthvsQualityScatterPlot_dot.png  LogTransformed_HistogramReadlength.png        Weighted_HistogramReadlength.png
+LengthvsQualityScatterPlot_kde.png  NanoPlot_20220317_1602.log                    Weighted_LogTransformed_HistogramReadlength.png
+```
+
+There are plenty of tables, pictures and reports. We can do a qick check of the NanoStats.txt report:
+
+```console
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ more NanoStats.txt                                                       [5/100]
+General summary:
+Mean read length:                4,266.4
+Mean read quality:                  10.2
+Median read length:              2,275.5
+Median read quality:                10.5
+Number of reads:                24,000.0
+Read length N50:                 8,318.0
+STDEV read length:               5,682.0
+Total bases:               102,392,823.0
+Number, percentage and megabases of reads above quality cutoffs
+>Q5:    23999 (100.0%) 102.4Mb
+>Q7:    22812 (95.0%) 98.1Mb
+>Q10:   14172 (59.0%) 62.6Mb
+>Q12:   3881 (16.2%) 16.7Mb
+>Q15:   0 (0.0%) 0.0Mb
+Top 5 highest mean basecall quality scores and their read lengths
+1:      14.8 (962)
+2:      14.8 (772)
+3:      14.5 (1027)
+4:      14.4 (1483)
+5:      14.4 (894)
+Top 5 longest reads and their mean basecall quality score
+1:      117332 (11.8)
+2:      82149 (9.4)
+3:      68986 (7.5)
+4:      66931 (8.2)
+5:      63998 (8.6)
+```
+
+Let's do the same for the PromethiON results:
+
+```console
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 MiniON.Nanoplot.out]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 GenomeAssembly2022]$ cd PromethiONReads/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiONReads]$ NanoPlot -t 4 --fastq PromethiON.fastq --N50 --loglength -o PromethiON.Nanoplot.out
+/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:702: MatplotlibDeprecationWarning:
+
+The global colormaps dictionary is no longer considered public API.
+
+/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/lib/python3.6/_collections_abc.py:720: MatplotlibDeprecationWarning:
+
+The global colormaps dictionary is no longer considered public API.
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ ls
+Dynamic_Histogram_Read_length.html  LengthvsQualityScatterPlot_loglength_dot.png  NanoPlot-report.html                             Yield_By_Length.png
+HistogramReadlength.png             LengthvsQualityScatterPlot_loglength_kde.png  NanoStats.txt
+LengthvsQualityScatterPlot_dot.png  LogTransformed_HistogramReadlength.png        Weighted_HistogramReadlength.png
+LengthvsQualityScatterPlot_kde.png  NanoPlot_20220317_1615.log                    Weighted_LogTransformed_HistogramReadlength.png
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-11 PromethiON.Nanoplot.out]$ more NanoStats.txt
+General summary:
+Mean read length:                 6,935.2
+Mean read quality:                   12.6
+Median read length:               2,029.0
+Median read quality:                 12.7
+Number of reads:                165,305.0
+Read length N50:                 23,747.0
+STDEV read length:               12,384.9
+Total bases:              1,146,423,404.0
+Number, percentage and megabases of reads above quality cutoffs
+>Q5:    165305 (100.0%) 1146.4Mb
+>Q7:    165305 (100.0%) 1146.4Mb
+>Q10:   135154 (81.8%) 934.6Mb
+>Q12:   99363 (60.1%) 715.0Mb
+>Q15:   29523 (17.9%) 208.5Mb
+Top 5 highest mean basecall quality scores and their read lengths
+1:      22.9 (629)
+2:      22.6 (282)
+3:      22.1 (219)
+4:      21.5 (262)
+5:      21.5 (1414)
+Top 5 longest reads and their mean basecall quality score
+1:      261876 (7.6)
+2:      240794 (8.6)
+3:      196851 (8.0)
+4:      189140 (7.9)
+5:      184049 (9.3)
+```
+
+NanoPlot also proudces a .html report with these data. To vizualise this it is necesary to copy the html to our computer and open it then in a browser.
+We can do this by scp or rsync commands **IN YOUR COMPUTER NOT ORION**:
+
+```console
+(base) avera@L003772:auve$ rsync -aP bio326-21-0@login.orion.nmbu.no:/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/PromethiONReads/PromethiON.Nanoplot.out/*.html .
+```
+
+
+What can we conclude on these results???
+
+
+
 
 
 
