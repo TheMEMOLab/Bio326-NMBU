@@ -525,5 +525,154 @@ From the FiltLong github:
 
 We will use this software to remove those "bad" reads and clean the samples.
 
-The easiest way is by submmiting a batch script as the follow:
+The easiest way is by submmiting the following script as SLRUM batch job:
+
+```bash
+#!/bin/bash
+#########################################################################
+#       SLURM script to run FiltLong and NanoPlot analysis on ONP reads
+#               usage: sbatch FiltLong.SLURM.sh <InputString>
+#
+#       Author Arutro Vera
+#       March 2022
+#########################################################################
+
+###############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=FiltlongAndNanoPlot
+#
+## Wall time limit:
+#SBATCH --time=01:00:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 10
+#SBATCH --mem=20G
+#SBATCH --out slurm-FiltlongNanoplot-%A.out
+#SBATCH --partition=smallmem
+###
+###########################################################
+
+###Basic usage help for this script#######
+
+print_usage() {
+        echo "Usage: sbatch $0 <InputString>"
+        echo "eg: sbatch $0 MiniON"
+}
+
+if [ $# -le 0 ]
+        then
+                print_usage
+                exit 1
+        fi
+
+
+###############Main SCRIPT###################################
+
+###Variables###
+input=$1
+
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3
+
+##Activate conda environments
+
+export PS1=\$
+
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
+
+
+####Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I'm working with this CONDAENV"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+
+echo "copying files to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID.$input
+cd tmpDir_of.$SLURM_JOB_ID.$input
+
+#Copy data to the $TMPDIR
+
+echo "copying Reads to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+time rsync -aP $SLURM_SUBMIT_DIR/$input\Reads/*fastq .
+
+echo "These are my files:"
+ls -1
+
+
+### Filtlong
+
+echo "Performing Filtlong on file $input ..."
+date +%d\ %b\ %T
+
+time filtlong \
+        --min_length 1000 \
+        --keep_percent 90 \
+        $input.fastq | pigz -p $SLURM_CPUS_ON_NODE > $input.filtlong.fq.gz
+
+###NanoPlot
+
+echo "Performing NanoPlot on filtlong reads"
+date +%d\ %b\ %T
+
+time NanoPlot \
+        -t $SLURM_CPUS_ON_NODE \
+        --fastq $input.filtlong.fq.gz \
+        --N50 \
+        --loglength \
+        -p $input.filtlong. \
+        -o $input.NanoplotFiltlong.dir
+
+###########Moving results to anywhere the main script was submitted############
+
+echo "moving results to" $SLURM_SUBMIT_DIR/
+
+cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+time rsync -aP $input.filtlong.fq.gz $SLURM_SUBMIT_DIR/$input\Reads/
+time rsync -aP $input.NanoplotFiltlong.dir $SLURM_SUBMIT_DIR/$input\Reads
+
+echo "Final fastq and Nanoplot results are in:" $SLURM_SUBMIT_DIR/$input\Reads
+
+####removing tmp dir. Remember to do this for not filling the HDD in the node!!!!###
+
+cd $TMPDIR/$USER/
+rm -r tmpDir_of.$SLURM_JOB_ID.$input
+
+echo "I've done at"
+date
+```
 
