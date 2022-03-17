@@ -290,8 +290,7 @@ Now we can delete the fastqFiles directory in each folder:
 
 The first steep after obtaining the fastq files form the sequencer is to know how is the quality in means of No. of reads, size, and ![Phred quality score](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/fastqC.png):
 
-
-To do this we can use 
+* We will use the [NanoPlot](https://github.com/wdecoster/NanoPlot) and some Rscripts to produce some plots of the basic stats of our data. To use Nanoplot we need first to request an interactive job and start working there. As some times we could lost the connection with the Orion server, it is preferable to use [TMUX](https://github.com/tmux/tmux/wiki). This terminal multiplexer software will allow keeping our session active in Orion even if we suddenly lost the internet connection:
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ tmux new -s ONP
@@ -312,3 +311,38 @@ For any Orion related enquiry: orion-support@nmbu.no
 PS: We are on Teams: https://bit.ly/orion-teams
 
 [bio326-21-0@login GenomeAssembly2022]$
+```
+* Now we need to ask the SLURM manager for a computer node to test the NANOPLOT and can start to work: 
+
+```console 
+[bio326-21-0@login GenomeAssembly2022]$ srun --cpus-per-task 4 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
+srun: job 14301977 queued and waiting for resources
+srun: job 14301977 has been allocated resources
+
+Welcome to the NMBU Orion compute cluster environment.
+
+You are logged in to a machine that can be used to access your home directory,
+edit your scripts, manage your files, and submit jobs to the cluster environment.
+Do not run any jobs on this machine, as they might be automatically terminated.
+
+IMPORTANT:
+  - Orion introduction: https://orion.nmbu.no/
+  - Orion can handle small-scale projects. Need more CPU hours? Please consider
+    applying for national infrastructure resources: https://www.sigma2.no/
+  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
+    using i.e. pigz.
+
+NEWS:
+  - 2020-10-08: Orion has been re-built. We are still working out many details.
+    Please email us if you miss anything, or notice any issues.
+
+For any Orion related enquiry: orion-support@nmbu.no
+PS: We are on Teams: https://bit.ly/orion-teams
+
+[bio326-21-0@cn-12 GenomeAssembly2022]$
+```
+*Now that TMUX is active you can deatch the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
+
+
+
+
