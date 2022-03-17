@@ -406,7 +406,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 [bio326-21-0@cn-12 GenomeAssembly2022]$
 ```
 
-As we moved into a new computer, we should activate Anaconda3 and the ONPTools environment:
+As we moved into a new computer, we should activate Anaconda3 and the ONPTools environment before start working:
 
 ```console
 [bio326-21-0@cn-11 GenomeAssembly2022]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
@@ -543,8 +543,12 @@ Now we can finish the interactive job and the tmux session:
 [exited]
 ```
 
-## Filtering lowquality reads and short reads by [FiltLong]()
+## Filtering lowquality reads and short reads by [FiltLong](https://github.com/rrwick/Filtlong)
 
+From the FiltLong github:
+*"Filtlong is a tool for filtering long reads by quality. It can take a set of long reads and produce a smaller, better subset. It uses both read length (longer is better) and read identity (higher is better) when choosing which reads pass the filter."*
 
+We will use this software to remove those "bad" reads and clean the samples.
 
+The easiest way is by submmiting the 
 
