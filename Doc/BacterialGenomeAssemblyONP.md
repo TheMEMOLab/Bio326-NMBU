@@ -891,12 +891,13 @@ PS: We are on Teams: https://bit.ly/orion-teams
 [bio326-21-0@cn-11 NanoStats.dir]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
 Activating Anaconda module for bio326-21-0
 conda is running. Please type conda activate to load the basic conda functions...
-[bio326-21-0@cn-11 NanoStats.dir]$ conda activate /net/fs-1/home01/auve/mycondaenvs/R_env
+[bio326-21-0@cn-11 NanoStats.dir]$ conda activate /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$
 ```
 * The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will produce the bar plots. Let's use it:
 
 ```console
-(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
 Reading File MiniON.NanoStats.txt
 Reading File PromethiON.NanoStats.txt
 Reading File MiniON.filtlong.NanoStats.txt
@@ -928,7 +929,7 @@ Thank you!
 * After cheking we got the ```Barplots.NanoStats.pdf``` file in our directory we can exit the computing node:
 
 ```console
-(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ ls -lrth
+[bio326-21-0@cn-11 NanoStats.dir]$ ls -lrth
 total 28K
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0  819 Mar 17 22:03 MiniON.NanoStats.txt
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0  812 Mar 17 22:03 MiniON.filtlong.NanoStats.txt
@@ -936,7 +937,7 @@ total 28K
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0  847 Mar 17 22:03 PromethiON.filtlong.NanoStats.txt
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0  186 Mar 17 23:32 NanoStats.total.tsv
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0 5.2K Mar 17 23:32 Barplots.NanoStats.pdf
-(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ exit
+[bio326-21-0@cn-11 NanoStats.dir]$ exit
 exit
 [bio326-21-0@login NanoStats.dir]$
 ```
