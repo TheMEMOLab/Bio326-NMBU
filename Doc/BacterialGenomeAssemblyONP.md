@@ -290,7 +290,42 @@ Now we can delete the fastqFiles directory in each folder:
 
 The first steep after obtaining the fastq files form the sequencer is to know how is the quality in means of No. of reads, size, and ![Phred quality score](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/fastqC.png):
 
-* We will use the [NanoPlot](https://github.com/wdecoster/NanoPlot) and some Rscripts to produce some plots of the basic stats of our data. To use Nanoplot we need first to request an interactive job and start working there. As some times we could lost the connection with the Orion server, it is preferable to use [TMUX](https://github.com/tmux/tmux/wiki). This terminal multiplexer software will allow keeping our session active in Orion even if we suddenly lost the internet connection:
+* Nanoplot and most of the software we will use in this course are installed in a condaenvironment. Let's activate the environment and test Nanoplot:
+**NOTE: CONDA and all its features have to be loaded by a module names Anaconda3 and then configure some of the env variables to be able to use conda.
+For your conveniance we have crated a bash script that do all this for you, just type the following to activate conda:**
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+Activating Anaconda module for bio326-21-0
+conda is running. Please type conda activate to load the basic conda functions...
+[bio326-21-0@login GenomeAssembly2022]$
+```
+
+Now that conda is loaded let's activate the ONPTools environment and try Nanoplot
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ conda activate  /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@login GenomeAssembly2022]$ NanoPlot --help
+usage: NanoPlot [-h] [-v] [-t THREADS] [--verbose] [--store] [--raw] [--huge]
+                [-o OUTDIR] [-p PREFIX] [--tsv_stats] [--maxlength N]
+                [--minlength N] [--drop_outliers] [--downsample N]
+                [--loglength] [--percentqual] [--alength] [--minqual N]
+                [--runtime_until N] [--readtype {1D,2D,1D2}] [--barcoded]
+                [--no_supplementary] [-c COLOR] [-cm COLORMAP]
+                [-f {eps,jpeg,jpg,pdf,pgf,png,ps,raw,rgba,svg,svgz,tif,tiff}]
+                [--plots [{kde,hex,dot,pauvre} [{kde,hex,dot,pauvre} ...]]]
+                [--listcolors] [--listcolormaps] [--no-N50] [--N50]
+                [--title TITLE] [--font_scale FONT_SCALE] [--dpi DPI]
+                [--hide_stats]
+                (--fastq file [file ...] | --fasta file [file ...] | --fastq_rich file [file ...] | --fastq_minimal file [file ...] | --summary file [file ...] | --bam file [file ...] | --ubam file [file ...] | --cram file [file ...] | --pickle pickle | --feather file [file ...])
+
+CREATES VARIOUS PLOTS FOR LONG READ SEQUENCING DATA.
+```
+
+**This mean the environment works and we can use NanoPlot now.**
+
+* We will use the [NanoPlot](https://github.com/wdecoster/NanoPlot) and some Rscripts to produce some plots of the basic stats of our data. To use Nanoplot we need first to request an interactive job and start working there (Remember: Never run a job in the login node "Do not get naked in the lobby"). 
+*As some times we could lost the connection with the Orion server, it is preferable to use [TMUX](https://github.com/tmux/tmux/wiki). This terminal multiplexer software will allow keeping our session active in Orion even if we suddenly lost the internet connection:*
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ tmux new -s ONP
