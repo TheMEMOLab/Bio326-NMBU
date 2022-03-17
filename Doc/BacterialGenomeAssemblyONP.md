@@ -839,3 +839,12 @@ Top 5 longest reads and their mean basecall quality score
 4:      189140 (7.9)
 5:      184049 (9.3)
 ```
+It seems there was a little improvment after FiltLong selection. We could keep opening all the NanoStats files and compare manualy, this is easy when you have 2 or 3 files but what happen if you get 100? Manual inspection will take forever. So as bioinformaticians we can create our own scripts to parse the information from NanoPlot and display all this info in some kind of plots.
+
+* Go to the GenomeAssembly2022 directory and let's gather all the NanoStatsFiles into a single directory. Again a ```for loop``` will be super useful here:
+
+```console
+bio326-21-0@login PromethiON.NanoplotFiltlong.dir]$ cd $SCRATCH/GenomeAssembly2022
+[bio326-21-0@login GenomeAssembly2022]$ for i in *Reads; do BN=$(basename $i Reads); cp $i/$BN.Nanoplot.out/*NanoStats.txt NanoStats.dir/; cp $i/$BN.NanoplotFiltlong.dir/*NanoStats.txt NanoStats.dir/;done
+```
+
