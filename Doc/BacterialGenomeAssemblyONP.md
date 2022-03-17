@@ -925,6 +925,21 @@ dbl (1): Longest
 I've done.
 Thank you!
 ```
+* After cheking we got the ```Barplots.NanoStats.pdf``` file in our directory we can exit the computing node:
+
+```console
+(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ ls -lrth
+total 28K
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0  819 Mar 17 22:03 MiniON.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0  812 Mar 17 22:03 MiniON.filtlong.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0  846 Mar 17 22:03 PromethiON.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0  847 Mar 17 22:03 PromethiON.filtlong.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0  186 Mar 17 23:32 NanoStats.total.tsv
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 5.2K Mar 17 23:32 Barplots.NanoStats.pdf
+(/net/fs-1/home01/auve/mycondaenvs/R_env) [bio326-21-0@cn-11 NanoStats.dir]$ exit
+exit
+[bio326-21-0@login NanoStats.dir]$
+```
 
 * This script produces a pdf with the plots. To open it, we need to transfer the file to our computer by rsync: 
 
@@ -936,6 +951,6 @@ Barplots.NanoStats.pdf
           5,288 100%    5.04MB/s    0:00:00 (xfr#1, to-chk=0/1)
 ```
 
-The PDF has something like this ![barplot](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/barplot.png)
+The PDF shows something like this ![barplot](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/barplot.png)
 
 ## Do you think FiltLong improve the quality of the Nanopore sequences????
