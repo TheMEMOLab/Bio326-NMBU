@@ -676,3 +676,41 @@ echo "I've done at"
 date
 ```
 
+A copy of this script can be found in ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts``` Copy to your ```GenomeAssembly2022``` directory as follow:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/FiltLong.SLURM.sh .
+[bio326-21-0@login GenomeAssembly2022]$ ls
+FiltLong.SLURM.sh  MiniONReads  PromethiONReads  PromethiONReadsReads
+```
+This script has a usage lets check the options:
+
+```console 
+[bio326-21-0@login GenomeAssembly2022]$ ./FiltLong.SLURM.sh
+Usage: sbatch ./FiltLong.SLURM.sh <InputString>
+eg: sbatch ./FiltLong.SLURM.sh MiniON
+```
+And follow the example:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ sbatch ./FiltLong.SLURM.sh MiniON
+Submitted batch job 14302187
+```
+
+We can monitorate the progress of our job by using the ```squeue``` command:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14302187  smallmem Filtlong bio326-2  R       0:10      1 cn-8
+```
+The same way we can run the script for the Promethion:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ sbatch FiltLong.SLURM.sh PromethiON
+Submitted batch job 14302190
+[bio326-21-0@login GenomeAssembly2022]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14302190  smallmem Filtlong bio326-2  R       0:01      1 cn-8
+```
+
