@@ -341,7 +341,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 
 [bio326-21-0@cn-12 GenomeAssembly2022]$
 ```
-*Now that TMUX is active you can deatch the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
+*Now that TMUX is active you can deatach the temrinal and try if your session is still active. To do this we need to press the keys ctrl+b d. This will bring us back to the "main" terminal...Use the command ```tmux a -t ONP``` to attach the ONP session again*
 
 
 
