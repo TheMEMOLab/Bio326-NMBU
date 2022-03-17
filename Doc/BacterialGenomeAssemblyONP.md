@@ -714,3 +714,52 @@ Submitted batch job 14302190
           14302190  smallmem Filtlong bio326-2  R       0:01      1 cn-8
 ```
 
+SBATCH will produce an .out file with all the messages from the STDOUT and errors, let's take a look:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ ls -1
+FiltLong.SLURM.sh
+MiniONReads
+PromethiONReads
+PromethiONReadsReads
+slurm-FiltlongNanoplot-14302187.out
+slurm-FiltlongNanoplot-14302190.out
+[bio326-21-0@login GenomeAssembly2022]$ head -20 slurm-FiltlongNanoplot-14302187.out
+Activating Anaconda module for bio326-21-0
+conda is running. Please type conda activate to load the basic conda functions...
+Hello bio326-21-0
+my submit directory is:
+/net/cn-1/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022
+this is the job:
+14302187
+I am running on:
+cn-8
+I am running with:
+10 cpus
+I'm working with this CONDAENV
+/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools
+Today is:
+Thu Mar 17 21:19:03 CET 2022
+copying files to /home/work/bio326-21-0/tmpDir_of.14302187.MiniON
+copying Reads to /home/work/bio326-21-0/tmpDir_of.14302187.MiniON
+sending incremental file list
+MiniON.fastq
+    208,625,216 100%  104.53MB/s    0:00:01 (xfr#1, to-chk=0/1)
+  ```
+ 
+ We can display also the last part of the file:
+ 
+ ```console
+  [bio326-21-0@login GenomeAssembly2022]$ tail slurm-FiltlongNanoplot-14302190.out
+         28,880 100%  273.82kB/s    0:00:00 (xfr#12, to-chk=1/14)
+PromethiON.NanoplotFiltlong.dir/PromethiON.filtlong.Yield_By_Length.png
+         22,684 100%  215.07kB/s    0:00:00 (xfr#13, to-chk=0/14)
+
+real    0m0.162s
+user    0m0.042s
+sys     0m0.021s
+Final fastq and Nanoplot results are in: /net/cn-1/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/PromethiONReads
+I've done at
+Thu Mar 17 21:24:51 CET 2022
+```
+
