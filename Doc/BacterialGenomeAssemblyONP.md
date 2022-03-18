@@ -897,50 +897,107 @@ conda is running. Please type conda activate to load the basic conda functions..
 * The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will produce the bar plots. Let's use it:
 
 ```console
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ pperl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
 Reading File MiniON.NanoStats.txt
 Reading File PromethiON.NanoStats.txt
 Reading File MiniON.filtlong.NanoStats.txt
 Reading File PromethiON.filtlong.NanoStats.txt
-Ploting stats...
+The result table is NanoStats.total.tsv
 
-Loading required package: tidyverse
-── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
-✔ ggplot2 3.3.5     ✔ purrr   0.3.4
-✔ tibble  3.1.4     ✔ dplyr   1.0.7
-✔ tidyr   1.1.3     ✔ stringr 1.4.0
-✔ readr   2.0.1     ✔ forcats 0.5.1
-── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-Loading required package: patchwork
-Rows: 4 Columns: 5
-── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Delimiter: "\t"
-chr (1): Sample
-dbl (1): Longest
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-[1] "Saving plots into Barplots.NanoStats.pdf"
 I've done.
 Thank you!
 ```
-* After cheking we got the ```Barplots.NanoStats.pdf``` file in our directory we can exit the computing node:
+* After cheking we got the ```NanoStats.total.tsv``` file in our directory we can exit the computing node:
 
 ```console
 [bio326-21-0@cn-11 NanoStats.dir]$ ls -lrth
-total 28K
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  819 Mar 17 22:03 MiniON.NanoStats.txt
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  812 Mar 17 22:03 MiniON.filtlong.NanoStats.txt
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  846 Mar 17 22:03 PromethiON.NanoStats.txt
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  847 Mar 17 22:03 PromethiON.filtlong.NanoStats.txt
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  186 Mar 17 23:32 NanoStats.total.tsv
--rw-rw-r-- 1 bio326-21-0 bio326-21-0 5.2K Mar 17 23:32 Barplots.NanoStats.pdf
+total 20K
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 819 Mar 17 22:03 MiniON.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 812 Mar 17 22:03 MiniON.filtlong.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 846 Mar 17 22:03 PromethiON.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 847 Mar 17 22:03 PromethiON.filtlong.NanoStats.txt
+-rw-rw-r-- 1 bio326-21-0 bio326-21-0 186 Mar 18 10:58 NanoStats.total.tsv
 [bio326-21-0@cn-11 NanoStats.dir]$ exit
 exit
 [bio326-21-0@login NanoStats.dir]$
 ```
+
+* Finally we can use R (RStudio is a nice option) to produce the plots. To do this we can open RStudio in the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
+
+
+* We can use the following script to produce nice barplots of the NanoStats
+
+```R
+
+###Addign a path with some libraries used in BIO326
+mypath <- "/mnt/SCRATCH/bio326-21/GenomeAssembly/R"
+.libPaths(mypath)
+
+##Loading libraries
+library(tidyverse)
+library(patchwork)
+
+##Go to the GenomeAssembly2022 dir
+
+setwd("/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/NanoStats.dir")
+
+#Reading the NanoStats table
+Nanostat <- read_tsv("NanoStats.total.tsv",
+                     col_names = c("Sample","Mean.Read.Len", "Num.Reads","N50","Longest"))
+
+###USing ggplot to create barplots of the stats
+
+BPNReads <- ggplot(data=Nanostat,
+                   aes(x=reorder(Sample,Num.Reads),
+                       y=Num.Reads)) +
+  geom_bar(stat='identity',fill="steelblue")+
+  xlab("Samples")+
+  ylab("Number of reads")+
+  coord_flip()+
+  theme_classic()
+
+
+BPN50 <- ggplot(data=Nanostat,
+                aes(x=reorder(Sample,N50),
+                    y=N50)) +
+  geom_bar(stat='identity',fill="darkgreen")+
+  coord_flip()+
+  xlab("Samples")+
+  ylab("N50")+
+  theme_classic()
+
+BPLonges <- ggplot(data=Nanostat,
+                   aes(x=reorder(Sample,Longest),
+                       y=Longest)) +
+  geom_bar(stat='identity',fill="darkred")+
+  coord_flip()+
+  xlab("Samples")+
+  ylab("longestRead_Length_bp")+
+  theme_classic()
+
+
+BPMeanLen <- ggplot(data=Nanostat,
+                    aes(x=reorder(Sample,Mean.Read.Len),
+                        y=Mean.Read.Len)) +
+  geom_bar(stat='identity',fill="orange")+
+  coord_flip()+
+  xlab("Samples")+
+  ylab("Mean_Read_Length_bp")+
+  theme_classic()
+
+##Using patchwork to merge all the ggplot objects into a single object
+
+BarplotsAll <- (BPNReads + BPN50)/(BPMeanLen + BPLonges)
+
+##Saving the object BarplotsAll into a PDF file
+
+ggsave(BarplotsAll,
+       file="Barplots.NanoStats.pdf",
+       width = 15,
+       height = 18)
+
+```
+
 
 * This script produces a pdf with the plots. To open it, we need to transfer the file to our computer by rsync: 
 
