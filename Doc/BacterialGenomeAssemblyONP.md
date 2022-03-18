@@ -693,7 +693,7 @@ eg: sbatch ./FiltLong.SLURM.sh MiniON
 And follow the example:
 
 ```console
-[bio326-21-0@login GenomeAssembly2022]$ sbatch ./FiltLong.SLURM.sh MiniON
+[bio326-21-0@login GenomeAssembly2022]$ sbatch FiltLong.SLURM.sh MiniON
 Submitted batch job 14302187
 ```
 
@@ -721,7 +721,6 @@ SBATCH will produce an .out file with all the messages from the STDOUT and error
 FiltLong.SLURM.sh
 MiniONReads
 PromethiONReads
-PromethiONReadsReads
 slurm-FiltlongNanoplot-14302187.out
 slurm-FiltlongNanoplot-14302190.out
 [bio326-21-0@login GenomeAssembly2022]$ head -20 slurm-FiltlongNanoplot-14302187.out
