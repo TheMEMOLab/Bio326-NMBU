@@ -888,7 +888,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 * The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will help us to gather all the tables into a single file and extract the No. of reads, the mean lenght, N50 and the longest read in each file. Let's use it:
 
 ```console
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ pperl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
+(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
 Reading File MiniON.NanoStats.txt
 Reading File PromethiON.NanoStats.txt
 Reading File MiniON.filtlong.NanoStats.txt
