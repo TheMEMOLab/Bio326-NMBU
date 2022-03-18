@@ -681,7 +681,7 @@ A copy of this script can be found in ```/mnt/SCRATCH/bio326-21/GenomeAssembly/B
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/FiltLong.SLURM.sh .
 [bio326-21-0@login GenomeAssembly2022]$ ls
-FiltLong.SLURM.sh  MiniONReads  PromethiONReads  PromethiONReadsReads
+FiltLong.SLURM.sh  MiniONReads  PromethiONReads
 ```
 This script has a usage lets check the options:
 
