@@ -885,16 +885,7 @@ PS: We are on Teams: https://bit.ly/orion-teams
 
 [bio326-21-0@cn-11 NanoStats.dir]$
 ```
-* We will use R to plot, R is also installed as a conda environment, activate this:
-
-```console
-[bio326-21-0@cn-11 NanoStats.dir]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
-Activating Anaconda module for bio326-21-0
-conda is running. Please type conda activate to load the basic conda functions...
-[bio326-21-0@cn-11 NanoStats.dir]$ conda activate /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env/
-(/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$
-```
-* The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will produce the bar plots. Let's use it:
+* The script ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl``` will help us to gather all the tables into a single file and extract the No. of reads, the mean lenght, N50 and the longest read in each file. Let's use it:
 
 ```console
 (/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/r-env) [bio326-21-0@cn-11 NanoStats.dir]$ pperl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/PNanostats.2.pl
@@ -917,6 +908,11 @@ total 20K
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0 846 Mar 17 22:03 PromethiON.NanoStats.txt
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0 847 Mar 17 22:03 PromethiON.filtlong.NanoStats.txt
 -rw-rw-r-- 1 bio326-21-0 bio326-21-0 186 Mar 18 10:58 NanoStats.total.tsv
+[bio326-21-0@cn-11 NanoStats.dir]$ more NanoStats.total.tsv
+MiniON  4,266.4 24,000.0        8,318.0 117332
+PromethiON      6,935.2 165,305.0       23,747.0        261876
+MiniON.filtlong 6,836.8 13,479.0        9,438.0 117332
+PromethiON.filtlong     11,276.5        91,499.0        24,931.0        240794
 [bio326-21-0@cn-11 NanoStats.dir]$ exit
 exit
 [bio326-21-0@login NanoStats.dir]$
