@@ -1191,6 +1191,11 @@ date
 ```
 ** Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.**
 
+**The assembly will take some time...let's check some concepts:
+
+![Assembly](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/assembly.png)
+![Stats](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/stats.png)
+
 * The script will produce the ```MiniON.flyeAssembly.dir``` folder:
 
 ```console
