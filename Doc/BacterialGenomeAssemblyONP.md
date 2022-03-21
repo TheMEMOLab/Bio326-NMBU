@@ -1204,5 +1204,71 @@ FiltLong.SLURM.sh
 flye.SLURM.sh
 MiniON.flyeAssembly.dir
 ```
+* If everything worked correctly you will obtain somethig like this:
 
+```console
+[bio326-21-0@login GenomeAssembly2022]$ tree MiniON.flyeAssembly.dir/
+MiniON.flyeAssembly.dir/
+├── 00-assembly
+│   ├── draft_assembly.fasta
+│   └── draft_assembly.fasta.fai
+├── 10-consensus
+│   ├── consensus.fasta
+│   ├── minimap.bam.bai
+│   └── minimap.stderr
+├── 20-repeat
+│   ├── graph_after_rr.gv
+│   ├── graph_before_rr.fasta
+│   ├── graph_before_rr.gv
+│   ├── read_alignment_dump
+│   ├── repeat_graph_dump
+│   └── repeat_graph_edges.fasta
+├── 30-contigger
+│   ├── contigs.fasta
+│   ├── contigs.fasta.fai
+│   ├── contigs_stats.txt
+│   ├── graph_final.fasta
+│   ├── graph_final.gfa
+│   ├── graph_final.gv
+│   └── scaffolds_links.txt
+├── 40-polishing
+│   ├── contigs_stats.txt
+│   ├── edges_aln.bam.bai
+│   ├── filtered_contigs.fasta
+│   ├── filtered_contigs.fasta.fai
+│   ├── filtered_stats.txt
+│   ├── minimap_1.bam.bai
+│   ├── minimap.stderr
+│   └── polished_edges.gfa
+├── assembly.fasta
+├── assembly_graph.gfa
+├── assembly_graph.gv
+├── assembly_info.txt
+├── flye.log
+├── MiniON.stats.flye.contigs.txt
+└── params.json
+
+5 directories, 33 files
+```
+
+**The file assembly.fasta contain the final contigs and the file  MiniON.stats.flye.contigs.txt has the basic stats. Let's take a look:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ more MiniON.flyeAssembly.dir/MiniON.stats.flye.contigs.txt
+stats for assembly.fasta
+sum = 3415822, n = 7, ave = 487974.57, largest = 3305136
+N50 = 3305136, n = 1
+N60 = 3305136, n = 1
+N70 = 3305136, n = 1
+N80 = 3305136, n = 1
+N90 = 3305136, n = 1
+N100 = 4184, n = 7
+N_count = 0
+Gaps = 0
+```
+
+
+The total of bases in the assembly sum ~3.46 Mb, this is the final length of the assembly. The N50 (statistic that defines the assembly quality in terms of contiguity. It can be defined as: given a set of contigs, the N50 is the sequence length of the shortest contig at 50% of the total genome length...), is ~ 3.28 Mb in a single contig.
+
+After this, we can assess the completeness of our genome. The most used strategy is to look for the presence of a set of single-copy orthologs genes commonly present in all bacteria (universal genes) and score the number of occurrences in our genome.
 
