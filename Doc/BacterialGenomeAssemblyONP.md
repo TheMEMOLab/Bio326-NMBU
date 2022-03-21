@@ -1189,7 +1189,7 @@ date
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh MiniON
 ```
-** Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.
+** Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.**
 
 * The script will produce the ```MiniON.flyeAssembly.dir``` folder:
 
