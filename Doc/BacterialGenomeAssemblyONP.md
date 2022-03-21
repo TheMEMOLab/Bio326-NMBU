@@ -937,8 +937,14 @@ library(patchwork)
 setwd("/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/NanoStats.dir")
 
 #Reading the NanoStats table
+
 Nanostat <- read_tsv("NanoStats.total.tsv",
-                     col_names = c("Sample","Mean.Read.Len", "Num.Reads","N50","Longest"))
+                     col_names = c("Sample",
+                                   "Mean.Read.Len", 
+                                   "Num.Reads",
+                                   "N50",
+                                   "Quality",
+                                   "Longest"))
 
 ###USing ggplot to create barplots of the stats
 
@@ -980,11 +986,20 @@ BPMeanLen <- ggplot(data=Nanostat,
   ylab("Mean_Read_Length_bp")+
   theme_classic()
 
+Quality <- ggplot(data=Nanostat,
+                  aes(x=reorder(Sample,Quality),
+                      y=Quality)) +
+  geom_bar(stat='identity',fill="pink")+
+  coord_flip()+
+  xlab("Samples")+
+  ylab("Mean read Quality")+
+  theme_classic()
+
 ##Using patchwork to merge all the ggplot objects into a single object
 
-BarplotsAll <- (BPNReads + BPN50)/(BPMeanLen + BPLonges)
+BarplotsAll <- (BPNReads + BPN50+Quality)/(BPMeanLen + BPLonges)
 
-##Saving the object BarplotsAll into a PDF file
+##Saving the BarplotsAll object into a PDF
 
 ggsave(BarplotsAll,
        file="Barplots.NanoStats.pdf",
@@ -1006,4 +1021,162 @@ Barplots.NanoStats.pdf
 
 The PDF shows something like this ![barplot](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/barplot.png)
 
-## Do you think FiltLong improve the quality of the Nanopore sequences????
+**Do you think FiltLong improve the quality of the Nanopore sequences????**
+
+## Genome assembly using [flye](https://github.com/fenderglass/Flye)
+
+Now that we have filtered the reads using Filtlong the next step is assembly the reads into genomic contigs.
+
+* We will use Flye assembler to merge the reads into a genome assembly.
+
+* The following script uses the reads filtered by filtlong and then call Flye to produce a genomic assembly:
+
+```bash
+
+#!/bin/bash
+#########################################################################
+#       SLURM script to run Flye ONP reads
+#               usage: sbatch Flye.SLURM.sh <InputString>
+#
+#       Author Arutro Vera
+#       March 2022
+#########################################################################
+
+###############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=FlyeAssembly
+#
+## Wall time limit:
+#SBATCH --time=24:00:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 12
+#SBATCH --mem=50G
+#SBATCH --out slurm-FlyeAssembly-%A.out
+#SBATCH --partition=smallmem
+###
+###########################################################
+
+###Basic usage help for this script#######
+
+print_usage() {
+        echo "Usage: sbatch $0 <InputString>"
+        echo "eg: sbatch $0 MiniON"
+}
+
+if [ $# -le 0 ]
+        then
+                print_usage
+                exit 1
+        fi
+
+
+###############Main SCRIPT###################################
+
+###Variables###
+input=$1
+
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3
+
+##Activate conda environments
+
+export PS1=\$
+
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/ONPAssembly
+
+
+####Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I'm working with this CONDAENV"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+
+echo "copying files to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID.$input
+cd tmpDir_of.$SLURM_JOB_ID.$input
+
+#Copy data to the $TMPDIR
+
+echo "copying Filtlong reads to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+time rsync -aP $SLURM_SUBMIT_DIR/$input\Reads/$input.filtlong.fq.gz .
+
+echo "These are my files:"
+ls -1
+
+##Assembly using flye
+
+echo "Assembly bacterial genome $input using Fly"
+date +%d\ %b\ %T
+
+time flye \
+        --nano-raw $input.filtlong.fq.gz \
+        --threads $SLURM_CPUS_ON_NODE \
+        -o $input.flyeAssembly.dir
+
+echo "Doing some stats..."
+
+### Stats
+
+conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
+
+cd $input.flyeAssembly.dir
+
+echo "stats"
+assembly-stats assembly.fasta
+Genome_Assembly_lecture/Scripts/assembly-stats/assembly-stats assembly.fasta > $input.stats.metaFly.contigs.txt
+
+###########Moving results to anywhere the main script was submitted############
+
+echo "moving results to" $SLURM_SUBMIT_DIR/
+
+cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+
+time rsync -aP $input.flyeAssembly.dir $SLURM_SUBMIT_DIR/
+
+echo "Final fastq and Nanoplot results are in:" $SLURM_SUBMIT_DIR/$input.flyeAssembly.dir
+
+####removing tmp dir. Remember to do this for not filling the HDD in the node!!!!###
+
+cd $TMPDIR/$USER/
+rm -r tmpDir_of.$SLURM_JOB_ID.$input
+
+echo "I've done at"
+date
+
+```
+
+
