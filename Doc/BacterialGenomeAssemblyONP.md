@@ -1178,5 +1178,17 @@ echo "I've done at"
 date
 
 ```
+* You can copy the script from ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts```
+
+```console 
+[bio326-21-0@login GenomeAssembly2022]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/flye.SLURM.sh .
+```
+
+* And run like this:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh MiniON
+[bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh PromethiON
+```
 
 
