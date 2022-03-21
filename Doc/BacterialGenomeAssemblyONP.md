@@ -1188,7 +1188,16 @@ date
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh MiniON
-[bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh PromethiON
+```
+** Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.
+
+* The script will produce the ```MiniON.flyeAssembly.dir``` folder:
+
+```console
+(/mnt/users/auve/mycondaenvs/ONPTools) [bio326-21-0@login GenomeAssembly2022]$ ls -1
+FiltLong.SLURM.sh
+flye.SLURM.sh
+MiniON.flyeAssembly.dir
 ```
 
 
