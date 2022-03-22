@@ -1484,4 +1484,60 @@ Submitted batch job 14313378
           14313378  smallmem BUSCOBac bio326-2  R       0:15      1 cn-10
 ```
 
-Now the scr
+- When the script is done it will produce the ```MiniON.Busco.flye``` directory. Let's enter and take a look into the results:
+
+```console
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ ls
+00-assembly   20-repeat     40-polishing    assembly_graph.gfa  assembly_info.txt  flye.log           MiniON.stats.flye.contigs.txt  slurm-BUSCO-14313378.out
+10-consensus  30-contigger  assembly.fasta  assembly_graph.gv   busco.SLURM.sh     MiniON.Busco.flye  params.json
+[bio326-21-0@login MiniON.flyeAssembly.dir]$
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ cd MiniON.Busco.flye/
+[bio326-21-0@login MiniON.Busco.flye]$ ls
+auto_lineage  prodigal_output     run_pseudomonadales_odb10                                   short_summary.specific.pseudomonadales_odb10.MiniON.Busco.flye.txt
+logs          run_bacteria_odb10  short_summary.generic.bacteria_odb10.MiniON.Busco.flye.txt
+```
+BUSCO will produce 2 result tables ```short_summary.generic.bacteria_odb10.MiniON.Busco.flye.txt``` and the ```short_summary.specific.pseudomonadales_odb10.MiniON.Busco.flye.txt```. Let's take a look into these files:
+
+```console
+[bio326-21-0@login MiniON.Busco.flye]$ more short_summary.generic.bacteria_odb10.MiniON.Busco.flye.txt
+# BUSCO version is: 5.0.0
+# The lineage dataset is: bacteria_odb10 (Creation date: 2020-03-06, number of species: 4085, number of BUSCOs: 124)
+# Summarized benchmarking in BUSCO notation for file /home/work/bio326-21-0/tmpDir_of.14313378/assembly.fasta
+# BUSCO was run in mode: genome
+# Gene predictor used: prodigal
+
+        ***** Results: *****
+
+        C:46.8%[S:46.8%,D:0.0%],F:41.1%,M:12.1%,n:124
+        58      Complete BUSCOs (C)
+        58      Complete and single-copy BUSCOs (S)
+        0       Complete and duplicated BUSCOs (D)
+        51      Fragmented BUSCOs (F)
+        15      Missing BUSCOs (M)
+        124     Total BUSCO groups searched
+        
+[bio326-21-0@login MiniON.Busco.flye]$ more short_summary.specific.pseudomonadales_odb10.MiniON.Busco.flye.txt
+# BUSCO version is: 5.0.0
+# The lineage dataset is: pseudomonadales_odb10 (Creation date: 2020-03-06, number of species: 159, number of BUSCOs: 782)
+# Summarized benchmarking in BUSCO notation for file /home/work/bio326-21-0/tmpDir_of.14313378/assembly.fasta
+# BUSCO was run in mode: genome
+# Gene predictor used: prodigal
+
+        ***** Results: *****
+
+        C:46.2%[S:46.2%,D:0.0%],F:19.8%,M:34.0%,n:782
+        361     Complete BUSCOs (C)
+        361     Complete and single-copy BUSCOs (S)
+        0       Complete and duplicated BUSCOs (D)
+        155     Fragmented BUSCOs (F)
+        266     Missing BUSCOs (M)
+        782     Total BUSCO groups searched
+
+Placement file versions:
+list_of_reference_markers.bacteria_odb10.2019-12-16.txt
+tree.bacteria_odb10.2019-12-16.nwk
+tree_metadata.bacteria_odb10.2019-12-16.txt
+supermatrix.aln.bacteria_odb10.2019-12-16.faa
+mapping_taxids-busco_dataset_name.bacteria_odb10.2019-12-16.txt
+mapping_taxid-lineage.bacteria_odb10.2019-12-16.txt
+```
