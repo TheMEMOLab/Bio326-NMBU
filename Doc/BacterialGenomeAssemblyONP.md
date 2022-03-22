@@ -1276,6 +1276,8 @@ After this, we can assess the completeness of our genome. The most used strategy
 
 [BUSCO](https://busco.ezlab.org/) (Benchmarking Universal Single-Copy Orthologs) is a tool that attempts to provide a quantitative assessment of the completeness in terms of expected gene content of a genome assembly, transcriptome, or annotated gene set. The results are simplified into categories of Complete and single-copy, Complete and duplicated, Fragmented, or Missing BUSCOs.
 
+**"Based on evolutionarily-informed expectations of gene content of near-universal single-copy orthologs, BUSCO metric is complementary to technical metrics like N50."**
+
 This software looks for a certain number of orthologous genes (BUSCOs) on a database and compares the total of these ortholog genes present in the genome we would like to evaluate. Then, it estimates the completeness based on the presence, duplication, fragmentation, or absence of these BUSCOS. For example (raw example), if the BUSCO database has 10 genes and the software only finds 9 of them in the query genome it scores completeness of the genome at 90 %.
 
 BUSCO has developed different databases with common universal orthologs clusters for several organisms:
@@ -1472,7 +1474,7 @@ Usage: sbatch busco.SLURM.sh fasta.file BuscoOutputName
 eg: sbatch busco.SLURM.sh  assembly.fasta MiniON.Busco.flye
 ```
 
-- Run the script:
+- This script requires 2 parameters as arguments: a fasta file and an output string, let's run the script
 
 ```console
 [bio326-21-0@login MiniON.flyeAssembly.dir]$ sbatch busco.SLURM.sh assembly.fasta MiniON.Busco.flye
@@ -1482,4 +1484,4 @@ Submitted batch job 14313378
           14313378  smallmem BUSCOBac bio326-2  R       0:15      1 cn-10
 ```
 
-
+Now the scr
