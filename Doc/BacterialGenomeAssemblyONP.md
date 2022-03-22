@@ -1281,6 +1281,88 @@ This software looks for a certain number of orthologous genes (BUSCOs) on a data
 BUSCO has developed different databases with common universal orthologs clusters for several organisms:
 ![buscoimg](https://github.com/avera1988/Genome_Assembly_lecture/blob/master/images/busco.png)
 
-Busco will predict genes in the assembly (by prodigal) and then look for the USCOs of a certain taxonomical lineage using hmmer. It automatically identifies the closest taxonomical lineage and then download the BUSCOs database, however you can indicate and narrow the BUSCOs sarch to a prokaryote or eukaryote database by using the **--auto-lineage-prok** flag. 
+Busco will predict genes in the assembly (by prodigal) and then look for the BUSCOs of a certain taxonomical lineage using hmmer. It automatically identifies the closest taxonomical lineage and then download the BUSCOs database, however you can indicate and narrow the BUSCOs sarch to a prokaryote or eukaryote database by using the **--auto-lineage-prok** flag. 
 
 - BUSCO is installed in Orion by a singularity container. We can use the following command to look into the busco options:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ singularity exec /cvmfs/singularity.galaxyproject.org/b/u/busco\:5.0.0--py_1 busco --help
+usage: busco -i [SEQUENCE_FILE] -l [LINEAGE] -o [OUTPUT_NAME] -m [MODE] [OTHER OPTIONS]
+
+Welcome to BUSCO 5.0.0: the Benchmarking Universal Single-Copy Ortholog assessment tool.
+For more detailed usage information, please review the README file provided with this distribution and the BUSCO user guide.
+
+optional arguments:
+  -i FASTA FILE, --in FASTA FILE
+                        Input sequence file in FASTA format. Can be an assembled genome or transcriptome (DNA), or protein sequences from an annotated gene set.
+  -o OUTPUT, --out OUTPUT
+                        Give your analysis run a recognisable short name. Output folders and files will be labelled with this name. WARNING: do not provide a path
+  -m MODE, --mode MODE  Specify which BUSCO analysis mode to run.
+                        There are three valid modes:
+                        - geno or genome, for genome assemblies (DNA)
+                        - tran or transcriptome, for transcriptome assemblies (DNA)
+                        - prot or proteins, for annotated gene sets (protein)
+  -l LINEAGE, --lineage_dataset LINEAGE
+                        Specify the name of the BUSCO lineage to be used.
+  --auto-lineage        Run auto-lineage to find optimum lineage path
+  --auto-lineage-prok   Run auto-lineage just on non-eukaryote trees to find optimum lineage path
+  --auto-lineage-euk    Run auto-placement just on eukaryote tree to find optimum lineage path
+  -c N, --cpu N         Specify the number (N=integer) of threads/cores to use.
+  -f, --force           Force rewriting of existing files. Must be used when output files with the provided name already exist.
+  -r, --restart         Continue a run that had already partially completed.
+  -q, --quiet           Disable the info logs, displays only errors
+  --out_path OUTPUT_PATH
+                        Optional location for results folder, excluding results folder name. Default is current working directory.
+  --download_path DOWNLOAD_PATH
+                        Specify local filepath for storing BUSCO dataset downloads
+  --datasets_version DATASETS_VERSION
+                        Specify the version of BUSCO datasets, e.g. odb10
+  --download_base_url DOWNLOAD_BASE_URL
+                        Set the url to the remote BUSCO dataset location
+  --update-data         Download and replace with last versions all lineages datasets and files necessary to their automated selection
+  --offline             To indicate that BUSCO cannot attempt to download files
+  --metaeuk_parameters METAEUK_PARAMETERS
+                        Pass additional arguments to Metaeuk for the first run. All arguments should be contained within a single pair of quotation marks, separated by commas. E.g. "--param1=1,--param2=2"
+  --metaeuk_rerun_parameters METAEUK_RERUN_PARAMETERS
+                        Pass additional arguments to Metaeuk for the second run. All arguments should be contained within a single pair of quotation marks, separated by commas. E.g. "--param1=1,--param2=2"
+  -e N, --evalue N      E-value cutoff for BLAST searches. Allowed formats, 0.001 or 1e-03 (Default: 1e-03)
+  --limit REGION_LIMIT  How many candidate regions (contig or transcript) to consider per BUSCO (default: 3)
+  --augustus            Use augustus gene predictor for eukaryote runs
+  --augustus_parameters AUGUSTUS_PARAMETERS
+                        Pass additional arguments to Augustus. All arguments should be contained within a single pair of quotation marks, separated by commas. E.g. "--param1=1,--param2=2"
+  --augustus_species AUGUSTUS_SPECIES
+                        Specify a species for Augustus training.
+  --long                Optimization Augustus self-training mode (Default: Off); adds considerably to the run time, but can improve results for some non-model organisms
+  --config CONFIG_FILE  Provide a config file
+  -v, --version         Show this version and exit
+  -h, --help            Show this help message and exit
+  --list-datasets       Print the list of available BUSCO datasets
+```
+We need to indicate the genome.fasta file we are using as a query, the lineage (in this case --auto-lineage-prok), the mode (genome) and the output prefix. **As BUSCO works more eficiently with multiple CPUs, the best option for running this program is by submitting a job in to the Orion queue.**
+
+- Let's enter to the flye assembly directory and copy the ```busco.SLURM.sh``` script there:  
+
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cd MiniON.flyeAssembly.dir/
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/busco.SLURM.sh .
+```
+- Then let's submit the script. We can check the syntasix by:
+
+```console
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ bash busco.SLURM.sh
+Usage: sbatch busco.SLURM.sh fasta.file BuscoOutputName
+eg: sbatch busco.SLURM.sh  assembly.fasta MiniON.Busco.flye
+```
+
+- Run the script:
+
+```console
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ sbatch busco.SLURM.sh assembly.fasta MiniON.Busco.flye
+Submitted batch job 14313378
+[bio326-21-0@login MiniON.flyeAssembly.dir]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14313378  smallmem BUSCOBac bio326-2  R       0:15      1 cn-10
+```
+
+
