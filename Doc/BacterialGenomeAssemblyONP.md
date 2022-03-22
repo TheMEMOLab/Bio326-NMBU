@@ -1251,7 +1251,7 @@ MiniON.flyeAssembly.dir/
 5 directories, 33 files
 ```
 
-**The file assembly.fasta contain the final contigs and the file  MiniON.stats.flye.contigs.txt has the basic stats. Let's take a look:
+**The file assembly.fasta contain the final contigs and the file  MiniON.stats.flye.contigs.txt has the basic stats. Let's take a look:**
 
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ more MiniON.flyeAssembly.dir/MiniON.stats.flye.contigs.txt
@@ -1268,7 +1268,19 @@ Gaps = 0
 ```
 
 
-The total of bases in the assembly sum ~3.46 Mb, this is the final length of the assembly. The N50 (statistic that defines the assembly quality in terms of contiguity. It can be defined as: given a set of contigs, the N50 is the sequence length of the shortest contig at 50% of the total genome length...), is ~ 3.28 Mb in a single contig.
+The total of bases in the assembly sum ~3.46 Mb, this is the final length of the assembly. The N50 (statistic that defines the assembly quality in terms of contiguity. It can be defined as: given a set of contigs, the N50 is the sequence length of the shortest contig at 50% of the total genome length...), is ~ 3.3 Mb in a single contig.
 
 After this, we can assess the completeness of our genome. The most used strategy is to look for the presence of a set of single-copy orthologs genes commonly present in all bacteria (universal genes) and score the number of occurrences in our genome.
 
+### Evaluate genome completeness by BUSCO
+
+[BUSCO](https://busco.ezlab.org/) (Benchmarking Universal Single-Copy Orthologs) is a tool that attempts to provide a quantitative assessment of the completeness in terms of expected gene content of a genome assembly, transcriptome, or annotated gene set. The results are simplified into categories of Complete and single-copy, Complete and duplicated, Fragmented, or Missing BUSCOs.
+
+This software looks for a certain number of orthologous genes (BUSCOs) on a database and compares the total of these ortholog genes present in the genome we would like to evaluate. Then, it estimates the completeness based on the presence, duplication, fragmentation, or absence of these BUSCOS. For example (raw example), if the BUSCO database has 10 genes and the software only finds 9 of them in the query genome it scores completeness of the genome at 90 %.
+
+BUSCO has developed different databases with common universal orthologs clusters for several organisms:
+![buscoimg](https://github.com/avera1988/Genome_Assembly_lecture/blob/master/images/busco.png)
+
+Busco will predict genes in the assembly (by prodigal) and then look for the USCOs of a certain taxonomical lineage using hmmer. It automatically identifies the closest taxonomical lineage and then download the BUSCOs database, however you can indicate and narrow the BUSCOs sarch to a prokaryote or eukaryote database by using the **--auto-lineage-prok** flag. 
+
+- BUSCO is installed in Orion by a singularity container. We can use the following command to look into the busco options:
