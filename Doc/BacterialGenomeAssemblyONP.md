@@ -1340,6 +1340,123 @@ optional arguments:
 ```
 We need to indicate the genome.fasta file we are using as a query, the lineage (in this case --auto-lineage-prok), the mode (genome) and the output prefix. **As BUSCO works more eficiently with multiple CPUs, the best option for running this program is by submitting a job in to the Orion queue.**
 
+The following script will be useful:
+
+```bash
+#!/bin/bash
+###########################################################################
+#
+#       This script takes a fasta file and run busco
+#       Author Arturo Vera
+#       March 2022
+##########################################################################
+
+#############SBATCH commands#######################
+## Job name:
+#SBATCH --job-name=BUSCOBacteria
+#
+## Wall time limit:
+#SBATCH --time=00:30:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 10
+#SBATCH --mem=10G
+#SBATCH --nodes 1
+#SBATCH --out slurm-BUSCO-%A.out
+#SBATCH --partition=smallmem
+######################################################
+###Basic usage help for this script#######
+
+print_usage() {
+        echo "Usage: sbatch $0 fasta.file BuscoOutputName"
+        echo "eg: sbatch $0  assembly.fasta MiniON.Busco.flye"
+}
+
+if [ $# -le 0 ]
+        then
+                print_usage
+                exit 1
+        fi
+
+########Main Job#######################
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+
+###Read some variables
+
+fasta=$1
+buscout=$2
+
+####Do some work:########
+
+## For debuggin it is useful to print some info about the node,CPUs requested and when the job starts...
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+echo "copying files to $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID"
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID
+cd tmpDir_of.$SLURM_JOB_ID
+
+cp $SLURM_SUBMIT_DIR/$fasta .
+
+
+####RUNNING BUSCO####
+
+echo "Busco starts at"
+date +%d\ %b\ %T
+
+singularity exec /cvmfs/singularity.galaxyproject.org/b/u/busco\:5.0.0--py_1 busco \
+-i $fasta \
+-o $buscout \
+-m geno \
+--auto-lineage-prok \
+-c $SLURM_CPUS_ON_NODE
+
+###########Moving results #####################
+
+echo "moving results to" $SLURM_SUBMIT_DIR/
+
+rm *.fasta #Remove fasta files
+rm -r busco_downloads #Remove tmp busco databases downloaded
+
+time cp -r $buscout $SLURM_SUBMIT_DIR/  #Copy all results to the submit directory
+
+####Removing tmp dir#####
+
+cd $TMPDIR/$USER/
+
+rm -r tmpDir_of.$SLURM_JOB_ID
+
+echo "I've done at"
+date
+```
+
 - Let's enter to the flye assembly directory and copy the ```busco.SLURM.sh``` script there:  
 
 
