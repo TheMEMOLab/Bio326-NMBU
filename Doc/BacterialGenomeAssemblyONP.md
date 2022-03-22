@@ -1189,9 +1189,9 @@ date
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh MiniON
 ```
-** Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.**
+**Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.**
 
-**The assembly will take some time...let's check some concepts:
+**The assembly will take some time...In the mean time let's check some concepts:
 
 ![Assembly](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/assembly.png)
 ![Stats](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/stats.png)
@@ -1542,4 +1542,6 @@ mapping_taxids-busco_dataset_name.bacteria_odb10.2019-12-16.txt
 mapping_taxid-lineage.bacteria_odb10.2019-12-16.txt
 ```
 **What do you think our genome is so "incomplete"???**
+
+## Correcting ONP assemblies using Trycycler 
 
