@@ -1189,6 +1189,7 @@ date
 ```console
 [bio326-21-0@login GenomeAssembly2022]$ sbatch flye.SLURM.sh MiniON
 ```
+*A copy of the filtlong reads is in ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/MiniONReads/MiniON.filtlong.fq.gz``` you can copy to your $SCRATCH directory* 
 **Due to the lack of time, in class we only work with the MiniON files. As homework you will assembly the PromethiON reads.**
 
 **The assembly will take some time...In the mean time let's check some concepts:
