@@ -2104,7 +2104,7 @@ must either repair this sequence or exclude it and then try running trycycler
 reconcile again.
 ```
 
-Again this cluster seems to have "weird" contigs, for example small contigs < 5 Kb (e.g. cluster_007) . We need to remove those contigs and try to continue... We can also take a look on the cladogram and try to remove those "weird" contings. **Due to lack of time, we have already curated all the clusters... We can continue with the next steps:**
+Again this cluster seems to have "weird" contigs. We need to remove those contigs and try to continue... Also we can get rid  of clusters with small contigs e.g. cluste_007. We can also take a look on the cladogram and try to remove those "weird" contings. **Due to lack of time, we have already curated all the clusters... We can continue with the next steps:**
 
 - Multiple sequence alignment:
 
@@ -2131,4 +2131,6 @@ Then run the trycycler command:
 ```
 
 At the end we will need 3 files for each cluster: ```2_all_seqs.fasta```, ```3_msa.fasta``` and ```4_reads.fastq```
+
+The final step of Trycycler is to generate a consensus contig sequence for each cluster. It does this by converting the MSA into a graph form, containing "same" chunks (where all the input sequences agree) and "different" chunks (where there are two or more options). It then chooses the most popular option for each different chunk (see How variants are chosen for the consensus sequence for more details). When there is a tie between options, Trycycler aligns the reads to the alternative sequences and chooses the option with the best read alignment scores.
 
