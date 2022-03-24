@@ -2071,7 +2071,7 @@ cluster_008.log
 Error: failed to circularise sequence A_utg000008c for multiple reasons. You
 ```
 
-We can notice that cluster 1 and 8 have issues. Let's take a look properly to those files:
+We can notice that cluster 1, 7 and 8 have issues. Let's take a look properly to those files:
 
 ```console
 [bio326-21-0@cn-5 MiniON.FilterClusters.dir]$ tail cluster_001.log
