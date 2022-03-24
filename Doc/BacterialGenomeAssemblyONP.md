@@ -2007,7 +2007,55 @@ cluster_001  cluster_003  cluster_005  cluster_007  cluster.parsed.tsv  contigs.
 cluster_002  cluster_004  cluster_006  cluster_008  contigs.newick      Filtered_cluster.tsv  MiniON.FilterClusters.dir  StatsCluster.tsv
 ```
 
-Then run the reconcile script for each cluster:
+Then run the reconcile script for each cluster. *Remember to activate the conda environment of trycycler first!!!*
 
 ```Console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+Activating Anaconda module for bio326-21-0
+conda is running. Please type conda activate to load the basic conda functions...
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler
+ bio326-21-0@cn-17 MiniON.trycycler.clusters]$ 
 ```
+
+The basic reconcile command is:
+
+```console
+trycycler reconcile --reads reads.fastq --cluster_dir trycycler/cluster_001
+```
+
+As we have 7 clusters we can do a for loop to help us:
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler reconcile --reads MiniON.filtlong.fq.gz --cluster_dir $i | tee $i.log ; done
+.
+.
+.
+Circularisation (2022-03-24 15:51:31)
+    Trycycler now compares the contigs to each other to repair any circularisation issues. After this step, each sequence should be cleanly circularised - i.e. the first base in the
+contig immediately follows the last base. Each contig will be circularised by looking for the position of its start and end in the other contigs. If necessary, additional sequence will be
+added or duplicated sequence will be removed. If there are multiple possible ways to fix a contig's circularisation, then Trycycler will use read alignments to choose the best one.
+
+Circularising A_utg000008c:
+  using C_utg000005c:
+    unable to circularise: A_utg000008c's end could not be found in C_utg000005c
+  using E_utg000008c:
+    unable to circularise: A_utg000008c's start/end is the same as E_utg000008c's start/end
+  using G_utg000008c:
+    unable to circularise: A_utg000008c's start/end is the same as G_utg000008c's start/end
+
+Error: failed to circularise sequence A_utg000008c for multiple reasons. You must either repair this sequence or exclude it and then try running trycycler reconcile again.
+```
+
+As you can see here, there are errors and faliures that does not allow the program to continue... We need to manually inspect this errors and curate the clusters. To do this we will use the log file the ```for loop``` created by the ```tee``` comand:
+
+```console
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-17 MiniON.trycycler.clusters]$ cd MiniON.FilterClusters.dir/
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-17 MiniON.FilterClusters.dir]$ ls
+cluster_001      cluster_003      cluster_004      cluster_005      cluster_006      cluster_007      cluster_008
+cluster_001.log  cluster_003.log  cluster_004.log  cluster_005.log  cluster_006.log  cluster_007.log  cluster_008.log
+```
+
+
+
+
+
