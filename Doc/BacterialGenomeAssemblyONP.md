@@ -1728,3 +1728,33 @@ MiniON.assemblies/
 
 0 directories, 8 files
 ````
+
+- The next steep is to proudce clusters of these assemblies and decided what kind of contigs are good enough to keep doing the corrections. We will use R to load and vizualise the newick tree and see the clustering analysis. So let's open an RStudio session using the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
+
+The following R code will plot the tree:
+
+```R
+###Addign a path with some libraries used in BIO326
+mypath <- "/mnt/SCRATCH/bio326-21/GenomeAssembly/R"
+.libPaths(mypath)
+
+##Loading libraries
+library(tidyverse)
+library(ggtree)
+library(treeio)
+
+#Entering to the Trycycler clustering directory
+setwd("/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/testTrycycler/MiniON.Trycycler.dir/MiniON.Trycycler.dir")
+
+####Read the newick clustering tree
+tree <- read.newick("contigs.newick")
+
+#Using ggtree and ggplot to plot the tree
+
+ggplot(tree, aes(x, y)) +
+  geom_tree() +
+  theme_tree()+
+  geom_tiplab(as_ylab=TRUE, color='blue')
+```
+
+This will produce something like ![tree](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/Tree.png)
