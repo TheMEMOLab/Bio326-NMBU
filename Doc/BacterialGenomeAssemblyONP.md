@@ -1552,4 +1552,4 @@ We are using Trycycler to improve and correct the ONP genome assemblies:
 
 Trycycler is a modular software, so unfortunatelly it require a lot of manual intervention and cannot be fully automatized:
 
-![trycycler](https://github.com/rrwick/Trycycler/wiki/Illustrated-pipeline-overview)
+![trycycler](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/pipeline.png)
