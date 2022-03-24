@@ -2026,7 +2026,7 @@ trycycler reconcile --reads reads.fastq --cluster_dir trycycler/cluster_001
 As we have 7 clusters we can do a for loop to help us:
 
 ```console
-[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler reconcile --reads MiniON.filtlong.fq.gz --cluster_dir $i | tee $i.log ; done
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler reconcile --reads MiniON.filtlong.fq.gz --cluster_dir $i 2>&1 | tee $i.log ; done
 .
 .
 .
@@ -2046,7 +2046,7 @@ Circularising A_utg000008c:
 Error: failed to circularise sequence A_utg000008c for multiple reasons. You must either repair this sequence or exclude it and then try running trycycler reconcile again.
 ```
 
-As you can see here, there are errors and faliures that does not allow the program to continue... We need to manually inspect this errors and curate the clusters. To do this we will use the log file the ```for loop``` created by the ```tee``` comand:
+As you can see here, there are errors and faliures that does not allow the program to continue... We need to manually inspect this errors and curate the faliure clusters. To do this we will use the log file the ```for loop``` created by the ```tee``` comand:
 
 ```console
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-17 MiniON.trycycler.clusters]$ cd MiniON.FilterClusters.dir/
@@ -2055,7 +2055,80 @@ cluster_001      cluster_003      cluster_004      cluster_005      cluster_006 
 cluster_001.log  cluster_003.log  cluster_004.log  cluster_005.log  cluster_006.log  cluster_007.log  cluster_008.log
 ```
 
+Let's look for errors in each log:
 
+```console
+[bio326-21-0@cn-5 MiniON.FilterClusters.dir]$ for i in *.log; do echo $i;grep "Error" $i;done
+cluster_001.log
+Error: failed to circularise sequence A_utg000001l for multiple reasons. You
+cluster_003.log
+cluster_004.log
+cluster_005.log
+cluster_006.log
+cluster_007.log
+Error: failed to circularise sequence C_utg000006c for multiple reasons. You
+cluster_008.log
+Error: failed to circularise sequence A_utg000008c for multiple reasons. You
+```
 
+We can notice that cluster 1 and 8 have issues. Let's take a look properly to those files:
 
+```console
+[bio326-21-0@cn-5 MiniON.FilterClusters.dir]$ tail cluster_001.log
+    unable to circularise: A_utg000001l requires 235504 bp to be added but settings only allow 1000 bp
+  using G_utg000001l:
+    unable to circularise: A_utg000001l's end could not be found in G_utg000001l
+  using H_Utg946:
+    unable to circularise: A_utg000001l requires 235531 bp to be added but settings only allow 1000 bp
+
+Error: failed to circularise sequence A_utg000001l for multiple reasons. You
+must either repair this sequence or exclude it and then try running trycycler
+reconcile again.
+```
+
+We need to remove the A_utg000001l and run reconcile again:
+
+```console
+ [bio326-21-0@cn-5 MiniON.FilterClusters.dir]$ rm cluster_001/1_contigs/A_utg000001l.fasta
+ [bio326-21-0@cn-5 MiniON.FilterClusters.dir]$ cd ..
+ (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ pwd
+/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir/MiniON.trycycler.clusters
+trycycler reconcile --reads MiniON.filtlong.fq.gz --cluster_dir MiniON.FilterClusters.dir/cluster_001 2>&1 | tee MiniON.FilterClusters.dir/cluster_001.2.log
+.
+.
+.
+.
+
+Error: failed to circularise sequence C_utg000001l for multiple reasons. You
+must either repair this sequence or exclude it and then try running trycycler
+reconcile again.
+```
+
+Again this cluster seems to have "weird" contigs, for example small contigs < 5 Kb (e.g. cluster_007) . We need to remove those contigs and try to continue... We can also take a look on the cladogram and try to remove those "weird" contings. **Due to lack of time, we have already curated all the clusters... We can continue with the next steps:**
+
+- Multiple sequence alignment:
+
+```
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler msa --cluster_dir $i ;done
+```
+-Partitioning reads:
+
+Now that you have reconciled sequences for each cluster, this step will partition your reads between these clusters. I.e. each read will be assigned to whichever cluster it best aligns and saved into a file for that cluster.
+
+This step is run once for your entire genome (i.e. not on a per-cluster basis).
+
+We can go back and delete all the log files. Then run the partition reads:
+
+```console
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir/MiniON.trycycler.clusters
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ rm MiniON.FilterClusters.dir/*.log
+```
+
+Then run the trycycler command:
+
+```console
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ trycycler partition --reads MiniON.filtlong.fq.gz --cluster_dirs MiniON.FilterClusters.dir/cluster_*
+```
+
+At the end we will need 3 files for each cluster: ```2_all_seqs.fasta```, ```3_msa.fasta``` and ```4_reads.fastq```
 
