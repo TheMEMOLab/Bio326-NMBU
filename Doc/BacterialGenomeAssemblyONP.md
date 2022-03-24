@@ -1729,7 +1729,139 @@ MiniON.assemblies/
 0 directories, 8 files
 ````
 
-- The next steep is to proudce clusters of these assemblies and decided what kind of contigs are good enough to keep doing the corrections. We will use R to load and vizualise the newick tree and see the clustering analysis. So let's open an RStudio session using the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
+- The next steep is to proudce clusters of these assemblies and decided what kind of contigs are good enough to keep doing the corrections. This SLRUM script is goning to help us:
+
+```bash
+#!/bin/bash
+#########################################################################
+#       SLURM script to run Trycycler clustering
+#
+#
+#       Author Arutro Vera
+#       March 2022
+#########################################################################
+################################################
+## Job name:
+#SBATCH --job-name=TrycyclerClustering
+#
+## Wall time limit:
+#SBATCH --time=04:00:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 12
+#SBATCH --mem=20G
+#SBATCH --nodes 1
+#SBATCH --out slurm-Clustering_Trycycler-%A.out
+#####################################
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+
+##Activate conda environments
+
+export PS1=\$
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler
+
+###Def variables
+
+
+###Def variables:
+
+input=$1
+scripts='/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts' ##The dependency scripts are here
+
+####Do some work:########
+
+## For debuggin it is useful to print some info about the node,CPUs requested and when the job starts...
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID\_$SLURM_ARRAY_TASK_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I am working with this enviroment loaded"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+echo "entering to Sample directory..."
+
+cd $SLURM_SUBMIT_DIR/$input.Trycycler.dir
+sampledir=$(pwd)
+
+echo "I'm in the smple dir:     "$sampledir
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+echo "copying files to $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input"
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID.$input
+cd tmpDir_of.$SLURM_JOB_ID.$input
+
+time cp -r $sampledir/$input.assemblies .
+time cp -r $SLURM_SUBMIT_DIR/$input\Reads/*.filtlong.fq.gz .
+
+
+###Variable to select the fastqfile
+fastqfile=$(ls -1|grep filtlong)
+echo "my fastq file is: "$fastqfile
+
+###Clustering with Trycycler
+echo "Clustering ..."
+date +%d\ %b\ %T
+
+time trycycler cluster \
+-t $SLURM_CPUS_ON_NODE \
+--assemblies $input.assemblies/*.fasta \
+--reads $fastqfile \
+--out_dir $input.trycycler.clusters
+
+echo "moving results to" $sampledir
+date +%d\ %b\ %T
+
+time cp -r $input.trycycler.clusters $sampledir/
+
+
+####Removing tmp dir#####
+
+cd $TMPDIR/$USER/
+
+rm -r tmpDir_of.$SLURM_JOB_ID.$input
+
+echo "I've done at"
+date
+
+```
+You can copy the script from ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/clustering.trycycler.SLURM.sh```
+
+- Then run it:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ sbatch clustering.trycycler.SLURM.sh MiniON
+Submitted batch job 14317034
+[bio326-21-0@login GenomeAssembly2022]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14317034     orion Trycycle bio326-2  R       0:05      1 cn-14
+ ```
+
+We will use R to load and vizualise the newick tree and see the clustering analysis. So let's open an RStudio session using the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
 
 The following R code will plot the tree:
 
