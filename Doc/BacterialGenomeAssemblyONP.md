@@ -2106,7 +2106,7 @@ reconcile again.
 
 Again this cluster seems to have "weird" contigs. We need to remove those contigs and try to continue... Also we can get rid  of clusters with small contigs e.g. cluste_007. We can also take a look on the cladogram and try to remove those "weird" contings. **Due to lack of time, we have already curated all the clusters... We can continue with the next steps:**
 
-- Multiple sequence alignment. A ```for loop`` will help us to run the msa to all the dirs.
+- Multiple sequence alignment. A ```for loop``` will help us to run the msa to all the dirs.
 
 ```console
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler msa --cluster_dir $i ;done
@@ -2313,3 +2313,273 @@ MiniON.FilterClusters.dir/
 [bio326-21-0@login MiniON.Trycycler.dir]$ cat MiniON.trycycler.clusters/MiniON.FilterClusters.dir/cluster_00*/7_final_consensus.fasta > MiniON.trycycler.final.consensus.total.fasta
 ```
 
+- Then we can predict the basic genome-stats of this final consensus:
+
+```console
+[bio326-21-0@cn-9 MiniON.trycycler.clusters]$ conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools) [bio326-21-0@cn-9 MiniON.Trycycler.dir]$ assembly-stats MiniON.trycycler.final.consensus.total.fasta
+stats for MiniON.trycycler.final.consensus.total.fasta
+sum = 3399283, n = 5, ave = 679856.60, largest = 3304877
+N50 = 3304877, n = 1
+N60 = 3304877, n = 1
+N70 = 3304877, n = 1
+N80 = 3304877, n = 1
+N90 = 3304877, n = 1
+N100 = 7479, n = 5
+N_count = 0
+Gaps = 0
+```
+A quick comparison of the genomes:
+
+```console
+[bio326-21-0@cn-9 MiniON.Trycycler.dir]$ assembly-stats -t MiniON.trycycler.final.consensus.total.fasta ../MiniON.flyeAssembly.dir/assembly.fasta
+filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
+MiniON.trycycler.final.consensus.total.fasta    3399283 5       679856.60       3304877 7479    0       0       3304877 1       3304877 1       3304877 1
+../MiniON.flyeAssembly.dir/assembly.fasta       3415822 7       487974.57       3305136 4184    0       0       3305136 1       3305136 1       3305136 1
+```
+
+**Is there any difference??
+
+Let's check the BUSCO completeness:
+
+```console
+[bio326-21-0@login MiniON.Trycycler.dir]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/busco.SLURM.sh .
+[bio326-21-0@login MiniON.Trycycler.dir]$ sbatch busco.SLURM.sh MiniON.trycycler.final.consensus.total.fasta MiniON.Busco.trycycler
+Submitted batch job 14317408
+```
+
+checking the results:
+
+```console
+
+INFO:
+
+        --------------------------------------------------
+        |Results from generic domain bacteria_odb10       |
+        --------------------------------------------------
+        |C:37.1%[S:37.1%,D:0.0%],F:46.8%,M:16.1%,n:124    |
+        |46     Complete BUSCOs (C)                       |
+        |46     Complete and single-copy BUSCOs (S)       |
+        |0      Complete and duplicated BUSCOs (D)        |
+        |58     Fragmented BUSCOs (F)                     |
+        |20     Missing BUSCOs (M)                        |
+        |124    Total BUSCO groups searched               |
+        --------------------------------------------------
+
+        --------------------------------------------------
+        |Results from dataset pseudomonadales_odb10       |
+        --------------------------------------------------
+        |C:43.2%[S:43.2%,D:0.0%],F:18.7%,M:38.1%,n:782    |
+        |338    Complete BUSCOs (C)                       |
+        |338    Complete and single-copy BUSCOs (S)       |
+        |0      Complete and duplicated BUSCOs (D)        |
+        |146    Fragmented BUSCOs (F)                     |
+        |298    Missing BUSCOs (M)                        |
+        |782    Total BUSCO groups searched               |
+        --------------------------------------------------
+````
+
+It seems this Trycycler did not improve a lot the assembly the last resort is to try to polish even more this assembly using [medaka](https://github.com/nanoporetech/medaka).
+
+The following bash script will help this time:
+
+```bash
+#!/usr/bin/bash
+
+dir=$1
+for c in $dir/cluster_*; do
+    medaka_consensus \
+        -i "$c"/4_reads.fastq \
+        -d "$c"/7_final_consensus.fasta \
+        -o "$c"/medaka \
+        -m r941_min_fast_g303 \
+        -t $SLURM_CPUS_ON_NODE
+    mv "$c"/medaka/consensus.fasta "$c"/8_medaka.fasta
+    rm -r "$c"/medaka "$c"/*.fai "$c"/*.mmi  # clean up
+done
+
+```
+
+Let's copy this from ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts```
+
+```console
+[bio326-21-0@cn-9 MiniON.Trycycler.dir]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir/MiniON.trycycler.clusters
+[bio326-21-0@cn-9 MiniON.trycycler.clusters]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/medaka.sh .
+```
+
+And run it:
+
+```console
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools)  [bio326-21-0@cn-9 MiniON.trycycler.clusters]$ bash medaka.sh MiniON.FilterClusters.dir
+```
+
+This script will prouduce the ```8_medaka.fasta``` in each cluster:
+
+```console
+[bio326-21-0@login MiniON.trycycler.clusters]$ tree MiniON.FilterClusters.dir/
+MiniON.FilterClusters.dir/
+├── cluster_001
+│   ├── 1_contigs
+│   │   ├── A_contig_1.fasta
+│   │   ├── C_Utg978.fasta
+│   │   ├── F_Utg972.fasta
+│   │   ├── J_contig_1.fasta
+│   │   └── L_Utg946.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   ├── 7_final_consensus.fasta
+│   └── 8_medaka.fasta
+├── cluster_001.consensus.log
+├── cluster_003
+│   ├── 1_contigs
+│   │   ├── A_utg000003c.fasta
+│   │   ├── B_Utg976.fasta
+│   │   ├── C_utg000003c.fasta
+│   │   ├── D_Utg982.fasta
+│   │   ├── E_utg000003c.fasta
+│   │   ├── F_Utg954.fasta
+│   │   ├── G_utg000003c.fasta
+│   │   └── H_Utg956.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   ├── 7_final_consensus.fasta
+│   └── 8_medaka.fasta
+├── cluster_003.consensus.log
+├── cluster_004
+│   ├── 1_contigs
+│   │   ├── A_utg000004c.fasta
+│   │   ├── B_Utg968.fasta
+│   │   ├── C_utg000004c.fasta
+│   │   ├── D_Utg974.fasta
+│   │   ├── E_utg000004c.fasta
+│   │   ├── F_Utg946.fasta
+│   │   ├── G_utg000004c.fasta
+│   │   └── H_Utg948.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   ├── 7_final_consensus.fasta
+│   └── 8_medaka.fasta
+├── cluster_004.consensus.log
+├── cluster_005
+│   ├── 1_contigs
+│   │   ├── A_utg000007c.fasta
+│   │   ├── B_Utg972.fasta
+│   │   ├── C_utg000008c.fasta
+│   │   ├── D_Utg978.fasta
+│   │   ├── E_utg000007c.fasta
+│   │   ├── F_Utg950.fasta
+│   │   ├── G_utg000007c.fasta
+│   │   └── H_Utg952.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   ├── 7_final_consensus.fasta
+│   └── 8_medaka.fasta
+├── cluster_005.consensus.log
+├── cluster_006
+│   ├── 1_contigs
+│   │   ├── A_utg000005c.fasta
+│   │   ├── B_Utg970.fasta
+│   │   ├── C_utg000007c.fasta
+│   │   ├── D_Utg976.fasta
+│   │   ├── E_utg000005c.fasta
+│   │   ├── F_Utg948.fasta
+│   │   ├── G_utg000005c.fasta
+│   │   └── H_Utg950.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   ├── 7_final_consensus.fasta
+│   └── 8_medaka.fasta
+└── cluster_006.consensus.log
+
+10 directories, 77 files
+```
+
+We then can gather these files into a single one and run BUSCO
+
+```console
+ [bio326-21-0@cn-9 MiniON.trycycler.clusters]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir
+ [bio326-21-0@cn-9 MiniON.Trycycler.dir]$ cat MiniON.trycycler.clusters/MiniON.FilterClusters.dir/cluster_*/8_medaka.fasta > MiniON.trycycler.medaka.consensus.total.fasta
+ [bio326-21-0@cn-9 MiniON.Trycycler.dir]$ sbatch busco.SLURM.sh MiniON.trycycler.medaka.consensus.total.fasta MiniON.trycycler.medaka.Busco
+Submitted batch job 14317423
+```
+ We can exit the interactive job now
+ 
+ ```console
+ [bio326-21-0@cn-9 MiniON.Trycycler.dir]$ exit
+exit
+ ```
+ 
+ Let's see our BUSCO results:
+ 
+ ```console
+ [bio326-21-0@login MiniON.Trycycler.dir]$ cd MiniON.trycycler.medaka.Busco/
+ [bio326-21-0@login MiniON.trycycler.medaka.Busco]$ more short_summary.generic.bacteria_odb10.MiniON.trycycler.medaka.Busco.txt
+# BUSCO version is: 5.0.0
+# The lineage dataset is: bacteria_odb10 (Creation date: 2020-03-06, number of species: 4085, number of BUSCOs: 124)
+# Summarized benchmarking in BUSCO notation for file /home/work/bio326-21-0/tmpDir_of.14317423/MiniON.trycycler.medaka.consensus.total.fasta
+# BUSCO was run in mode: genome
+# Gene predictor used: prodigal
+
+        ***** Results: *****
+
+        C:73.4%[S:73.4%,D:0.0%],F:24.2%,M:2.4%,n:124
+        91      Complete BUSCOs (C)
+        91      Complete and single-copy BUSCOs (S)
+        0       Complete and duplicated BUSCOs (D)
+        30      Fragmented BUSCOs (F)
+        3       Missing BUSCOs (M)
+        124     Total BUSCO groups searched
+[bio326-21-0@login MiniON.trycycler.medaka.Busco]$ more short_summary.specific.pseudomonadales_odb10.MiniON.trycycler.medaka.Busco.txt
+# BUSCO version is: 5.0.0
+# The lineage dataset is: pseudomonadales_odb10 (Creation date: 2020-03-06, number of species: 159, number of BUSCOs: 782)
+# Summarized benchmarking in BUSCO notation for file /home/work/bio326-21-0/tmpDir_of.14317423/MiniON.trycycler.medaka.consensus.total.fasta
+# BUSCO was run in mode: genome
+# Gene predictor used: prodigal
+
+        ***** Results: *****
+
+        C:72.1%[S:72.0%,D:0.1%],F:13.4%,M:14.5%,n:782
+        564     Complete BUSCOs (C)
+        563     Complete and single-copy BUSCOs (S)
+        1       Complete and duplicated BUSCOs (D)
+        105     Fragmented BUSCOs (F)
+        113     Missing BUSCOs (M)
+        782     Total BUSCO groups searched
+
+Placement file versions:
+list_of_reference_markers.bacteria_odb10.2019-12-16.txt
+tree.bacteria_odb10.2019-12-16.nwk
+tree_metadata.bacteria_odb10.2019-12-16.txt
+supermatrix.aln.bacteria_odb10.2019-12-16.faa
+mapping_taxids-busco_dataset_name.bacteria_odb10.2019-12-16.txt
+mapping_taxid-lineage.bacteria_odb10.2019-12-16.txt
+ 
+ ```
+ 
+ At the end we can compare our results:
+ 
+ ```console
+ 
+ Genome  BUSCO
+short_summary.specific.pseudomonadales_odb10.MiniON.Busco.flye.txt.mod  46.2%
+short_summary.specific.pseudomonadales_odb10.MiniON.Busco.trycycler.txt.mod     43.2%
+short_summary.specific.pseudomonadales_odb10.MiniON.trycycler.medaka.Busco.txt.mod      72.1%
+
+```
+
+**It looks like doing a Trycycler + Medaka polishing really helps to improve the quality of the genome**
