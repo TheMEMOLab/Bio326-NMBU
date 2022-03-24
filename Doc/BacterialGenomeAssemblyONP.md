@@ -1865,16 +1865,16 @@ Submitted batch job 14317034
  
  ```console
  [bio326-21-0@login MiniON.trycycler.clusters]$ ls
-cluster_001  cluster_002  cluster_003  cluster_004  cluster_005  cluster_006  cluster_007  cluster_008  cluster_009  contigs.newick  contigs.phylip
+cluster_001  cluster_002  cluster_003  cluster_004  cluster_005  cluster_006  cluster_007  cluster_008  contigs.newick  contigs.phylip
 ```
 
-"Trycycler cluster will create an output directory (trycycler in the example above) which contains the following:
+Trycycler cluster will create an output directory (trycycler in the example above) which contains the following:
 
+```
     contigs.phylip: a matrix of the Mash distances between all contigs in PHYLIP format.
     contigs.newick: a FastME tree of the contigs built from the distance matrix. This can be visualised in a phylogenetic tree viewer such as FigTree, Dendroscope or Archaeopteryx.
     One directory for each of the clusters: cluster_001, cluster_002, etc. These directories will each contain a subdirectory named 1_contigs which includes the FASTA files for the contigs in the cluster.
-"
-
+```
 
 We will use R to load and vizualise the newick tree and see the clustering analysis. So let's open an RStudio session using the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
 
@@ -1905,3 +1905,109 @@ ggplot(tree, aes(x, y)) +
 ```
 
 This will produce something like ![tree](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/Tree.png)
+
+**"After running Trycycler cluster, it is up to you to choose which of the clusters are good and which are bad. This can be somewhat subjective, so there is not an exact procedure for you to follow (if there was I would have automated the decision in Trycycler). You'll have to rely on your scientific acumen!"**
+
+We can continue doing the analysis manually and inspect each node, however this might take forever... So, we can "reduce" or "clean" the number of clusters by using some metrics. Let's say the mean of the contig size and the coverage, we then can remove all those clusters with low coverage and at least 2SD the size of the contigs. The following perl ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/get.clusters.pl```script parses the ```contigs.phylip``` file and extract the coverage an lenght of each contig in each cluster. Then it filters those "good" and "bad" clusters...
+
+**As we are going to run some scripts remember to ask for a node to "not get naked in the lobby"**
+
+```console
+[bio326-21-0@login MiniON.trycycler.clusters]$ srun --cpus-per-task 10 --nodes 1 --mem=10G --time=02:00:00 --pty bash -i
+
+Welcome to the NMBU Orion compute cluster environment.
+
+You are logged in to a machine that can be used to access your home directory,
+edit your scripts, manage your files, and submit jobs to the cluster environment.
+Do not run any jobs on this machine, as they might be automatically terminated.
+
+IMPORTANT:
+  - Orion introduction: https://orion.nmbu.no/
+  - Orion can handle small-scale projects. Need more CPU hours? Please consider
+    applying for national infrastructure resources: https://www.sigma2.no/
+  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
+    using i.e. pigz.
+
+NEWS:
+  - 2020-10-08: Orion has been re-built. We are still working out many details.
+    Please email us if you miss anything, or notice any issues.
+
+For any Orion related enquiry: orion-support@nmbu.no
+PS: We are on Teams: https://bit.ly/orion-teams
+```
+- The scripts needs R to run some stats so let's load the R module: 
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ module load R/4.0.5
+```
+
+- Then run the perl scritp:
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/get.clusters.pl
+Usage: perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/get.clusters.pl phylip_file_trycycler SampleName
+```
+It will ask for the phylip file and a sample name:
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ perl /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/get.clusters.pl contigs.phylip MiniON
+Parsing trycycler ouput...
+Geting good clusters....
+── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+✔ ggplot2 3.3.2     ✔ purrr   0.3.4
+✔ tibble  3.0.4     ✔ dplyr   1.0.2
+✔ tidyr   1.1.2     ✔ stringr 1.4.0
+✔ readr   1.4.0     ✔ forcats 0.5.0
+── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+cols(
+  path = col_character(),
+  cluster = col_character(),
+  size = col_double(),
+  coverage = col_double()
+)
+
+`summarise()` ungrouping output (override with `.groups` argument)
+Your filtered clusters are in MiniON.FilterClusters.dir
+Good bye!
+```
+
+The script producess the folder ```MiniON.FilterClusters.dir``` Go there:
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ cd MiniON.FilterClusters.dir/
+[bio326-21-0@cn-17 MiniON.FilterClusters.dir]$ ls
+cluster_001  cluster_003  cluster_004  cluster_005  cluster_006  cluster_007  cluster_008
+```
+
+As you can see in this example we get rid off the cluster_002 ... After this we can continue with the following step of Trycycler that is Reconciling contigs:
+
+Trycycler reconcile will:
+
+    Perform an initial check to make sure the contigs look sufficiently similar to each other:
+        relative lengths must be fairly close (e.g. one contig can't be twice as long as another)
+        Mash distances must be quite small
+    Ensure that all contig sequences are on the same strand
+    If the replicon is circular:
+        Fix any circularisation issues (i.e. add/remove sequence at each contig's start/end as necessary)
+        Rotate the contigs to a common starting sequence
+    Perform a final alignment check to make sure the normalised/circularised contigs are sufficiently similar to each other for the next step
+
+The Trycycler reconcile command must be run separately for each of your good clusters. 
+Reconcile needs the fastq files so lets bring this file to the ```MiniON.trycycler.clusters``` directory  by creating a symbolic link:
+
+```console
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir/MiniON.trycycler.clusters
+bio326-21-0@cn-17 MiniON.trycycler.clusters]$ ln -s /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniONReads/MiniON.filtlong.fq.gz .
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ ls
+cluster_001  cluster_003  cluster_005  cluster_007  cluster.parsed.tsv  contigs.phylip        getgoodcluster.sh          MiniON.filtlong.fq.gz
+cluster_002  cluster_004  cluster_006  cluster_008  contigs.newick      Filtered_cluster.tsv  MiniON.FilterClusters.dir  StatsCluster.tsv
+```
+
+Then run the reconcile script for each cluster:
+
+```Console
+```
