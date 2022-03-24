@@ -2106,9 +2106,9 @@ reconcile again.
 
 Again this cluster seems to have "weird" contigs. We need to remove those contigs and try to continue... Also we can get rid  of clusters with small contigs e.g. cluste_007. We can also take a look on the cladogram and try to remove those "weird" contings. **Due to lack of time, we have already curated all the clusters... We can continue with the next steps:**
 
-- Multiple sequence alignment:
+- Multiple sequence alignment. A ```for loop`` will help us to run the msa to all the dirs.
 
-```
+```console
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler msa --cluster_dir $i ;done
 ```
 -Partitioning reads:
@@ -2132,5 +2132,184 @@ Then run the trycycler command:
 
 At the end we will need 3 files for each cluster: ```2_all_seqs.fasta```, ```3_msa.fasta``` and ```4_reads.fastq```
 
+
+```console
+
+[bio326-21-0@login MiniON.FilterClusters.dir]$ tree *
+cluster_001
+├── 1_contigs
+│   ├── A_contig_1.fasta
+│   ├── C_Utg978.fasta
+│   ├── F_Utg972.fasta
+│   ├── J_contig_1.fasta
+│   └── L_Utg946.fasta
+├── 2_all_seqs.fasta
+├── 3_msa.fasta
+└── 4_reads.fastq
+cluster_003
+├── 1_contigs
+│   ├── A_utg000003c.fasta
+│   ├── B_Utg976.fasta
+│   ├── C_utg000003c.fasta
+│   ├── D_Utg982.fasta
+│   ├── E_utg000003c.fasta
+│   ├── F_Utg954.fasta
+│   ├── G_utg000003c.fasta
+│   └── H_Utg956.fasta
+├── 2_all_seqs.fasta
+├── 3_msa.fasta
+└── 4_reads.fastq
+cluster_004
+├── 1_contigs
+│   ├── A_utg000004c.fasta
+│   ├── B_Utg968.fasta
+│   ├── C_utg000004c.fasta
+│   ├── D_Utg974.fasta
+│   ├── E_utg000004c.fasta
+│   ├── F_Utg946.fasta
+│   ├── G_utg000004c.fasta
+│   └── H_Utg948.fasta
+├── 2_all_seqs.fasta
+├── 3_msa.fasta
+└── 4_reads.fastq
+cluster_005
+├── 1_contigs
+│   ├── A_utg000007c.fasta
+│   ├── B_Utg972.fasta
+│   ├── C_utg000008c.fasta
+│   ├── D_Utg978.fasta
+│   ├── E_utg000007c.fasta
+│   ├── F_Utg950.fasta
+│   ├── G_utg000007c.fasta
+│   └── H_Utg952.fasta
+├── 2_all_seqs.fasta
+├── 3_msa.fasta
+└── 4_reads.fastq
+cluster_006
+├── 1_contigs
+│   ├── A_utg000005c.fasta
+│   ├── B_Utg970.fasta
+│   ├── C_utg000007c.fasta
+│   ├── D_Utg976.fasta
+│   ├── E_utg000005c.fasta
+│   ├── F_Utg948.fasta
+│   ├── G_utg000005c.fasta
+│   └── H_Utg950.fasta
+├── 2_all_seqs.fasta
+├── 3_msa.fasta
+└── 4_reads.fastq
+
+5 directories, 52 files
+```
+
 The final step of Trycycler is to generate a consensus contig sequence for each cluster. It does this by converting the MSA into a graph form, containing "same" chunks (where all the input sequences agree) and "different" chunks (where there are two or more options). It then chooses the most popular option for each different chunk (see How variants are chosen for the consensus sequence for more details). When there is a tie between options, Trycycler aligns the reads to the alternative sequences and chooses the option with the best read alignment scores.
+
+Trycycler uses the command:
+
+```
+trycycler consensus --cluster_dir trycycler/cluster_001
+```
+
+To produce the consensus fasta file in each cluster. A for loop again is the option here:
+
+```console
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-9 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster* ; do trycycler consensus --cluster_dir $i 2>&1 |tee $i.consensus.log; done
+```
+- At the end the consensus script will produce the ```7_final_consensus.fasta``` file for each cluster:
+
+```console
+[bio326-21-0@login MiniON.trycycler.clusters]$ tree MiniON.FilterClusters.dir/
+MiniON.FilterClusters.dir/
+├── cluster_001
+│   ├── 1_contigs
+│   │   ├── A_contig_1.fasta
+│   │   ├── C_Utg978.fasta
+│   │   ├── F_Utg972.fasta
+│   │   ├── J_contig_1.fasta
+│   │   └── L_Utg946.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   └── 7_final_consensus.fasta
+├── cluster_001.consensus.log
+├── cluster_003
+│   ├── 1_contigs
+│   │   ├── A_utg000003c.fasta
+│   │   ├── B_Utg976.fasta
+│   │   ├── C_utg000003c.fasta
+│   │   ├── D_Utg982.fasta
+│   │   ├── E_utg000003c.fasta
+│   │   ├── F_Utg954.fasta
+│   │   ├── G_utg000003c.fasta
+│   │   └── H_Utg956.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   └── 7_final_consensus.fasta
+├── cluster_003.consensus.log
+├── cluster_004
+│   ├── 1_contigs
+│   │   ├── A_utg000004c.fasta
+│   │   ├── B_Utg968.fasta
+│   │   ├── C_utg000004c.fasta
+│   │   ├── D_Utg974.fasta
+│   │   ├── E_utg000004c.fasta
+│   │   ├── F_Utg946.fasta
+│   │   ├── G_utg000004c.fasta
+│   │   └── H_Utg948.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   └── 7_final_consensus.fasta
+├── cluster_004.consensus.log
+├── cluster_005
+│   ├── 1_contigs
+│   │   ├── A_utg000007c.fasta
+│   │   ├── B_Utg972.fasta
+│   │   ├── C_utg000008c.fasta
+│   │   ├── D_Utg978.fasta
+│   │   ├── E_utg000007c.fasta
+│   │   ├── F_Utg950.fasta
+│   │   ├── G_utg000007c.fasta
+│   │   └── H_Utg952.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   └── 7_final_consensus.fasta
+├── cluster_005.consensus.log
+├── cluster_006
+│   ├── 1_contigs
+│   │   ├── A_utg000005c.fasta
+│   │   ├── B_Utg970.fasta
+│   │   ├── C_utg000007c.fasta
+│   │   ├── D_Utg976.fasta
+│   │   ├── E_utg000005c.fasta
+│   │   ├── F_Utg948.fasta
+│   │   ├── G_utg000005c.fasta
+│   │   └── H_Utg950.fasta
+│   ├── 2_all_seqs.fasta
+│   ├── 3_msa.fasta
+│   ├── 4_reads.fastq
+│   ├── 5_chunked_sequence.gfa
+│   ├── 6_initial_consensus.fasta
+│   └── 7_final_consensus.fasta
+└── cluster_006.consensus.log
+
+10 directories, 72 files
+```
+
+-We can then gather all consensus files into a final fasta file:
+
+```console
+[bio326-21-0@login MiniON.Trycycler.dir]$ cd /mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniON.Trycycler.dir
+[bio326-21-0@login MiniON.Trycycler.dir]$ cat MiniON.trycycler.clusters/MiniON.FilterClusters.dir/cluster_00*/7_final_consensus.fasta > MiniON.trycycler.final.consensus.total.fasta
+```
 
