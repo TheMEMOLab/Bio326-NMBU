@@ -1550,6 +1550,156 @@ We are using Trycycler to improve and correct the ONP genome assemblies:
 
 **"Trycycler is a tool for generating consensus long-read assemblies for bacterial genomes. I.e. if you have multiple long-read assemblies for the same isolate, Trycycler can combine them into a single assembly that is better than any of your inputs"**
 
-Trycycler is a modular software, so unfortunatelly it require a lot of manual intervention and cannot be fully automatized:
+Trycycler is a modular software. Unfortunatelly, it requires a lot of manual intervention and cannot be fully automatized:
 
 ![trycycler](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/pipeline.png)
+
+- The first step is to subsampling those HQ reads and create temporary assemblies. The [Trycycler wiki](https://github.com/rrwick/Trycycler/wiki) suggests to use a combination of  Flye, Miniasm+Minipolish and Raven , to create the assemblies. The following script will run the subsampling module and a combination of the assemblers/polishers to create these temporary assemblies:
+
+```bash 
+#!/bin/bash
+#########################################################################
+#       SLURM script to run Trycycler sub assemblies ONP reads
+#       Dependencies:
+#       -assembly.sh
+#       -miniasm_and_minipolish.sh
+#       Author Arutro Vera
+#       March 2022
+#########################################################################
+################################################
+## Job name:
+#SBATCH --job-name=Trycycler_subsampling_assembly
+#
+## Wall time limit:
+#SBATCH --time=08:00:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 12
+#SBATCH --mem=30G
+#SBATCH --nodes 1
+#SBATCH --out slurm-TrycyclerSubAssembly-%A.out
+############################################
+
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+
+##Activate conda environments
+
+export PS1=\$
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler
+
+###Def variables:
+
+input=$1
+scripts='/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts'
+
+####Do some work:########
+
+## For debuggin it is useful to print some info about the node,CPUs requested and when the job starts...
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID\_$SLURM_ARRAY_TASK_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I am working with this enviroment loaded"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+echo "entering to Sample directory..."
+
+cd $SLURM_SUBMIT_DIR/$input\Reads
+sampledir=$(pwd)
+
+echo "I'm in the smple dir:" $sampledir
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+echo "copying files to $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input"
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID.$input
+cd tmpDir_of.$SLURM_JOB_ID.$input
+workdir=$(pwd)
+mkdir $input.Trycycler.dir
+cd $input.Trycycler.dir
+cp $sampledir/*.filtlong.*.gz .
+cp $scripts/miniasm_and_minipolish.sh .
+cp $scripts/assembly.sh .
+
+###Variable to select the fastqfile
+fastqfile=$(ls -1|grep filtlong)
+echo "my fastq file is: "$fastqfile
+
+###Trycycler###
+
+echo "Starting trycycler ..."
+date +%d\ %b\ %T
+
+##Subsampling
+
+echo "Read subsampling ..."
+date +%d\ %b\ %T
+
+time trycycler subsample \
+        -t $SLURM_CPUS_ON_NODE \
+        --reads $fastqfile \
+        --out_dir $input.read_subsets
+
+echo "Multiple assembly ..."
+
+date +%d\ %b\ %T
+
+time bash assembly.sh $SLURM_CPUS_ON_NODE $input
+
+
+echo "moving results to" $SLURM_SUBMIT_DIR/
+date +%d\ %b\ %T
+
+rm -r $fastqfile
+
+cd $workdir
+time rsync -aP *.dir $SLURM_SUBMIT_DIR/
+
+####Removing tmp dir#####
+
+cd $TMPDIR/$USER/
+
+rm -r tmpDir_of.$SLURM_JOB_ID.$input
+
+echo "I've done at"
+date
+```
+You can copy the script from: ```/mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/trycycler.sub.ass.SLURM.sh``` :
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cp /mnt/SCRATCH/bio326-21/GenomeAssembly/BIO326-2022/scripts/trycycler.sub.ass.SLURM.sh .
+```
+- And then run it:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ sbatch trycycler.sub.ass.SLURM.sh MiniON
+Submitted batch job 14316638
+[bio326-21-0@login GenomeAssembly2022]$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14316638     orion Trycycle bio326-2  R       0:14      1 cn-16
+```
+*The script needs the ```MiniONReads/MiniON.filtlong.fq.gz``` if you do not havave these you can copy the directory from: ```/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniONReads```.*
