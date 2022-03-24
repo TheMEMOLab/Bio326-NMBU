@@ -1550,3 +1550,6 @@ We are using Trycycler to improve and correct the ONP genome assemblies:
 
 **"Trycycler is a tool for generating consensus long-read assemblies for bacterial genomes. I.e. if you have multiple long-read assemblies for the same isolate, Trycycler can combine them into a single assembly that is better than any of your inputs"**
 
+Trycycler is a modular software, so unfortunatelly it require a lot of manual intervention and cannot be fully automatized:
+
+![trycycler](https://github.com/rrwick/Trycycler/wiki/Illustrated-pipeline-overview)
