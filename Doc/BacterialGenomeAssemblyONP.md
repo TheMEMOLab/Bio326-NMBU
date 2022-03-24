@@ -1703,3 +1703,28 @@ Submitted batch job 14316638
           14316638     orion Trycycle bio326-2  R       0:14      1 cn-16
 ```
 *The script needs the ```MiniONReads/MiniON.filtlong.fq.gz``` if you do not havave these you can copy the directory from: ```/mnt/SCRATCH/bio326-21-0/GenomeAssembly2022/MiniONReads```.*
+
+
+- After subsampling and assembly Trycycler will produce the ```MiniON.Trycycler.dir``` folder. Let's take a look:
+
+```console
+[bio326-21-0@login GenomeAssembly2022]$ cd MiniON.Trycycler.dir/
+[bio326-21-0@login MiniON.Trycycler.dir]$ ls
+assembly_02.gfa  assembly_05.gfa  assembly_08.gfa  assembly_11.gfa  assembly.sh  miniasm_and_minipolish.sh  MiniON.assemblies  MiniON.read_subsets
+```
+If we look at the ``` MiniON.assemblies``` folder there are 8 new assemblies:
+
+```console
+[bio326-21-0@login MiniON.Trycycler.dir]$ tree MiniON.assemblies/
+MiniON.assemblies/
+├── assembly_02.fasta
+├── assembly_03.fasta
+├── assembly_05.fasta
+├── assembly_06.fasta
+├── assembly_08.fasta
+├── assembly_09.fasta
+├── assembly_11.fasta
+└── assembly_12.fasta
+
+0 directories, 8 files
+````
