@@ -1983,7 +1983,7 @@ The script producess the folder ```MiniON.FilterClusters.dir``` Go there:
 cluster_001  cluster_003  cluster_004  cluster_005  cluster_006  cluster_007  cluster_008
 ```
 
-As you can see in this example we get rid off the cluster_002 ... After this we can continue with the following step of Trycycler that is Reconciling contigs:
+As you can see in this example we get rid of the cluster_002 ... After this we can continue with the following step of Trycycler that is Reconciling contigs:
 
 Trycycler reconcile will:
 
