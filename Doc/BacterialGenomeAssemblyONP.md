@@ -1544,5 +1544,9 @@ mapping_taxid-lineage.bacteria_odb10.2019-12-16.txt
 ```
 **What do you think our genome is so "incomplete"???**
 
-## Correcting ONP assemblies using Trycycler 
+## Correcting ONP bacterial genome assemblies using [Trycycler](https://github.com/rrwick/Trycycler) 
+
+We are using Trycycler to improve and correct the ONP genome assemblies:
+
+**"Trycycler is a tool for generating consensus long-read assemblies for bacterial genomes. I.e. if you have multiple long-read assemblies for the same isolate, Trycycler can combine them into a single assembly that is better than any of your inputs"**
 
