@@ -1860,6 +1860,21 @@ Submitted batch job 14317034
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14317034     orion Trycycle bio326-2  R       0:05      1 cn-14
  ```
+ 
+ The script will give us the ```MiniON.trycycler.clusters```. Enter and take a look:
+ 
+ ```console
+ [bio326-21-0@login MiniON.trycycler.clusters]$ ls
+cluster_001  cluster_002  cluster_003  cluster_004  cluster_005  cluster_006  cluster_007  cluster_008  cluster_009  contigs.newick  contigs.phylip
+```
+
+"Trycycler cluster will create an output directory (trycycler in the example above) which contains the following:
+
+    contigs.phylip: a matrix of the Mash distances between all contigs in PHYLIP format.
+    contigs.newick: a FastME tree of the contigs built from the distance matrix. This can be visualised in a phylogenetic tree viewer such as FigTree, Dendroscope or Archaeopteryx.
+    One directory for each of the clusters: cluster_001, cluster_002, etc. These directories will each contain a subdirectory named 1_contigs which includes the FASTA files for the contigs in the cluster.
+"
+
 
 We will use R to load and vizualise the newick tree and see the clustering analysis. So let's open an RStudio session using the jupyterHub: https://orion.nmbu.no/jupyter/ Select the **RStudio-4.0.5** ![JP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/jpyter.png).
 
