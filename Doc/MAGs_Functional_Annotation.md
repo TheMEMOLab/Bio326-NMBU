@@ -86,4 +86,13 @@ For any Orion related enquiry: orion-support@nmbu.no
 PS: We are on Teams: https://bit.ly/orion-teams
 [bio326-21-0@cn-16 ~]$
 ```
-2. Go the folder where are the final MAGs from MetaBat2 and the checkM results. In my case is in the $SCRATCH under a folder named MetagenomicMAGs, so go there and check you have the 9 MAGs and the checkM results folder: 
+- Go the folder where are the final MAGs from MetaBat2 and the checkM results. In my case is in the ```$SCRATCH``` inside a folder named something like ```MetagenomicMAGs```, so go there and check you have the 9 MAGs and the checkM results folder: 
+
+```console
+[bio326-21-0@cn-16 ~]$ cd $SCRATCH/MetagenomicMAGS
+[bio326-21-0@cn-16 MetagenomicMAGS]$ ls
+checkM_results  ONT_bin.1.fa  ONT_bin.2.fa  ONT_bin.3.fa  ONT_bin.4.fa  ONT_bin.5.fa  ONT_bin.6.fa  ONT_bin.7.fa  ONT_bin.8.fa  ONT_bin.9.fa
+```
+*Remember to change your paths and directories to your user name*
+
+- Now let's run again the ```checkm qa``` pipeline but indicating we want to print a *table separated values* file with the quality scores. How do we obtain that?, let's take a look into the checkm qa options. **We have installed a conda environment with checkM ```/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM```, just due to some times conda envrironments are faster that singularity containers. So we need to first load that environment** 
