@@ -697,7 +697,7 @@ ONT_bin.8
 
 **Again, the main aim of this course is not to learn how to code, so do not panic, just look into the commands and try to make sense of them ...**
 
-Although we can display the content of the *.tsv* files obtainded by DRAM here in the terminal, the  metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these data to our personal computers and take a look. **A guide on how to copy files from Orion to our personal computers can be found in the [BacterialGenomeAssemblyMiniON](https://github.com/avera1988/NMBU-Bio-326/blob/main/Doc/BacterialGenomeAssemblyMiniON.md) document.**
+Although we can display the content of the *.tsv* files obtainded by DRAM here in the terminal, the  metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these data to our personal computers and take a look. 
 
 Once in your computer, you can open the product.html, to explore the metabolic potential of your MAGs.
 
