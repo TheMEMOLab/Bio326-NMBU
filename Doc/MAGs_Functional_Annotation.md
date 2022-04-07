@@ -1,6 +1,7 @@
 # Prokaryotic functional annotation
 
-### So far we were able to obtain indiviual metagenome assembled genomes (MAGs) from the xantan enrichment gut environment. Let's review our workflow to see what is the next step: 
+### So far have obtained indiviual metagenome assembled genomes (MAGs) from the xantan enrichment gut environment (poop). Let's review our workflow to see what is the next step: 
+
 ![workflow](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/wrokflowmetagenome.png) 
 
 After binning with [MetaBat](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained 9 bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to asses the quality of these MAGs and this was the result after run the "qa" pipeline:
@@ -136,7 +137,7 @@ usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
 
 ```
 
-This will provide us with a *ONT_qa_bins.tsv* file where all the qa results are storage. Let's take a look:
+This will provide us with a ```*ONT_qa_bins.tsv*``` file where all the qa results are storage. Let's take a look:
 
 ```console
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM) [bio326-21-0@cn-16 MetagenomicMAGS]$ more ONT_qa_bins.tsv 
@@ -153,7 +154,7 @@ ONT_bin.9	k__Bacteria (UID203)	5449	104	58	8.62	0.00	0.00	382818	0	6	6	65540	655
 
 ```
 
-- So for filtering we need to select all genomes that have a *Completeness*(colum6) >= 70 and *Contamination	Strain* (colum 7). For this conditionals loops, we can use the AWK that is a programming language for data extraction and reporting tool. The goal of this course is not to learn AWK so just let's talk about the basics: 
+- For filtering the results we need to select all genomes that have a *Completeness*(colum6) >= 70 and *Contamination	Strain* (colum 7). For this ```conditionals loops```, we can use the [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that is *a programming language for data extraction and reporting tool*. The goal of this course is not to learn AWK, so just let's talk about the basics: 
 * $ are references to colums (e.g. $6 meand colum 6)
 * -F Command line option to specify input field delimiter (e.g. -F "\t" means the text is separated by tabs)
 * awk '/pattern/ {action}' file↵Execute action for matched pattern 'pattern' on file 'file' (e.g awk -F "\t" '{if($6 >= 70 && $7 <= 5) print $1"\t"$6"\t"$7}' ONT_qa_bins.tsv means if colum 6 is greather than 70 and colum 7 is lower than 5 print: col.1 (ID), col.6(completeness) and col.7(Contamination), all separated by tabs ("\t")... 
@@ -196,7 +197,7 @@ done
 ONT_bin.1.fa  ONT_bin.2.fa  ONT_bin.3.fa  ONT_bin.7.fa  ONT_bin.8.fa
 ```
 
-6. **By applying this loop we were able to get all the genomes in the same folder at once. Try the loop if no don't panic, you can copy these genomes one by one using the normal cp command 😊**
+6. **By applying this loop we were able to get all the genomes in the same folder at once. Try the loop if it does not work, do not panic, you can copy these genomes one by one using the normal cp command 😊**
 
 We can exit now the interactive job:
 
@@ -313,7 +314,8 @@ cd tmpDir_of.$SLURM_JOB_ID
 ##Activate conda environments
 
 export PS1=\$
-source activate /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/GTDBTK
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/GTDBTK
 
 #Copy the MAGs to the $TMPDIR
 
@@ -512,7 +514,8 @@ module load Miniconda3
 ##Activate conda environments
 
 export PS1=\$
-source activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/DRAM
+source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/DRAM
 
 ####Do some work:########
 
@@ -616,7 +619,7 @@ echo "I've done at"
 date
 
 ```
-**You can copy this script to your folder by: ```cp /mnt/SCRATCH/bio326-21-0/MetagenomicMAGS/dram.GTDB.CM.SLURM.sh .```**
+**You can copy this script to your folder by: ```cp /mnt/SCRATCH/bio326-21/MetaGenomeBinning/dram.GTDB.CM.SLURM.sh .```**
 
 Let's run DRAM:
 
