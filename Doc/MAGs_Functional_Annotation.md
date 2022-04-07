@@ -1,0 +1,61 @@
+# Prokaryotic functional annotation
+
+### So far we were able to obtain indiviual metagenome assembled genomes (MAGs) from the xantan enrichment gut environment. Let's review our workflow to see what is the next step: 
+![workflow](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/wrokflowmetagenome.png) 
+
+After binning with [MetaBat](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained 9 bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to asses the quality of these MAGs qnd this was the result after run the "qa" pipeline:
+
+```console
+$ singularity exec /cvmfs/singularity.galaxyproject.org/c/h/checkm-genome:1.1.3--py_1 \
+checkm \
+qa \
+$out_path/lineage.ms \
+$out_path \
+-o 2 > $out_path/ONT_qa_bins
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+  Bin Id            Marker lineage         # genomes   # markers   # marker sets   Completeness   Contamination   Strain heterogeneity   Genome size (bp)   # ambiguous bases   # scaffolds   
+# contigs   N50 (scaffolds)   N50 (contigs)   Mean scaffold length (bp)   Mean contig length (bp)   Longest scaffold (bp)   Longest contig (bp)     GC    GC std (scaffolds > 1kbp)   Coding d
+ensity   Translation table   # predicted genes    0     1    2   3   4   5+  
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+  ONT_bin.7   o__Bacteroidales (UID2657)      160         490           268           99.13            0.75               0.00               6455207                0                1        
+    1           6455207          6455207               6455207                    6455207                  6455207                6455207         42.66              0.00                 90.7
+0                11                 5055          3    485   2   0   0   0   
+  ONT_bin.3   o__Clostridiales (UID1226)      155         278           158           98.67            1.27               0.00               6427786                0                1        
+    1           6427786          6427786               6427786                    6427786                  6427786                6427786         50.27              0.00                 87.8
+6                11                 5776          5    272   0   1   0   0   
+  ONT_bin.1   o__Clostridiales (UID1212)      172         263           149           97.99            2.85              71.43               3054291                0                1        
+    1           3054291          3054291               3054291                    3054291                  3054291                3054291         38.05              0.00                 89.6
+7                11                 2667          4    252   7   0   0   0   
+  ONT_bin.2    g__Bacteroides (UID2691)        33         839           309           81.93            0.46              62.50               5130773                0                33       
+    33           211788           211788                155477                     155477                   405112                 405112         42.66              1.64                 89.1
+9                11                 4231         155   676   8   0   0   0   
+  ONT_bin.8   o__Bacteroidales (UID2621)      198         427           260           72.07            0.00               0.00               3472450                0                25       
+    25           198197           198197                138898                     138898                   342879                 342879         45.20              1.71                 90.0
+9                11                 2911         102   325   0   0   0   0   
+  ONT_bin.5   o__Clostridiales (UID1226)      155         278           158           63.40            0.00               0.00               3278464                0                31       
+    31           141330           141330                105756                     105756                   511058                 511058         49.37              1.66                 88.2
+6                11                 3108          93   185   0   0   0   0   
+  ONT_bin.9      k__Bacteria (UID203)         5449        104            58            8.62            0.00               0.00                382818                0                6        
+    6            65540            65540                 63803                      63803                    130590                 130590         42.32              0.99                 91.0
+7                11                 297           99    5    0   0   0   0   
+  ONT_bin.6          root (UID1)              5656         56            24            0.00            0.00               0.00                753739                0                5        
+    5            230855           230855                150747                     150747                   247841                 247841         45.27              0.86                 84.9
+7                11                 773           56    0    0   0   0   0   
+  ONT_bin.4          root (UID1)              5656         56            24            0.00            0.00               0.00                482281                0                3        
+    3            166602           166602                160760                     160760                   166615                 166615         41.07              0.52                 87.0
+3                11                 543           56    0    0   0   0   0   
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+```
+
+Now can start filtering the MAGs. A good criterion is to use the quality and contamination of the MAGs to sort them into *High*, *Medium* and *Low* quality MAGs. 
+We can use the following table from [Bowers et al.,](https://www.nature.com/articles/nbt.3893) to classify the MAGs:
+![tablemags](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/mags.jpg)
+
+We have all this information from the table generated by checkm, and we can use it to extract these quality score parameters. Now we have 9 MAGs and we can easily pick manually those MAGs ans sorted them for quality and contamination. Let's say >= 70 % completeness and =< 5 % contamination by looking into this table. But what if we had ended up with hundred or thousan of genomes ? Doing a manual selection would not be an easy option. So now let's code a little script to automatically select those *"Good quality MAGs"*:
