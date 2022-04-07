@@ -138,7 +138,7 @@ usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
 
 This will provide us with a *ONT_qa_bins.tsv* file where all the qa results are storage. Let's take a look:
 
-```bash
+```console
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM) [bio326-21-0@cn-16 MetagenomicMAGS]$ more ONT_qa_bins.tsv 
 Bin Id	Marker lineage	# genomes	# markers	# marker sets	Completeness	Contamination	Strain heterogeneity	Genome size (bp)	# ambiguous bases	# scaffolds	# contigs	N50 (scaffolds)	N50 (contigs)	Mean scaffold length (bp)	Mean contig length (bp)	Longest scaffold (bp)	Longest contig (bp)	GC	GC std (scaffolds > 1kbp)	Coding density	Translation table	# predicted genes	0	1	2	3	4	5+
 ONT_bin.1	o__Clostridiales (UID1212)	172	263	149	97.99	2.85	71.43	3054291	0	1	1	3054291	3054291	3054291	3054291	3054291	3054291	38.0	0.00	89.67	11	2667	4	252	7	0	0	0
