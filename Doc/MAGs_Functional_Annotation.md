@@ -98,4 +98,21 @@ checkM_results  ONT_bin.1.fa  ONT_bin.2.fa  ONT_bin.3.fa  ONT_bin.4.fa  ONT_bin.
 - Now let's run again the ```checkm qa``` pipeline but indicating we want to print a *table separated values* file with the quality scores. How do we obtain that?, let's take a look into the checkm qa options. **We have installed a conda environment with checkM ```/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM```. So we need to first load that environment** 
 
 ```console
-[bio326-21-0@cn-16 MetagenomicMAGS]$ source 
+[bio326-21-0@cn-16 MetagenomicMAGS]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
+[bio326-21-0@cn-16 MetagenomicMAGS]$ conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM
+```
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM) [bio326-21-0@cn-16 MetagenomicMAGS]$ checkm qa --help
+usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
+                 [--exclude_markers EXCLUDE_MARKERS] [--individual_markers]
+                 [--skip_adj_correction] [--skip_pseudogene_correction]
+                 [--aai_strain AAI_STRAIN] [-a ALIGNMENT_FILE]
+                 [--ignore_thresholds] [-e E_VALUE] [-l LENGTH]
+                 [-c COVERAGE_FILE] [-f FILE] [--tab_table] [-t THREADS] [-q]
+                 [--tmpdir TMPDIR]
+                 marker_file analyze_dir
+
+Assess bins for contamination and completeness.
+                                        
+```
+**The options we need are: --tab_table and -f to save this into a file and not just printed to the standar input. We need the checkM results folder and the marker_files**
+
