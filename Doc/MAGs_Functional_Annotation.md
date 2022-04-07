@@ -110,8 +110,9 @@ usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
                  [-c COVERAGE_FILE] [-f FILE] [--tab_table] [-t THREADS] [-q]
                  [--tmpdir TMPDIR]
                  marker_file analyze_dir
+```
 
-Assess bins for contamination and completeness.
+- Assess bins for contamination and completeness.
                                         
 ```
 **The options we need are: --tab_table and -f to save this into a file and not just printed to the standar input. We need the checkM results folder and the marker_files**
