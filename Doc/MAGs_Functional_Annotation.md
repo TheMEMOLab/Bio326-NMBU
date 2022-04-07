@@ -1,4 +1,4 @@
-# Prokaryotic functional annotation
+# Prokaryotic functional genome annotation
 
 ### So far have obtained indiviual metagenome assembled genomes (MAGs) from the xantan enrichment gut environment (poop). Let's review our workflow to see what is the next step: 
 
