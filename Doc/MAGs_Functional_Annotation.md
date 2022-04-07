@@ -100,7 +100,6 @@ checkM_results  ONT_bin.1.fa  ONT_bin.2.fa  ONT_bin.3.fa  ONT_bin.4.fa  ONT_bin.
 ```console
 [bio326-21-0@cn-16 MetagenomicMAGS]$ source /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/activate.conda.sh
 [bio326-21-0@cn-16 MetagenomicMAGS]$ conda activate /net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM
-```
 (/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/checkM) [bio326-21-0@cn-16 MetagenomicMAGS]$ checkm qa --help
 usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
                  [--exclude_markers EXCLUDE_MARKERS] [--individual_markers]
@@ -113,7 +112,6 @@ usage: checkm qa [-h] [-o {1,2,3,4,5,6,7,8,9}]
 ```
 
 - Assess bins for contamination and completeness.
-                                        
-```
+
 **The options we need are: --tab_table and -f to save this into a file and not just printed to the standar input. We need the checkM results folder and the marker_files**
 
