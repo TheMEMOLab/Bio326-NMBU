@@ -1,5 +1,7 @@
 # Prokaryotic functional genome annotation
 
+Author: Arturo Vera. v1 April 2022
+
 ### So far have obtained indiviual metagenome assembled genomes (MAGs) from the xantan enrichment gut environment (poop). Let's review our workflow to see what is the next step: 
 
 ![workflow](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/wrokflowmetagenome.png) 
