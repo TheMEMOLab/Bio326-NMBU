@@ -2218,7 +2218,7 @@ trycycler consensus --cluster_dir trycycler/cluster_001
 To produce the consensus fasta file in each cluster. A for loop again is the option here:
 
 ```console
-(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-9 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster* ; do trycycler consensus --cluster_dir $i 2>&1 |tee $i.consensus.log; done
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-9 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster* ; do trycycler consensus  -t $SLURM_CPUS_ON_NODE --cluster_dir $i ; done 2>&1 |tee consensus.log &
 ```
 - At the end the consensus script will produce the ```7_final_consensus.fasta``` file for each cluster:
 
