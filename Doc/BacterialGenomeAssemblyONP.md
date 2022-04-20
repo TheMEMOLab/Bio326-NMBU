@@ -2031,7 +2031,7 @@ trycycler reconcile --reads reads.fastq --cluster_dir trycycler/cluster_001
 As we have 7 clusters we can do a for loop to help us:
 
 ```console
-[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler reconcile --reads MiniON.filtlong.fq.gz --cluster_dir $i ; done 2>&1 | tee reconcile.log & 
+[bio326-21-0@cn-17 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler reconcile -t $SLURM_CPUS_ON_NODE --reads MiniON.filtlong.fq.gz --cluster_dir $i ; done 2>&1 | tee reconcile.log & 
 .
 .
 .
