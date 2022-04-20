@@ -2114,7 +2114,7 @@ Again this cluster seems to have "weird" contigs. We need to remove those contig
 - Multiple sequence alignment. A ```for loop``` will help us to run the msa to all the dirs.
 
 ```console
-(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler msa --cluster_dir $i ;done
+(/net/cn-1/mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/Trycycler) [bio326-21-0@cn-5 MiniON.trycycler.clusters]$ for i in MiniON.FilterClusters.dir/cluster_*; do trycycler msa -t $SLURM_CPUS_ON_NODE --cluster_dir $i ;done 2>&1 | tee msa.log &  
 ```
 -Partitioning reads:
 
