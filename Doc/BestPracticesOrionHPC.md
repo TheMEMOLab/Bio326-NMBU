@@ -87,6 +87,8 @@ Have a nice evening!
 
 ### Orion main configuration 
 
+**The Orion HPC system currently consists of 1680 processor cores with more than 12 terabytes of RAM and 1 petabyte of storage accessible on a 10/1 Gbit network via NFS. The Orion HPC's computation nodes utilize various processors with Centos Linux 7.9 as an operating environment.**
+
 Let's take a look into this figure: 
 
 ![Cluster](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/cluster.png)
@@ -335,8 +337,11 @@ As a student of this course, we are using the $SCRATCH folder to keep our raw se
 Let's move into that folder:
 
 ```
-[bio326-21-0@login ~]$ cd /mnt/SCRATCH/bio326-21-0
+-bash-4.2$ cd $SCRATCH
+-bash-4.2$ pwd
+/mnt/SCRATCH/bio326-2023-19
 ```
+*For moving here we use the variable ```$SCRATCH```. A variable is a character string to which the user assign a value. The value assigned could be a number, text, filename, device, or any other type of data. It is important you get familiarized with this and other Unix/Linux terminology. This [link](https://orion.nmbu.no/en/LinuxTutorial) can help you to navigate through these terms.
 
 ### Queues for different RAM usage:
 
@@ -353,7 +358,7 @@ In general, there is a shorter job queue in smallmem than the hugemem queue. Als
 
 ## Running an interactive job to test programs and get used to working in the cluster
 
-The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can book a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
+The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can "book" a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
 
 ```
 [bio326-21-0@login bio326-21-0]$ srun --partition=smallmem --cpus-per-task 4 --mem=4G --time=01:00:00 --pty bash -i
