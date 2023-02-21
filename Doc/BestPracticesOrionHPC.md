@@ -221,8 +221,8 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 
 ## File system in Orion:
 
+|Environment|	Space Purpose|	Backedup |	Default| Quota|	Life span |
 |---|---|---|---|
-|Environment|	Space Purpose|	Backedup |	Default| Quota|	Life span ||
 |
 |
 
