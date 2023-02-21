@@ -113,6 +113,8 @@ As you can see, this computer is not well suitable for "heavy" computational wor
 
 ### The Orion HPC nodes:
 
+**Orion HPC provides a supercomputing environment with thousands of cores to researchers and students to handle their computational problems. The following table summarizes the computing power capacity of Orion HPC nodes.**
+
 |     |     |     |     |     |     |     |     |
 | --- | --- | --- | --- | --- | --- | --- |--- |
 | Number of nodes | RAM(GB)\* | CPU type | Clock rate (GHz) | Cores \*\* | $TMPDIR(TB)\*\*\* | Nodes | Remark|
@@ -219,7 +221,10 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 
 ## File system in Orion:
 
-
+|---|---|---|---|
+|Environment|	Space Purpose|	Backedup |	Default| Quota|	Life span ||
+|
+|
 
 As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
 
