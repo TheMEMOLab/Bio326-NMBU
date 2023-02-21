@@ -10,10 +10,10 @@ To login into Orion cluster we need two things:
 - Establish a [VPN](https://nmbuhjelp.nmbu.no/tas/public/ssp/content/detail/knowledgeitem?unid=4c4870bb-f0fc-4c9f-b0f5-0c036951436f) connection (if not using a NMBU network)
 - Use a secure-shell command [ssh](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) via the command line
 
-For login open a Unix terminal and type something like this. 
+For login open a Command-line interfase (CLI) or Terminal  and type something like this. 
 
 ```bash
-$ ssh bio326-21-0@login.orion.nmbu.no
+$ ssh bio326-2023-19@login.orion.nmbu.no
 ```
 *Remember to change to your username bio326-y-x*
 
@@ -21,9 +21,35 @@ This will ask for your password. Type it
 
 *Even you don't see anything the password is typed*
 
+After the first attempt of login you will get something like:
+
 ```bash
-bio326-21-0@login.orion.nmbu.no's password: 
-Last login: Tue Mar  2 11:18:13 2021 from 10.230.14.52
+ssh bio326-2023-19@login.orion.nmbu.no
+bio326-2023-19@login.orion.nmbu.no's password:
+You are required to change your password immediately (root enforced)
+Last login: Tue Feb 21 17:39:16 2023 from 10.42.25.161
+WARNING: Your password has expired.
+You must change your password now and login again!
+Changing password for user bio326-2023-19.
+Changing password for bio326-2023-19.
+(current) UNIX password:
+```
+
+Type the password again:
+
+```bash
+New password:
+Retype new password:
+passwd: all authentication tokens updated successfully.
+Connection to login.orion.nmbu.no closed.
+```
+
+If this was done correctly, you will be logout and need to relogin:
+
+```bash
+ssh bio326-2023-19@login.orion.nmbu.no
+bio326-2023-19@login.orion.nmbu.no's password:
+Last login: Tue Feb 21 17:49:52 2023 from 10.42.25.161
 
 Welcome to the NMBU Orion compute cluster environment.
 
@@ -33,15 +59,28 @@ Do not run any jobs on this machine, as they might be automatically terminated.
 
 IMPORTANT:
   - Orion introduction: https://orion.nmbu.no/
-  - Orion can handle small-scale projects. Need more CPU hours? Please consider
+  - Don’t use more than 150 threads/CPUs concurrently for more than one day. Please limit concurrently running array jobs to 25. Refer to Orion wiki how to do that. Orion can handle small-scale projects. Need more CPU hours? Please consider
     applying for national infrastructure resources: https://www.sigma2.no/
   - Please, PLEASE do compress your fastq, vcf and other non-compressed files
     using i.e. pigz.
 
-For any Orion related enquiry: orion-support@nmbu.no
-PS: We are on Teams: https://bit.ly/orion-teams
+NEWS:
+  - 2022-07-28: Orion has been moved to a new storage system with a new data management policy. Please check Orion https://orion.nmbu.no/en/StorageChanges. We are still working out many details.
+    Please email us if you miss anything or notice any issues.
+  - Linux commands cp, rsync, scp, and mv are allowed to run for only 5 minutes in the login server. You must submit your jobs or use the interactive qlogin command to run these commands for longer than 5 minutes. You can also use filemanager.orion.nmbu.no to transfer files to your PC or arken.nmbu.no.
 
-[bio326-21-0@login ~]$ 
+Apply for project storage https://tinyurl.com/OrionStorageApply
+
+For any Orion related enquiry: orion-support@nmbu.no
+We are on Teams: https://bit.ly/orion-teams
+
+
+Your quota:
+Volume          Type    ID                      Used    Quota   Limit   Grace
+Home            USR     bio326-2023-19          16K     200G    300G    none
+
+Have a nice evening!
+-bash-4.2$
 ```
 
 **Now you are logged into the Orion login-node.**
@@ -59,18 +98,32 @@ How can I be sure of the number of CPUs and RAM of this "login" computer node an
 * CPUS: Use the command nproc
 
 ```Bash
-[bio326-21-0@login ~]$ nproc 
-6
+-bash-4.2$ nproc
+8
 ```
 
 * RAM: We need to look for the "Total memory". All this info is allocated in the meminfo file at /proc directory. So we can use the grep command to look for this into the file.
 
 ```bash
-[bio326-21-0@login ~]$ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
-MemTotal: 32.7442 GB
+-bash-4.2$ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
+MemTotal: 32.7794 GB
 ```
 
 As you can see, this computer is not well suitable for "heavy" computational work. So if we want to do some work (e.g. run BLAST or assembly a genome) we need to send this (job) into a compute node.
+
+### The Orion HPC nodes:
+
+|     |     |     |     |     |     |     |     |
+| --- | --- | --- | --- | --- | --- | --- |--- |
+| Number of nodes | RAM(GB)\* | CPU type | Clock rate (GHz) | Cores \*\* | $TMPDIR(TB)\*\*\* | Nodes | Remark|
+| 1   | 3000 | Xeon(R) Gold 6140 | 2.30 | 144 | 2   | cn-1    ||
+| 7   | 192 | Xeon(R) CPU E5-2650 v2 | 2.60 | 32  | 4.5 | cn[4-11]    ||
+| 1   | 256 | Xeon(R) CPU E5-2683 v4 | 2.10 | 64  | 4.5 | cn-13    ||
+| 2   | 1000 | Xeon(R) CPU E7- 4870 | 2.40 | 80  | 18/8   | cn-[2-3]    ||
+| 4   | 256 | EPYC 7302 16-Core | 3.0 | 64  | 16  | gn-[0-3] | 3 x NVIDIA Quadro RTX 8000|
+| 2   | 256 | Xeon(R) CPU E5-2650 v2 | 2.60 | 32  | 11   |cn-12,15     ||
+| 1   | 2000 | EPYC 7742 64-Core | 2.25 - 3.40 | 256 | 8   | cn-14|    |
+| 2   | 1000 | EPYC 7702 64-Core | 2 - 3.35 | 256 | 2   |  cn-[16-17]   ||
 
 There are two ways for doing this:
 * Interactive Job (via SLURM)
@@ -96,62 +149,64 @@ If we want to know the amount of CPU, RAM and other configuration in the cluster
 For example we can display the Partition, No. of CPUs, Memmory ammount of each node (computer) in Orion using the following instructions:
 
 ```bash
-[bio326-21-0@login ~]$ sinfo --long --Node
-Thu Feb 10 14:40:12 2022
-NODELIST   NODES   PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON              
-cn-1           1      orion*     drained 144    4:18:2 309453        0      1 cpu_xeon maint               
-cn-1           1     hugemem     drained 144    4:18:2 309453        0      1 cpu_xeon maint               
-cn-2           1     hugemem   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-2           1 interactive   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-3           1     hugemem   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-3           1 interactive   allocated 80     40:1:2 103186        0      1 cpu_xeon none                
-cn-4           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-4           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-4           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-5           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-6           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-7           1      orion*     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
-cn-7           1    smallmem     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
-cn-7           1      lowpri     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
-cn-7           1 interactive     drained 32     32:1:1 193230        0      1 cpu_xeon maint               
-cn-8           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-8           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-8           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-9           1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1      orion*        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1    smallmem        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1      lowpri        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-10          1 interactive        idle 32     32:1:1 193230        0      1 cpu_xeon none                
-cn-11          1      orion*   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
-cn-11          1    smallmem   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
-cn-11          1 interactive   allocated 64     2:16:2 257687        0      1 cpu_xeon none                
-cn-12          1      orion*       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-12          1    smallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-12          1 interactive       mixed 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-13          1      orion*       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
-cn-13          1    smallmem       mixed 12      2:6:1  31917        0      1 cpu_xeon none                
-cn-14          1     hugemem   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
-cn-14          1      orion*   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
-cn-14          1 interactive   allocated 256    2:64:2 205153        0      1 cpu_amd, none                
-cn-15          1      orion*        idle 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-15          1     hugemem        idle 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-15          1 interactive        idle 32      2:8:2 257738        0      1 cpu_xeon none                
-cn-16          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
-cn-16          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
-cn-16          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none                
-cn-17          1      orion*        idle 256    2:64:2 103176        0      1 cpu_amd, none                
-cn-17          1     hugemem        idle 256    2:64:2 103176        0      1 cpu_amd, none                
-cn-17          1 interactive        idle 256    2:64:2 103176        0      1 cpu_amd, none                
-gn-0           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-1           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-2           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none                
-gn-3           1         gpu        idle 64     2:16:2 257710        0      1 cpu_amd, none  
+-bash-4.2$ sinfo -l -N
+Tue Feb 21 17:53:54 2023
+NODELIST   NODES   PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON
+cn-1           1      orion*       mixed 144    4:18:2 309453        0      1 cpu_xeon none
+cn-1           1     hugemem       mixed 144    4:18:2 309453        0      1 cpu_xeon none
+cn-1           1       RSYNC       mixed 144    4:18:2 309453        0      1 cpu_xeon none
+cn-1           1 interactive       mixed 144    4:18:2 309453        0      1 cpu_xeon none
+cn-2           1      orion*       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-2           1     hugemem       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-2           1    smallmem       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-2           1 interactive       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-3           1      orion*       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-3           1     hugemem       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-3           1    smallmem       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-3           1 interactive       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-4           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-4           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-4           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-5           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-5           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-5           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-6           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-6           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-7           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-7           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-7           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-8           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-8           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-8           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-9           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-9           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-9           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-10          1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-10          1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-10          1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-11          1      orion*       mixed 64     2:16:2 257687        0      1 cpu_xeon none
+cn-11          1    smallmem       mixed 64     2:16:2 257687        0      1 cpu_xeon none
+cn-11          1 interactive       mixed 64     2:16:2 257687        0      1 cpu_xeon none
+cn-12          1      orion*       mixed 32      2:8:2 257738        0      1 cpu_xeon none
+cn-12          1    smallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none
+cn-12          1 interactive       mixed 32      2:8:2 257738        0      1 cpu_xeon none
+cn-13          1       RSYNC        idle 12      2:6:1  31917        0      1 cpu_xeon none
+cn-14          1     hugemem       mixed 256    2:64:2 205153        0      1 cpu_amd, none
+cn-14          1      orion*       mixed 256    2:64:2 205153        0      1 cpu_amd, none
+cn-14          1 interactive       mixed 256    2:64:2 205153        0      1 cpu_amd, none
+cn-15          1     hugemem   allocated 32      2:8:2 257738        0      1 cpu_xeon none
+cn-15          1      orion*   allocated 32      2:8:2 257738        0      1 cpu_xeon none
+cn-15          1 interactive   allocated 32      2:8:2 257738        0      1 cpu_xeon none
+cn-16          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-16          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-16          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-17          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-17          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-17          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+gn-0           1         gpu     drained 64     2:16:2 257710        0      1 cpu_amd, Job step not running
+gn-1           1         gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+gn-2           1         gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+gn-3           1         gpu     drained 64     2:16:2 257710        0      1 cpu_amd, Kill task failed
 ```
 In this case, the *State* column shows the status of the node. It means, how many resources can be allocated per node, in this example there are 4 different status: 
 
@@ -162,7 +217,9 @@ In this case, the *State* column shows the status of the node. It means, how man
 
 Summarizing, the only nodes that can accept jobs under the previous conditions are those with "MIXED" status. 
 
-## Disk space quota in $HOME, $SCRATCH and $TMPDIR 
+## File system in Orion:
+
+
 
 As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
 
