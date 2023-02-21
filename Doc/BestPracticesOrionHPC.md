@@ -1,8 +1,8 @@
 # Basic exercises for best practices in Orion
-v2, February, 2022 Author: Arturo Vera-Ponce de Leon
+v3, February, 2023 Author: Arturo Vera-Ponce de Leon
 
 ### What is this?
-This document is intended to be a quick reference guide on the basic usage of the NMBU-Orion HPC cluster. For a complete reference please referer to the full documentation of [Orion](https://orion.nmbu.no/en/home)
+This document is intended to be a quick reference guide on the basic usage of the NMBU-Orion HPC cluster. For a complete reference please referer to the full documentation of [Orion](https://orion.nmbu.no/)
 
 **Login into orion** 
 
