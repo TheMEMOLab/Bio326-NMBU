@@ -223,7 +223,7 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 
 | Environment | Space Purpose | Backedup | Default Quota |Life span |
 | ----------- | ------------- | -------- | ------------- | -------- |
-|
+|$HOME	| Personal user home space that is best for small files |	YES	|200G - 300G* |	Active users |
 |
 
 As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
