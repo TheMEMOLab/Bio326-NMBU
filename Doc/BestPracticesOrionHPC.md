@@ -223,8 +223,10 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 
 | Environment | Space Purpose | Backedup | Default Quota |Life span |
 | ----------- | ------------- | -------- | ------------- | -------- |
-|$HOME	| Personal user home space that is best for small files |	YES	|200G - 300G* |	Active users |
-|
+| $HOME	| Personal user home space that is best for small files |	YES	|200G - 300G* |	Active users |
+| $SCRATCH or $SCRATCH_PROJECTS |	Temporary working directory for data analyses | 	YES	| 500G - 1T*|	180 days |
+| $PROJECTS |	Shared disk space for research projects	| YES |	On demand	Project period (max 3 - 4 years) |
+| $TMPDIR |	Local to compute node	| NO | Varies (4.5 – 16 T)	| Until a job is completed |
 
 As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
 
