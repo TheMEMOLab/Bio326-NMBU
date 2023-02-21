@@ -646,7 +646,7 @@ SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base
 -w --nodelist <list-of-node-names>    -J --job-name <jobname>
 ```
 
-We can indicate these options by using the **#SBATCH** word following by any of these flag (e.g -c 10 ; means 10 CPUs).
+We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 10 ; means 10 CPUs).
 
 
 ```
@@ -667,33 +667,63 @@ We can indicate these options by using the **#SBATCH** word following by any of 
 Let's use the following SLURM script to run the BLAST as we did in the interactive job.
 
 
-```
+```bash
 #!/bin/bash
 
+#####################SLURM flags
 ## Job name:
 #SBATCH --job-name=MyFirstBlastp
-#
 ## Wall time limit:
 #SBATCH --time=00:10:00
-#
 ## Other parameters:
-#SBATCH --cpus-per-task 4
-#SBATCH --mem=4G
-#SBATCH --nodes 1
-
+#SBATCH --cpus-per-task 2  #Asking for 2 CPUS
+#SBATCH --mem=2G     #2G of RAM
+#SBATCH --nodes 1 #Only one node 
+#SBATCH --partition=smallmem  #partition to run
+#SBATCH --output=slurm-%x_%A  #slurm standar output file
+#########################################
 
 ######Everything below this are the job instructions######
 
+#Loading modules
 module purge #This remove any module loaded 
+module load Miniconda3 && eval "$(conda shell.bash hook)"
+
+##Activating conda environments
+conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
+echo "Working with this $CONDA_PREFIX environmet ..."
 
 ##Useful lines to know where and when the job starts
+##Do some work:########
 
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID\_$SLURM_ARRAY_TASK_ID
 echo "I am running on:"
-echo $SLURM_NODELIST   ##The node where the job is executed
+echo $SLURM_NODELIST
 echo "I am running with:"
-echo $SLURM_CPUS_ON_NODE "cpus"  ###The number of cpus
+echo $SLURM_CPUS_ON_NODE "cpus"
 echo "Today is:"
 date
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+
+echo "copying files to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
 
 ##Enter to the $TMPDIR/$USER
 
@@ -714,7 +744,7 @@ cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/*.fa* .
 
 echo "Making database" ##Legend to know what the job is doing
 
-singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he19e7b1_0 makeblastdb \
+time makeblastdb \
 -dbtype prot \
 -in Bacteroides51.faa 
 
@@ -722,7 +752,7 @@ singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he1
 
 echo "Running BLAST" ##Legend to know what the job is doing
 
-singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he19e7b1_0 blastp \
+time blastp \
 -query amylase.Bgramini.fasta \
 -db Bacteroides51.faa -dbsize 1000000000 \
 -max_target_seqs 1 \
@@ -733,8 +763,12 @@ singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he1
 ###Copy results to the $SCRATCH##
 
 echo "Copy data to the $SCRATCH ..." ##Legend to know what the job is doing
+mkdir $SCRATCH/MyFirstBlastp.dir
 
-cp *fasta.blastp.out /mnt/SCRATCH/bio326-21-0  ##Remember to change the name of your user
+cp *fasta.blastp.out $SCRATCH/MyFirstBlastp.dir  
+
+echo "Your files are in $SCRATCH/MyFirstBlastp.dir"
+ls $SCRATCH/MyFirstBlastp.dir
 
 ###Remove the work.directory
 
@@ -746,188 +780,95 @@ echo "I am done at" ##Legend to know what the job is doing
 date
 ```
 
-**You can copy this script to your $SCRATCH or $HOME directory from /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/myfisrt.blastp.SLURM.sh**
+**You can copy this script to your $SCRATCH or $HOME directory from ```$COURSES/BIO326/BestPracticesOrion/myfirstblast.SLURM.sh**
 
 ```
-[bio326-21-0@login bio326-21-0]$ cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/myfisrt.blastp.SLURM.sh .
+[bio326-21-0@login bio326-21-0]$ cp $COURSES/BIO326/BestPracticesOrion/myfirstblast.SLURM.sh .
 ```
 
 ### Running the Job by sbatch
 
 The way that SLURM takes the bash script and submit a job is by using the SLURM **sbatch** comand following by the script we want to run:
 
-```
-[bio326-21-0@login bio326-21-0]$ sbatch myfisrt.blastp.SLURM.sh 
-Submitted batch job 12315560
+```bash
+sbatch myfirstblast.SLURM.sh
+Submitted batch job 11818971
 ```
 The job now is in the **queue** to run.
 
+
 ## Monitoring the jobs by squeue
 
-A user can monitorate the status of the Job by the command **squeue** 
+A user can monitorate the status of the Job by the command ```squeue $USER``` 
 
-```
-[bio326-21-0@login bio326-21-0]$ squeue 
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
-          12163974       gpu jupyterh     wubu CG      13:44      1 gn-0 
-          12133418       gpu jupyterh tobibjor CG    8:00:24      1 gn-0 
-          12133835       gpu jupyterh     idor CG    8:00:23      1 gn-0 
-          12155551       gpu jupyterh  cbrekke CG    8:00:20      1 gn-0 
-          12154693       gpu jupyterh  garethg CG    8:00:02      1 gn-0 
-          12133882       gpu jupyterh martpali CG    8:00:22      1 gn-0 
-          12132654       gpu jupyterh     tikn CG    8:00:22      1 gn-0 
-          12315165       gpu jupyterh     wubu  R    1:28:18      1 gn-3 
-          12137578       gpu msc_unet  maleneg  R 3-10:28:58      1 gn-0 
-          12315185       gpu jupyterh martpali  R    1:25:06      1 gn-3 
-          12314963       gpu head_nec ngochuyn  R    2:01:50      1 gn-3 
-          12314280       gpu jupyterh domniman  R    4:03:34      1 gn-3 
-          11998506       gpu   pepper michelmo  R 8-12:43:53      1 gn-0 
-          12234490   hugemem princess mariesai  R 2-01:44:53      1 cn-14 
-        12312723_1   hugemem AssAndBi     auve  R    8:33:36      1 cn-14 
-          11970643   hugemem fun-trai    torfn  R 17-11:37:59      1 cn-1 
-          12157565   hugemem maxbin2_   sivick  R 3-05:46:04      1 cn-14 
-          11977182   hugemem  tess15k kristenl  R 14-12:18:10      1 cn-14 
-          11977181   hugemem   tess7k kristenl  R 14-12:18:52      1 cn-14 
-          11977180   hugemem  tess10k kristenl  R 14-12:20:05      1 cn-14 
-          11970277   hugemem 2_alto10 kristenl  R 17-13:43:17      1 cn-1 
-          12073389   hugemem Simon_Br kristenl  R 6-11:13:50      1 cn-3 
-          12291673   hugemem funTrain     lagr  R 1-11:40:28      1 cn-2 
-       12071454_33   hugemem      bwa     tikn  R    2:21:42      1 cn-2 
-       12071454_32   hugemem      bwa     tikn  R    7:24:06      1 cn-1 
-       12071454_31   hugemem      bwa     tikn  R    7:35:52      1 cn-2 
-       12071454_30   hugemem      bwa     tikn  R   13:44:56      1 cn-2 
-       12071454_29   hugemem      bwa     tikn  R   17:05:05      1 cn-2 
-          11864977   hugemem     tldr volhpaul  R 31-09:08:07      1 cn-1 
-          11824306   hugemem    CLUST mariansc  R 17-02:45:30      1 cn-2 
-          11824320   hugemem    CLUST mariansc  R 17-02:45:30      1 cn-2 
-          12314799   hugemem       du   thommo  R    2:28:30      1 cn-1 
-          12312317   hugemem   qlogin kristenl  R    9:52:01      1 cn-14 
-          11973160   hugemem   mcclin volhpaul  R 16-04:56:47      1 cn-3 
-12071454_[34-200%5 hugemem,o      bwa     tikn PD       0:00      1 (JobArrayTaskLimit) 
-          12309426 interacti jupyterh     andu  R   14:10:01      1 gn-1 
-          12294220 interacti jupyterh     andu  R 1-11:04:58      1 gn-1 
-          12311916 interacti jupyterh    hanso  R   11:08:16      1 gn-1 
-          12311821 interacti jupyterh mariansc  R   11:29:35      1 gn-1 
-          12311628     orion     DRAM     iaal PD       0:00      1 (Priority) 
-          12311629     orion     DRAM     iaal PD       0:00      1 (Priority) 
-          12311627     orion     DRAM     iaal PD       0:00      1 (Resources) 
-          12311626     orion     DRAM     iaal  R       2:40      1 cn-8 
-          12311625     orion     DRAM     iaal  R       4:29      1 cn-9 
-          12311624     orion     DRAM     iaal  R       9:56      1 cn-10 
-          12311623     orion     DRAM     iaal  R      12:33      1 cn-4 
-          12311622     orion     DRAM     iaal  R      31:28      1 cn-7 
-          12311621     orion     DRAM     iaal  R      37:31      1 cn-5 
-          12311620     orion     DRAM     iaal  R      44:56      1 cn-7 
-          12311619     orion     DRAM     iaal  R      54:33      1 cn-8 
-          12311618     orion     DRAM     iaal  R      56:04      1 cn-9 
-          12311617     orion     DRAM     iaal  R    1:08:39      1 cn-4 
-          12311616     orion     DRAM     iaal  R    4:08:18      1 cn-13 
-          12311615     orion     DRAM     iaal  R    9:25:33      1 cn-6 
-          12311608     orion     DRAM     iaal  R   11:45:01      1 cn-10 
-          12311604     orion     DRAM     iaal  R   11:45:05      1 cn-5 
-          12311603     orion     DRAM     iaal  R   11:45:10      1 cn-6 
-          12309659     orion map_pepp michelmo  R   12:48:29      1 cn-3 
-          12315310     orion WGCNA_so mariansc  R    1:04:03      1 cn-3 
-          12315313     orion WGCNA_so mariansc  R    1:03:33      1 cn-3 
-          12315315     orion WGCNA_so mariansc  R    1:03:33      1 cn-3 
-          12315316     orion WGCNA_so mariansc  R    1:03:33      1 cn-3 
-          12315421     orion       du   thommo  R      36:03      1 cn-3 
-          12315203  smallmem     UMAP martpali PD       0:00      1 (Nodes required for job are DOWN, DRAINED or reserved for jobs in higher priority partitions) 
-    12073410_28199  smallmem  Provean    lirud  R       0:07      1 cn-12 
-    12073410_28198  smallmem  Provean    lirud  R       0:18      1 cn-12 
-    12073410_28197  smallmem  Provean    lirud  R       0:28      1 cn-12 
-    12073410_28196  smallmem  Provean    lirud  R       0:41      1 cn-12 
-    12073410_28195  smallmem  Provean    lirud  R       0:44      1 cn-12 
-    12073410_28194  smallmem  Provean    lirud  R       1:04      1 cn-12 
-    12073410_28193  smallmem  Provean    lirud  R       1:13      1 cn-12 
-    12073410_28192  smallmem  Provean    lirud  R       1:16      1 cn-12 
-    12073410_28191  smallmem  Provean    lirud  R       1:43      1 cn-12 
-    12073410_28190  smallmem  Provean    lirud  R       1:45      1 cn-12 
-    12073410_28188  smallmem  Provean    lirud  R       2:01      1 cn-12 
-    12073410_28187  smallmem  Provean    lirud  R       2:08      1 cn-12 
-    12073410_28186  smallmem  Provean    lirud  R       2:56      1 cn-12 
-    12073410_28174  smallmem  Provean    lirud  R       4:41      1 cn-12 
-    12073410_28173  smallmem  Provean    lirud  R       4:44      1 cn-12 
-      12211272_119  smallmem HetDetSo     ehmo  R   21:49:35      1 cn-4 
-      12211272_117  smallmem HetDetSo     ehmo  R   22:07:12      1 cn-8 
-      12211272_116  smallmem HetDetSo     ehmo  R   22:07:54      1 cn-9 
-      12211272_115  smallmem HetDetSo     ehmo  R   22:42:41      1 cn-8 
-      12211272_114  smallmem HetDetSo     ehmo  R   23:19:00      1 cn-9 
-      12211272_113  smallmem HetDetSo     ehmo  R   23:33:19      1 cn-10 
-      12211272_112  smallmem HetDetSo     ehmo  R   23:33:40      1 cn-5 
-      12211272_108  smallmem HetDetSo     ehmo  R 1-00:03:16      1 cn-9 
-      12211272_107  smallmem HetDetSo     ehmo  R 1-00:14:15      1 cn-5 
-      12211272_105  smallmem HetDetSo     ehmo  R 1-00:17:22      1 cn-10 
-      12211272_104  smallmem HetDetSo     ehmo  R 1-00:21:25      1 cn-9 
-      12211272_103  smallmem HetDetSo     ehmo  R 1-00:31:02      1 cn-4 
-      12211272_102  smallmem HetDetSo     ehmo  R 1-00:38:03      1 cn-5 
-          12074796  smallmem maxbin2_   sivick  R 6-09:00:04      1 cn-6 
-12073410_[28200-34 smallmem,  Provean    lirud PD       0:00      1 (JobArrayTaskLimit) 
-12312459_[552-1050 verysmall    FFull     eija PD       0:00      1 (Resources) 
+```bash
+squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          11818971  smallmem MyFirstB bio326-2  R       0:01      1 cn-12
 ```
 
 This will show all the jobs, quite difficult to read. So instead we can indicate only to show our user jobs by adding the flag **-u** and the **$USER** variable:
 
-```
-[bio326-21-0@login bio326-21-0]$ squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
-          12315560     orion MyFirstB bio326-2 PD       0:00      1 (Priority)
-```
+When the job starts it produces an out file **slurm-JOBNAME-$JOB_ID.out**:
 
-You can see the job is in the queue waiting for resources. PD means Priority resources. As soon as the SLURM finds resources for our job it will start running:
-
-```
-[bio326-21-0@login bio326-21-0]$ squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
-          12315560     orion MyFirstB bio326-2  R       0:22      1 cn-8 
-```
-
-When the job starts it produces an out file **slurm-$JOB_ID.out**:
-
-```[bio326-21-0@login bio326-21-0]$ ls -lrth
-total 16K
--rw-rw-r-- 1 bio326-21-0 bio326-21-0   68 Mar 11 21:03 amylase.Bgramini.fasta.blastp.out.mod
--rw-rw-r-- 1 bio326-21-0 bio326-21-0 1.2K Mar 11 21:27 myfisrt.blastp.SLURM.sh
--rw-rw-r-- 1 bio326-21-0 bio326-21-0  611 Mar 11 21:29 slurm-12315560.out
+```bash
+ls
+jupyterhubLog  myfirstblast.SLURM.sh  slurm-MyFirstBlastp_11818971
 ```
 
 We can check into this file:
 
 
-```
-[bio326-21-0@login bio326-21-0]$ more slurm-12315560.out 
+```bash
+more slurm-MyFirstBlastp_11818971
+Working with this /mnt/courses/BIO326/BestPracticesOrion/BLASTConda environmet ...
+Hello bio326-2023-19
+my submit directory is:
+/net/fs-2/scale/OrionStore/Home/bio326-2023-19
+this is the job:
+11818971_
 I am running on:
-cn-8
+cn-12
 I am running with:
-4 cpus
+2 cpus
 Today is:
-Thu Mar 11 21:40:09 CET 2021
+Tue Feb 21 21:50:36 CET 2023
+bio326-2023-19 exists on /home/work
+copying files to /home/work/bio326-2023-19/tmpDir_of.11818971
 Copy data ...
 Making database
-WARNING: Skipping mount /var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
 
 
-Building a new DB, current time: 03/11/2021 21:40:10
-New DB name:   /home/work/bio326-21-0/work.dir.of.12315623/Bacteroides51.faa
+Building a new DB, current time: 02/21/2023 21:50:37
+New DB name:   /home/work/bio326-2023-19/work.dir.of.11818971/Bacteroides51.faa
 New DB title:  Bacteroides51.faa
 Sequence type: Protein
 Keep MBits: T
-Maximum file size: 1000000000B
-Adding sequences from FASTA; added 4630 sequences in 0.199221 seconds.
+Maximum file size: 3000000000B
+Adding sequences from FASTA; added 4630 sequences in 0.178206 seconds.
 
 
+
+real    0m0.273s
+user    0m0.213s
+sys     0m0.018s
 Running BLAST
-WARNING: Skipping mount /var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
 Warning: [blastp] Examining 5 or more matches is recommended
-Copy data to the /mnt/SCRATCH/bio326-21-0 ...
+
+real    0m0.199s
+user    0m0.184s
+sys     0m0.025s
+Copy data to the /mnt/SCRATCH/bio326-2023-19 ...
+Your files are in /mnt/SCRATCH/bio326-2023-19/MyFirstBlastp.dir
+amylase.Bgramini.fasta.blastp.out
 I am done at
-Thu Mar 11 21:40:11 CET 2021
+Tue Feb 21 21:50:37 CET 2023
 ```
 
 As you can see it seems the Job ran smoothly and produced the result:
 
 ```
-[bio326-21-0@login bio326-21-0]$ ls
+ls /mnt/SCRATCH/bio326-2023-19/MyFirstBlastp.dir 
 amylase.Bgramini.fasta.blastp.out
 ```
 
