@@ -317,8 +317,9 @@ tmpfs                              3.2G     0  3.2G   0% /run/user/50094
 ```
 
 As you can notice there are plenty of directories in Orion, but let's focus in the $HOME partition:
-```
-[bio326-21-0@login ~]$ df -h .
+
+```bash
+-bash-4.2$ df -h .
 Filesystem      Size  Used Avail Use% Mounted on
 fs-1:/home01     76T   62T   15T  81% /net/fs-1/home01
 ```
@@ -336,7 +337,7 @@ As a student of this course, we are using the $SCRATCH folder to keep our raw se
 
 Let's move into that folder:
 
-```
+```bash
 -bash-4.2$ cd $SCRATCH
 -bash-4.2$ pwd
 /mnt/SCRATCH/bio326-2023-19
@@ -360,9 +361,8 @@ In general, there is a shorter job queue in smallmem than the hugemem queue. Als
 
 The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can "book" a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
 
-```
-[bio326-21-0@login bio326-21-0]$ srun --partition=smallmem --cpus-per-task 4 --mem=4G --time=01:00:00 --pty bash -i
-srun: job 12314004 queued and waiting for resources
+```bash
+-bash-4.2$ srun --partition=smallmem --cpus-per-task 2 --mem=2G --time=01:00:00 --pty bash -i
 ```
 
 *Basic syntaxis the command:
@@ -370,39 +370,23 @@ srun: job 12314004 queued and waiting for resources
   
 It might take a while to SLURM allocate the resources of this job. But as soon as it allocates the job a message like this will be displayed:
 
+```bash
+bash-4.2$
 ```
-srun: job 12314004 has been allocated resources
+*NB! At the moment writing this documentation we found some issues with the ```$PS1`` variable displaying the prompt information to solve this:*
 
-Welcome to the NMBU Orion compute cluster environment.
-
-You are logged in to a machine that can be used to access your home directory,
-edit your scripts, manage your files, and submit jobs to the cluster environment.
-Do not run any jobs on this machine, as they might be automatically terminated.
-
-IMPORTANT:
-  - Orion introduction: https://orion.nmbu.no/
-  - Orion can handle small-scale projects. Need more CPU hours? Please consider
-    applying for national infrastructure resources: https://www.sigma2.no/
-  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
-    using i.e. pigz.
-
-NEWS:
-  - 2020-10-08: Orion has been re-built. We are still working out many details.
-    Please email us if you miss anything, or notice any issues.
-
-For any Orion related enquiry: orion-support@nmbu.no
-PS: We are on Teams: https://bit.ly/orion-teams
-
-[bio326-21-0@cn-3 bio326-21-0]$ 
+```bash
+bash-4.2$ PS1="[\u@\h \W]$ "
+[bio326-2023-19@cn-8 ~]$
 ```
 
-You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node "cn-3". Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
+You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node "cn-x". Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
 
-```
-[bio326-21-0@cn-3 bio326-21-0]$ echo $SLURM_NODELIST 
-cn-3
-[bio326-21-0@cn-3 bio326-21-0]$ echo $SLURM_CPUS_ON_NODE 
-4
+```bash
+[bio326-2023-19@cn-8 ~]$ echo $SLURM_NODELIST
+cn-8
+[bio326-2023-19@cn-8 ~]$ echo $SLURM_CPUS_ON_NODE
+2
 ```
 
 Here we can run short parsing scripts, test software with a small datasets, etc. 
@@ -415,53 +399,57 @@ To avoid this we can take advantage of the **$TMPDIR** partition. This is a phys
 Let's take a look, first we need to check if our **$USER** exists in that **$TMPDIR**
 
 ```
-[bio326-21-0@cn-3 bio326-21-0]$ echo $TMPDIR/$USER
-/home/work/bio326-21-0
+[bio326-2023-19@cn-8 ~]$ echo $TMPDIR/$USER
+/home/work/bio326-2023-19
 ```
 
-This means the user **bio326-21-0** has a directory in the **$TMPDIR** (/home/work). Move to that directory:
+This means the user **bio326-y-u** has a directory in the **$TMPDIR** (/home/work). Move to that directory:
+
+```bash
+[bio326-2023-19@cn-8 ~]$ cd $TMPDIR/$USER
+bash: cd: /home/work/bio326-2023-19: No such file or directory
 
 ```
-[bio326-21-0@cn-3 bio326-21-0]$  cd $TMPDIR/$USER
-[bio326-21-0@cn-3 bio326-21-0]$ pwd
-/home/work/bio326-21-0
+
+It could happen that our $USER name is not in the $TMPDIR, if that is the case we can easily create this directory and go there:
+
+```bash
+[bio326-2023-19@cn-8 ~]$ mkdir $TMPDIR/$USER
+[bio326-2023-19@cn-8 ~]$ cd $TMPDIR/$USER
+[bio326-2023-19@cn-8 bio326-2023-19]$ pwd
+/home/work/bio326-2023-19
 ```
 
 Now we need to create an other directory **a work directory** to copy data for executing some commands. We can use another SLURM variable, let's say the JOBID to be consistent.
 
 
-```
-[bio326-21-0@cn-3 bio326-21-0]$ mkdir work.dir.of.$SLURM_JOB_ID 
-[bio326-21-0@cn-3 bio326-21-0]$ ls
-singularity  work.dir.of.12314866
+```bash
+[bio326-2023-19@cn-8 bio326-2023-19]$ mkdir work.dir.of.$SLURM_JOB_ID
+[bio326-2023-19@cn-8 bio326-2023-19]$ ls
+work.dir.of.11818800
+[bio326-2023-19@cn-8 work.dir.of.11818800]$ cd $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
+[bio326-2023-19@cn-8 work.dir.of.11818800]$ pwd
+/home/work/bio326-2023-19/work.dir.of.11818800
 ```
 
 By using the $SLURM_JOB_ID we can further identify what job we are running.
 
-Let's enter to that directory and then copy some fasta files from the **$SCRATCH**, that is a good directory to put raw data. In this class we are using the files from **/mnt/SCRATCH/bio326-21/BestPracticesOrion_031221** path.
+Let's enter to that directory and then copy some fasta files from the ```$COURSES/BIO326```, this is a share directory we (teachers) will use to upload data for you. In this class we are using the files from ```$COURSES/BIO326/BestPracticesOrion/BLASTExample``` path.
 
-```
-[bio326-21-0@cn-3 bio326-21-0]$ cd work.dir.of.$SLURM_JOB_ID 
-[bio326-21-0@cn-3 work.dir.of.12314866]$ pwd
-/home/work/bio326-21-0/work.dir.of.12314866
-```
+First take a look of the data
 
-First take a look of the **/mnt/SCRATCH/bio326-21/BestPracticesOrion_031221** 
-
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ ls -l /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221
-total 17072
--rw-rw-r-- 1 auve bio326-21      838 Mar 11 16:29 amylase.Bgramini.fasta
--rw-rw-r-- 1 auve bio326-21  2085506 Mar 11 16:29 Bacteroides51.faa
--rw-rw-r-- 1 auve bio326-21 15103261 Mar 11 16:29 Bacteroides51.GCF_010500965.1.gbff
--rw-rw-r-- 1 auve bio326-21   280161 Mar 11 16:29 Bacteroides51.tab
+```bash
+[bio326-2023-19@cn-8 bio326-2023-19]$ ls -l $COURSES/BIO326/BestPracticesOrion/BLASTExample
+total 2049
+-rwxrwxr-x 1 auve bio326     838 Nov  7 23:16 amylase.Bgramini.fasta
+-rwxrwxr-x 1 auve bio326 2085506 Nov  7 23:06 Bacteroides51.faa
 ```
 
 *Tip: Having more than one terminal open does help to faster look into multiple directories*
 
 As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
 
-```
+```bash
 [bio326-21-0@cn-3 work.dir.of.12314866]$ cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/*.fa* .
 [bio326-21-0@cn-3 work.dir.of.12314866]$ ls
 amylase.Bgramini.fasta  Bacteroides51.faa
@@ -471,7 +459,7 @@ amylase.Bgramini.fasta  Bacteroides51.faa
 
 No we can do some work on this files. Take a look of the **amylase.Bgramini.fasta** file 
 
-```
+```bash
 [bio326-21-0@cn-3 work.dir.of.12314866]$ more amylase.Bgramini.fasta 
 >WP_024997086.1 alpha-amylase [Bacteroides graminisolvens]
 MKRYKYWFLLLIPFLIVACSGSDDPVIEPPVVLKEGLNYSPTAPDADQELTITFKAGSTSALYNYVGDVY
@@ -490,229 +478,128 @@ FLTLEGGGKKLVVAGNFTNQAGSYTVTFPHTGTWYNYMTGESVSVSATNQTISIPAHEFKLFVDFQSN
 This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragilis, I would like to know if an homologue of this sequence is present in the set of sequences of **Bacteroides51.faa** (Bacteroides sp. from cockroaches). The easiest way is by doing a BLAST search. But is BLAST already installed?
 
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ blastp
+```bash
+[bio326-2023-19@cn-8 work.dir.of.11818800]$ blastp
 bash: blastp: command not found
 ```
 
 It seems blastp is not installed as a default software in Orion.
 
-### Modules and singularity
+### Conda envrionment:
 
-In order to use non-default software (e.g BLAST, HMMER, SPADES), we need to load the corresponding module first into the computer node.The Modules package is a tool that simplifies shell initialization and allows the users easily modify their environment during a session using modulefiles. **In other words it tells the computer where to look for all the executables and dependencies used by a particular software/tool**. You can read more about this on the [Environment Modules](https://modules.readthedocs.io/en/latest/) website.
+Conda is an open source package management system and environment management system that runs on Windows, macOS, and Linux. Conda quickly installs, runs and updates packages and their dependencies. Conda easily creates, saves, loads and switches between environments on your local computer. It was created for Python programs, but it can package and distribute software for any language. You can read more about conda [here](https://docs.conda.io/en/latest/).
 
-The following commands let us manage modules in our workflow:
+For **BIO-326** we will use different Conda environment previously installed in Orion. However, as a Orion user you are allowed to install your own environment, please refere to the [Orion-Conda Environment](https://orion.nmbu.no/en/CondaEnvironment) for doing this.
 
-```
-module avail # available modules
-module show # show modules info 
-module list # list loaded modules
-module load # loaded modules
-module unload # unload loaded modules
-module purge # unload all loaded modules
-```
-
-If we want to know what modules are already instaled in Orion we can use the following command:
-
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ module available
-
---------------------------------------------------------------------------- /usr/share/lmod/lmod/modulefiles/Core ----------------------------------------------------------------------------
-   lmod    settarg
-
------------------------------------------------------------------------------------- /cluster/modules/all ------------------------------------------------------------------------------------
-   AUGUSTUS/3.3.3-foss-2019b                                         METIS/5.1.0-GCCcore-8.3.0                           foss/2019a
-   Anaconda3/5.3.0                                                   MUSCLE/3.8.31-foss-2018a                            foss/2019b                               (D)
-   Autoconf/2.69-GCCcore-6.4.0                                       Mako/1.1.0-GCCcore-8.3.0                            freetype/2.9.1-GCCcore-8.2.0
-   Autoconf/2.69-GCCcore-7.3.0                                       MariaDB/10.4.13-gompi-2019b                         freetype/2.10.1-GCCcore-8.3.0            (D)
-   Autoconf/2.69-GCCcore-8.2.0                                       Mesa/19.1.7-GCCcore-8.3.0                           gams/30.2.0
-   Autoconf/2.69-GCCcore-8.3.0                                       Meson/0.51.2-GCCcore-8.3.0-Python-3.7.4             gettext/0.19.8.1-GCCcore-8.2.0
-   Autoconf/2.69-GCCcore-9.3.0                             (D)       Miniconda3/4.7.10                                   gettext/0.19.8.1
-   Automake/1.15.1-GCCcore-6.4.0                                     MultiQC/1.9-foss-2019b-Python-3.7.4                 gettext/0.20.1-GCCcore-8.3.0
-   Automake/1.16.1-GCCcore-7.3.0                                     NASM/2.14.02-GCCcore-8.3.0                          gettext/0.20.1-GCCcore-9.3.0
-   Automake/1.16.1-GCCcore-8.2.0                                     NASM/2.14.02-GCCcore-9.3.0                   (D)    gettext/0.20.1                           (D)
-   Automake/1.16.1-GCCcore-8.3.0                                     NLopt/2.6.1-GCCcore-8.3.0                           git/2.23.0-GCCcore-9.3.0-nodocs
-   Automake/1.16.1-GCCcore-9.3.0                           (D)       NSPR/4.21-GCCcore-8.3.0                             gnuplot/5.2.8-GCCcore-8.3.0
-   Autotools/20170619-GCCcore-6.4.0                                  NSS/3.45-GCCcore-8.3.0                              gompi/2018a
-   Autotools/20180311-GCCcore-7.3.0                                  Ninja/1.9.0-GCCcore-8.3.0                           gompi/2018b
-   Autotools/20180311-GCCcore-8.2.0                                  OpenBLAS/0.2.20-GCC-6.4.0-2.28                      gompi/2019a
-   Autotools/20180311-GCCcore-8.3.0                                  OpenBLAS/0.3.1-GCC-7.3.0-2.30                       gompi/2019b
-   Autotools/20180311-GCCcore-9.3.0                        (D)       OpenBLAS/0.3.5-GCC-8.2.0-2.31.1                     gompi/2020a                              (D)
-   BCFtools/1.10.2-GCC-8.3.0                                         OpenBLAS/0.3.7-GCC-8.3.0                     (D)    gperf/3.1-GCCcore-8.2.0
-   BCFtools/1.10.2-GCC-9.3.0                               (D)       OpenMPI/2.1.2-GCC-6.4.0-2.28                        gperf/3.1-GCCcore-8.3.0                  (D)
-   BEDTools/2.27.1-foss-2018b                                        OpenMPI/3.1.1-GCC-7.3.0-2.30                        groff/1.22.4-GCCcore-9.3.0
-   BEDTools/2.29.2-GCC-9.3.0                               (D)       OpenMPI/3.1.3-GCC-8.2.0-2.31.1                      help2man/1.47.4-GCCcore-6.4.0
-   BLAST+/2.9.0-gompi-2019b                                          OpenMPI/3.1.4-GCC-8.3.0                             help2man/1.47.4-GCCcore-7.3.0
-   BLAST+/2.10.1-gompi-2020a                               (D)       OpenMPI/4.0.3-GCC-9.3.0                      (D)    help2man/1.47.4
-   BWA/0.7.17-GCC-9.3.0                                              PCRE/8.43-GCCcore-8.3.0                             help2man/1.47.7-GCCcore-8.2.0
-```
-
-There are two modules of BLAST 
-* BLAST+/2.9.0-gompi-2019b  
-* BLAST+/2.10.1-gompi-2020a
-
-Lets **load** the newest **BLAST+/2.10.1-gompi-2020a**
-
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ module load BLAST+/2.10.1-gompi-2020a
-```
-
-And then try the command:
+Let's check if conda works in the node
 
 ```bash
-[bio326-21-0@cn-13 work.dir.of.14241644]$ blastp -h
-USAGE
-  blastp [-h] [-help] [-import_search_strategy filename]
-    [-export_search_strategy filename] [-task task_name] [-db database_name]
-    [-dbsize num_letters] [-gilist filename] [-seqidlist filename]
-    [-negative_gilist filename] [-negative_seqidlist filename]
-    [-taxids taxids] [-negative_taxids taxids] [-taxidlist filename]
-    [-negative_taxidlist filename] [-ipglist filename]
-    [-negative_ipglist filename] [-entrez_query entrez_query]
-    [-db_soft_mask filtering_algorithm] [-db_hard_mask filtering_algorithm]
-    [-subject subject_input_file] [-subject_loc range] [-query input_file]
-    [-out output_file] [-evalue evalue] [-word_size int_value]
-    [-gapopen open_penalty] [-gapextend extend_penalty]
-    [-qcov_hsp_perc float_value] [-max_hsps int_value]
-    [-xdrop_ungap float_value] [-xdrop_gap float_value]
-    [-xdrop_gap_final float_value] [-searchsp int_value] [-seg SEG_options]
-    [-soft_masking soft_masking] [-matrix matrix_name]
-    [-threshold float_value] [-culling_limit int_value]
-    [-best_hit_overhang float_value] [-best_hit_score_edge float_value]
-    [-subject_besthit] [-window_size int_value] [-lcase_masking]
-    [-query_loc range] [-parse_deflines] [-outfmt format] [-show_gis]
-    [-num_descriptions int_value] [-num_alignments int_value]
-    [-line_length line_length] [-html] [-sorthits sort_hits]
-    [-sorthsps sort_hsps] [-max_target_seqs num_sequences]
-    [-num_threads int_value] [-ungapped] [-remote] [-comp_based_stats compo]
-    [-use_sw_tback] [-version]
-
-DESCRIPTION
-   Protein-Protein BLAST 2.10.1+
-
-Use '-help' to print detailed descriptions of command line arguments
-
+[bio326-2023-19@cn-12 ~]$ conda --version
+conda 4.14.0
 ```
 
-**However, there are some modules like cn-3 and cn-2 that the following could happen:**
+Now we can **activate** the conda environment:
 
-```
-[bio326-21-0@cn-3 ~]$ blastp -h
-Illegal instruction
-```
+```bash
+[bio326-2023-19@cn-12 work.dir.of.11818800]$ conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
 
-As we can see in this node the blastp is not working. **Particularly in node cn-3 and cn-2, old nodes, module command shows multiple issues.** In that case we can use the singularity container. Singularity is a container platform. It allows you to create and run "containers" that package up pieces of software in a way that is portable and reproducible. Singularity can works in all nodes. For more information please read the [Introduction to Singularity](https://sylabs.io/guides/3.7/user-guide/introduction.html) Read the Docs.
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
 
-Let's take a look into this singularity container:
+    $ conda init <SHELL_NAME>
 
-First purge all modules:
+Currently supported shells are:
+  - bash
+  - fish
+  - tcsh
+  - xonsh
+  - zsh
+  - powershell
 
-```
-[bio326-21-0@cn-3 ~]$ module purge
- ```
- 
-This helps to not use the previous modules load (BLAST).
+See 'conda init --help' for more information and options.
 
-Then load the singularyti container:
-
-```
-[bio326-21-0@cn-3 ~]$ singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he19e7b1_0 blastp -help
-WARNING: Skipping mount /var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
-USAGE
-  blastp [-h] [-help] [-import_search_strategy filename]
-    [-export_search_strategy filename] [-task task_name] [-db database_name]
-    [-dbsize num_letters] [-gilist filename] [-seqidlist filename]
-    [-negative_gilist filename] [-negative_seqidlist filename]
-    [-taxids taxids] [-negative_taxids taxids] [-taxidlist filename]
-    [-negative_taxidlist filename] [-ipglist filename]
-    [-negative_ipglist filename] [-entrez_query entrez_query]
-    [-db_soft_mask filtering_algorithm] [-db_hard_mask filtering_algorithm]
-    [-subject subject_input_file] [-subject_loc range] [-query input_file]
-    [-out output_file] [-evalue evalue] [-word_size int_value]
-    [-gapopen open_penalty] [-gapextend extend_penalty]
-    [-qcov_hsp_perc float_value] [-max_hsps int_value]
-    [-xdrop_ungap float_value] [-xdrop_gap float_value]
-    [-xdrop_gap_final float_value] [-searchsp int_value] [-seg SEG_options]
-    [-soft_masking soft_masking] [-matrix matrix_name]
-    [-threshold float_value] [-culling_limit int_value]
-    [-best_hit_overhang float_value] [-best_hit_score_edge float_value]
-    [-subject_besthit] [-window_size int_value] [-lcase_masking]
-    [-query_loc range] [-parse_deflines] [-outfmt format] [-show_gis]
-    [-num_descriptions int_value] [-num_alignments int_value]
-    [-line_length line_length] [-html] [-sorthits sort_hits]
-    [-sorthsps sort_hsps] [-max_target_seqs num_sequences]
-    [-num_threads int_value] [-ungapped] [-remote] [-comp_based_stats compo]
-    [-use_sw_tback] [-version]
-
-DESCRIPTION
-Protein-Protein BLAST 2.10.1+
-
+IMPORTANT: You may need to close and restart your shell after running 'conda init'.
 ```
 
-**The basic syntax for singularity is:  singularity [global options...] exec [exec options...] \<container> \<command>**
+If this happen we need to configure the Node to be able to work with conda. The following commands help to do that:
 
-All the containers are alphatetically sorted.
+```bash
+[bio326-2023-19@cn-12 work.dir.of.11818800]$ module load Miniconda3 && eval "$(conda shell.bash hook)"
 
-Now we can run our BLAST search. First create a database using the Bacteroides51.faa file:
+(base) [bio326-2023-19@cn-12 work.dir.of.11818800]$
 
 ```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he19e7b1_0 makeblastdb -dbtype prot -in Bacteroides51.faa 
-WARNING: Skipping mount /var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
+What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell...**NB! Remember the aim of this course is not to be a Linux expert so do not worry if this is a bit criptic for you :-)** 
+
+Now conda is activate, we can see how our prompt has changed: ``` (base) [bio326-2023-19@cn-12 work.dir.of.11818800]$```
+
+Then we can activate the environmet for run conda in this case this is at ```$COURSES/BIO326/BestPracticesOrion/BLASTConda```
+
+```bash
+(base) [bio326-2023-19@cn-12 work.dir.of.11818800]$ conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
+(/mnt/courses/BIO326/BestPracticesOrion/BLASTConda) [bio326-2023-19@cn-12 work.dir.of.11818800]$
+```
+
+We can then run a blast experiment:
+
+* Index a database using ```makeblastdb``` and the molecule type prot:
+
+```bash
+makeblastdb -dbtype prot -in Bacteroides51.faa
 
 
-Building a new DB, current time: 03/11/2021 20:48:39
-New DB name:   /home/work/bio326-21-0/work.dir.of.12314866/Bacteroides51.faa
+Building a new DB, current time: 02/21/2023 19:54:33
+New DB name:   /home/work/bio326-2023-19/work.dir.of.11818800/Bacteroides51.faa
 New DB title:  Bacteroides51.faa
 Sequence type: Protein
 Keep MBits: T
-Maximum file size: 1000000000B
-Adding sequences from FASTA; added 4630 sequences in 0.287924 seconds.
+Maximum file size: 3000000000B
+Adding sequences from FASTA; added 4630 sequences in 0.182254 seconds.
 ```
 
-This create the index for BLAST
+Check the results by ls:
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ ls
-amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroides51.faa.psq  Bacteroides51.faa.pto
-Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pot  Bacteroides51.faa.ptf
+```bash
+
+ls
+amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroides51.faa.pot  Bacteroides51.faa.ptf
+Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pjs  Bacteroides51.faa.psq  Bacteroides51.faa.pto
 ```
 
 And now lets run the BLAST,as we want to search for protein in a protein database the command we need to use is BLASTP:
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ singularity exec /cvmfs/singularity.galaxyproject.org/b/l/blast:2.10.1--pl526he19e7b1_0 blastp -query amylase.Bgramini.fasta -db Bacteroides51.faa -dbsize 1000000000 -max_target_seqs 1 -outfmt 6 -num_threads $SLURM_CPUS_ON_NODE -out amylase.Bgramini.fasta.blastp.out
-WARNING: Skipping mount /var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
+```bash
+blastp -query amylase.Bgramini.fasta -db Bacteroides51.faa -dbsize 1000000000 -max_target_seqs 1 -outfmt 6 -num_threads $SLURM_CPUS_ON_NODE -out amylase.Bgramini.fasta.blastp.out
 Warning: [blastp] Examining 5 or more matches is recommended
 ```
 
 Take a look into the results:
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ more amylase.Bgramini.fasta.blastp.out 
-WP_024997086.1	D0T87_RS12665	57.772	772	301	13	8	763	28	790	0.0	908
+```bash
+more amylase.Bgramini.fasta.blastp.out
+WP_024997086.1  D0T87_RS12665   57.772  772     301     13      8       763     28      790     0.0     908
 ```
 
 It seems the amylase of *B. fragilis* has a match wiht the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ grep D0T87_RS12665 Bacteroides51.faa
+```bash
+grep D0T87_RS12665 Bacteroides51.faa
 >D0T87_RS12665	alpha-amylase	WP_163175496.1
 ```
-
 We found the amylase!!!
 
 ### Copy results to the $SCRATCH, remove work.directory and exit the job.
 
-Finally we need to move the results back to our $SCRATCH partition. For this we can use the following sintax:
+**NB! Remember the $TMPDIR is a temprary directory so, we need to move the results back to our $SCRATCH partition. For this we can use the following sintax:**
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ cp *fasta.blastp.out /mnt/SCRATCH/bio326-21-0
+```bash
+cp *fasta.blastp.out $SCRATCH
 ```
 
 Then let's sure this is copy back
 
-```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ ls /mnt/SCRATCH/bio326-21-0
+```bash
+ls $SCRATCH
 amylase.Bgramini.fasta.blastp.out
 ```
 
@@ -731,20 +618,18 @@ singularity  work.dir.of.12314866
 Now we need to remove the work.dir.of 
 
 ```
-[bio326-21-0@cn-3 bio326-21-0]$ rm -rf work.dir.of.12314866/
+[bio326-21-0@cn-3 bio326-21-0]$ rm -rf work.dir.of.*
 [bio326-21-0@cn-3 bio326-21-0]$ ls
-singularity
 ```
 
 Finally, we can logout of this node:
 
 ```
-[bio326-21-0@cn-3 bio326-21-0]$ exit
 exit
-[bio326-21-0@login bio326-21-0]$
+[bio326-2023-19@login ~]$
 ```
 
-You can see now we return to the main **login bio326-21-0** node.
+You can see now we return to the main **login bio326-y-x** node.
 
 ## Submit the same BLAST job but using a SLURM script.
 
