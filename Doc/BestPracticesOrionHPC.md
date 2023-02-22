@@ -373,7 +373,7 @@ It might take a while to SLURM allocate the resources of this job. But as soon a
 ```bash
 bash-4.2$
 ```
-*NB! At the moment writing this documentation we found some issues with the ```$PS1`` variable displaying the prompt information to solve this:*
+*NB! At the moment writing this documentation we found some issues with the ```$PS1``` variable displaying the prompt information to solve this:*
 
 ```bash
 bash-4.2$ PS1="[\u@\h \W]$ "
