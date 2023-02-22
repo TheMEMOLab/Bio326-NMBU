@@ -450,7 +450,7 @@ total 2049
 As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
 
 ```bash
-[bio326-21-0@cn-3 work.dir.of.12314866]$ cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/*.fa* .
+[bio326-21-0@cn-3 work.dir.of.12314866]$ cp /mnt/courses/BIO326/BestPracticesOrion/BLASTExample/*.fa* .
 [bio326-21-0@cn-3 work.dir.of.12314866]$ ls
 amylase.Bgramini.fasta  Bacteroides51.faa
 ```
@@ -610,7 +610,7 @@ We can achive this by doing this:
 * First go back to the main $TMPDI/$USER
 
 ```
-[bio326-21-0@cn-3 work.dir.of.12314866]$ cd $TMPDIR/$USER
+[bio326-2-0@cn-3 work.dir.of.12314866]$ cd $TMPDIR/$USER
 bio326-21-0@cn-3 bio326-21-0]$ ls
 singularity  work.dir.of.12314866
 ```
@@ -738,7 +738,7 @@ cd work.dir.of.$SLURM_JOB_ID
 
 echo "Copy data ..." ##Legend to know what the job is doing 
 
-cp /mnt/SCRATCH/bio326-21/BestPracticesOrion_031221/*.fa* .
+cp /mnt/courses/BIO326/BestPracticesOrion/BLASTExample/*.fa* .
 
 ###Create a protein blast database ##
 
@@ -879,22 +879,23 @@ For this, we can use the **scancel** command following the **JOBID**
 
 For example the following job 12315677:
 
-```
-[bio326-21-0@login bio326-21-0]$ squeue -u $USER
+```bash
+squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
           12315677     orion MyFirstB bio326-2 PD       0:00      1 (Priority)
  ```
 
 To cancel just type:
 
-```
-[bio326-21-0@login bio326-21-0]$ scancel 12315677
+```bash
+scancel 12315677
 ```
 
 And then check for the status:
 
-```
-[bio326-21-0@login bio326-21-0]$ squeue -u $USER
+```bash
+
+squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
 ```
 
