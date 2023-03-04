@@ -175,6 +175,11 @@ sniffles --input  bull.bam --vcf bull.vcf
 
 ```
 
+### You can use this script to perform your varian calling.
+
+Enjoy :-)!
+
+
 
 
 
