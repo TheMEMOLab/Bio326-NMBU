@@ -8,7 +8,7 @@ Conda is an open source package management system and environment management sys
 
 **The following document uses $SCRATCH to create a "ToolBox" directory and then use mamaba to install a couple of bioinformatic software (minimap2 and samtools). However, this can be replicated in whaterver directory in the filesystem in Orion**
 
-* Ask for a computer node to start working (rember "Don't get naked in the lobby"). The resources we are asking for are 2 CPUs (-c) 100 MB of RAM (--mem) 1 hr (-t) and using the smallmem partition (-p).
+* Ask for a computer node to start working (remember "Don't get naked in the lobby"). The resources we are asking for are 2 CPUs (-c) 100 MB of RAM (--mem) 1 hr (-t) and using the smallmem partition (-p).
 
 ```console
 qlogin -c 2 --mem=100M -t 01:00:00 -p smallmem
