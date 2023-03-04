@@ -159,16 +159,16 @@ minimap2 \
     cleaned.bull.fastq.gz > bull.sam
 
 # convert the sam file to bam format
-samtools view -S -b bull.sam > bull0.bam
+samtools view -@ $SLURM_CPUS_ON_NODE -S -b bull.sam > bull0.bam
 
 ## sort the bam file
-samtools sort bull0.bam -o bull.bam
+samtools sort -@ $SLURM_CPUS_ON_NODE bull0.bam -o bull.bam
 
 # index the bam file
-samtools index -M  bull.bam
+samtools index -@ $SLURM_CPUS_ON_NODE -M  bull.bam
 
 # Variant Calling using Sniffles
-sniffles --input  bull.bam --vcf bull.vcf
+sniffles -t $SLURM_CPUS_ON_NODE --input  bull.bam --vcf bull.vcf
 
 ##Finish
 
