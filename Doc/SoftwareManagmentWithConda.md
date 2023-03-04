@@ -140,7 +140,7 @@ The following is the modified script that Marie Satiou wrote but using conda ins
 #SBATCH --ntasks=1   
 #SBATCH --cpus-per-task=8
 #SBATCH --mail-type=END
-#SBATHC -o slurm-%x-%A.out
+#SBATCH -o slurm-%x-%A.out
 
 
 ##Activate conda environment
