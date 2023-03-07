@@ -1,4 +1,7 @@
+# Prokaryota dry lab: 01 Metagenomic Reconstruction
+#### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
 
+Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they come from.
 
 
 ## Filter raw reads
@@ -16,6 +19,12 @@ Before we get started, create a directory in your work dir named metaG and copy 
 Then create a slurm-script with the following contents:
 
 ```
+#!/bin/bash
+#SBATCH --job-name=filtlong
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task 1
+#SBATCH --mem=8G
+#SBATCH --partition=normal
 
 filtlong \
     --min_length 1000 \
@@ -25,3 +34,8 @@ filtlong \
     > output/filtlong/output.fastq.gz
 
 ```
+
+
+
+
+
