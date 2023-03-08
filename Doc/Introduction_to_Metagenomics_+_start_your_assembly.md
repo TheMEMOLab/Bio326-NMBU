@@ -20,7 +20,7 @@ Then create a slurm-script with the following contents:
 
 Create a file named 01_filter-filtlong.sh and submit the job with sbatch:
 
-```
+```bash
 #!/bin/bash
 
 # Define slurm parameters
@@ -86,7 +86,7 @@ You can read more about how to configure flye here: https://github.com/fendergla
 
 Create a file named 02_assemble-flye.sh and submit the job with sbatch:
 
-```
+```bash
 #!/bin/bash
 
 # Define slurm parameters
@@ -121,7 +121,7 @@ flye \
 Create a file named 03_polish-racon.sh and submit the job with sbatch:
 
 
-```
+```bash
 #!/bin/bash
 
 # Define slurm parameters
@@ -180,7 +180,7 @@ racon \
 
 Create a file named 04_polish-medaka.sh and submit the job with sbatch:
 
-```
+```bash
 #!/bin/bash
 
 # Define slurm parameters
@@ -215,7 +215,7 @@ medaka_consensus \
 
 Create a file named 05_bin-metabat.sh and submit the job with sbatch:
 
-```
+```bash
 #!/bin/bash
 
 # Define slurm parameters
