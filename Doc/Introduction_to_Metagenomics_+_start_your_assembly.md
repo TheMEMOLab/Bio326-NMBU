@@ -52,29 +52,29 @@ Now check your output/filtlong/ directory. There should be a compressed fastq ou
 
 ```bash
 tree output/filtlong/
-# output/filtlong/
-# └── output.fastq.gz
-# 
-# 0 directories, 1 file
+#> output/filtlong/
+#> └── output.fastq.gz
+#> 
+#> 0 directories, 1 file
 ```
 
 You can also investigate the log, and see how many reads we are left with. By running `tail -n 20` we only read the last 20 lines of the log.
 
 ```bash
 tail -n 20 logs/old/7683177-7-filtlong.err.log
-# 
-# Scoring long reads
-#   900,550 reads (6,064,478,591 bp)
-# 
-# Filtering long reads
-#   target: 500,000,000 bp
-#   keeping 500,011,726 bp
-# 
-# Outputting passed long reads
-# 
-# [Wed Feb 22 16:33:33 2023]
-# Finished job 0.
-# 1 of 1 steps (100%) done
+#> 
+#> Scoring long reads
+#>   900,550 reads (6,064,478,591 bp)
+#> 
+#> Filtering long reads
+#>   target: 500,000,000 bp
+#>   keeping 500,011,726 bp
+#> 
+#> Outputting passed long reads
+#> 
+#> [Wed Feb 22 16:33:33 2023]
+#> Finished job 0.
+#> 1 of 1 steps (100%) done
 ```
 
 
