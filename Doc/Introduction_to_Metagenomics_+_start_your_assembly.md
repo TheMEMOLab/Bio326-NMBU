@@ -50,12 +50,12 @@ filtlong \
 
 Now check your output/filtlong/ directory. There should be a compressed fastq output file.
 
-```
-$ tree output/filtlong/
-output/filtlong/
-└── output.fastq.gz
-
-0 directories, 1 file
+```bash
+tree output/filtlong/
+# output/filtlong/
+# └── output.fastq.gz
+# 
+# 0 directories, 1 file
 ```
 
 You can also investigate the log, and see how many reads we are left with. By running `tail -n 20` we only read the last 20 lines of the log.
