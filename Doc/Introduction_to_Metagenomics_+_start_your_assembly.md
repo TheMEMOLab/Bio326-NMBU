@@ -22,6 +22,8 @@ Create a file named 01_filter-filtlong.sh and submit the job with sbatch:
 
 ```
 #!/bin/bash
+
+# Define slurm parameters
 #SBATCH --job-name=filter-filtlong
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 1
@@ -34,6 +36,7 @@ OUTPUT="output/filtlong/output.fastq.gz"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $OUTPUT)
+
 
 filtlong \
     --min_length 1000 \
@@ -54,6 +57,8 @@ Create a file named 02_assemble-flye.sh and submit the job with sbatch:
 
 ```
 #!/bin/bash
+
+# Define slurm parameters
 #SBATCH --job-name=assemble-flye
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task 4
@@ -65,7 +70,8 @@ INPUT="output/filtlong/output.fastq.gz"
 OUTPUT="output/flye" # Note: this is a directory, not a file.
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $OUTPUT)
+#mkdir --parents $OUTPUT
+
 
 flye \
     --nano-raw $INPUT \
@@ -86,6 +92,8 @@ Create a file named 03_polish-racon.sh and submit the job with sbatch:
 
 ```
 #!/bin/bash
+
+# Define slurm parameters
 #SBATCH --job-name=polish1-racon
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task 4
@@ -93,12 +101,12 @@ Create a file named 03_polish-racon.sh and submit the job with sbatch:
 #SBATCH --partition=normal
 
 # Define IO
-INPUT.draft_assembly="output/flye/assembly.fasta"
-INPUT.reads="output/filtlong/output.fastq.gz"
-OUTPUT.polished_assembly="output/racon/racon_round2.fna"
+in_draft_assembly="output/flye/assembly.fasta"
+in_reads="output/filtlong/output.fastq.gz"
+out_polished_assembly="output/racon/racon_round2.fna"
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $OUTPUT.polished_assembly)
+mkdir --parents $(dirname $out_polished_assembly)
 
 
 >&2 echo "Round 1"
@@ -106,16 +114,16 @@ mkdir --parents $(dirname $OUTPUT.polished_assembly)
 minimap2 \
     -x map-ont \
     -t 8 \
-    $INPUT.draft_assembly \
-    $INPUT.reads \
+    $in_draft_assembly \
+    $in_reads \
     > output/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
 racon \
     -t 8 \
-    $INPUT.reads \
+    $in_reads \
     output/racon/minimap2_round1.paf \
-    $INPUT.draft_assembly > output/racon/racon_round1.fna
+    $in_draft_assembly > output/racon/racon_round1.fna
 
 
 >&2 echo "Round 2"
@@ -124,14 +132,14 @@ minimap2 \
     -x map-ont \
     -t 8 \
     output/racon/racon_round1.fna \
-    $INPUT.reads > output/racon/minimap2_round2.paf
+    $in_reads > output/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
 racon \
     -t 8 \
-    $INPUT.reads \
+    $in_reads \
     output/racon/minimap2_round2.paf \
-    output/racon/racon_round1.fna > $OUTPUT.polished_assembly
+    output/racon/racon_round1.fna > $out_polished_assembly
 ```
 
 
@@ -143,6 +151,8 @@ Create a file named 04_polish-medaka.sh and submit the job with sbatch:
 
 ```
 #!/bin/bash
+
+# Define slurm parameters
 #SBATCH --job-name=polish1-racon
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
@@ -150,20 +160,53 @@ Create a file named 04_polish-medaka.sh and submit the job with sbatch:
 #SBATCH --partition=normal
 
 # Define IO
-INPUT.assembly="output/racon_art/racon_round2.fna"
-INPUT.reads="output/filtlong/output.fastq.gz"
+in_assembly="output/racon_art/racon_round2.fna"
+in_reads="output/filtlong/output.fastq.gz"
 OUTPUT="output/medaka_art"
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $OUTPUT)
+#mkdir --parents $OUTPUT
 
 
 medaka_consensus \
     -t $SLURM_NPROCS \
-    -d $INPUT.assembly \
-    -i $INPUT.reads \
+    -d $in_assembly \
+    -i $in_reads \
     -o $OUTPUT \
     -m r1041_e82_260bps_hac_g632
+
+```
+
+### Binning with Metabat2
+
+
+
+
+Create a file named 05_bin-metabat.sh and submit the job with sbatch:
+
+```
+#!/bin/bash
+
+# Define slurm parameters
+#SBATCH --job-name=bin-metabat
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task 4
+#SBATCH --mem=8G
+#SBATCH --partition=normal
+
+# Define IO
+in_assembly="output/medaka_art/consensus.fasta"
+out_bins="output/metabat2/bin"
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $out_bins)
+
+
+metabat2 \
+    --numThreads 4 \
+    --inFile $in_assembly \
+    --outFile $out_bins \
+    --minClsSize 1000000
 
 ```
 
