@@ -18,7 +18,7 @@ Before we get started, create a directory in your work dir named metaG and copy 
 
 Then create a slurm-script with the following contents:
 
-Create a file named 01_filter-filtlong.sh and submit the job with sbatch:
+Create a file named 01_filter-filtlong.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -84,7 +84,7 @@ Finished job 0.
 Then we will use flye in "meta" mode. Flye builds contiguous sequences by overlapping each read.
 You can read more about how to configure flye here: https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md
 
-Create a file named 02_assemble-flye.sh and submit the job with sbatch:
+Create a file named 02_assemble-flye.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -118,7 +118,7 @@ flye \
 
 #### Racon
 
-Create a file named 03_polish-racon.sh and submit the job with sbatch:
+Create a file named 03_polish-racon.sh with the following contents, and submit the job with sbatch:
 
 
 ```bash
@@ -178,7 +178,7 @@ racon \
 #### Medaka
 
 
-Create a file named 04_polish-medaka.sh and submit the job with sbatch:
+Create a file named 04_polish-medaka.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -213,7 +213,7 @@ medaka_consensus \
 
 
 
-Create a file named 05_bin-metabat.sh and submit the job with sbatch:
+Create a file named 05_bin-metabat.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
