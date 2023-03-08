@@ -6,9 +6,9 @@ Hello! Welcome to the metagenomic dry lab session! Here we will take the raw bas
 
 ### Filter raw reads
 
-Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly".
+Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
-There is one file named "raw_reads.fastq.gz"
+There is one file named "raw_reads_nanopore.fastq.gz"
 
 Fastq is a raw read format containing a base quality score for each position along each read.
 We will filter these reads using filtlong.
@@ -31,21 +31,52 @@ Create a file named 01_filter-filtlong.sh and submit the job with sbatch:
 #SBATCH --partition=normal
 
 # Define IO
-INPUT="output/samtools/mapped.sorted.bam.fastq.gz"
-OUTPUT="output/filtlong/output.fastq.gz"
+
+in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
+out="output/filtlong/output.fastq.gz"
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $OUTPUT)
+mkdir --parents $(dirname $out)
 
 
 filtlong \
     --min_length 1000 \
     --keep_percent 90 \
-    $INPUT \
+    $in \
     | gzip \
-    > $OUTPUT
+    > $out
 
 ```
+
+Now check your output/filtlong/ directory. There should be a compressed fastq output file.
+
+```
+$ tree output/filtlong/
+output/filtlong/
+└── output.fastq.gz
+
+0 directories, 1 file
+```
+
+You can also investigate the log, and see how many reads we are left with. By running `tail -n 20` we only read the last 20 lines of the log.
+
+```
+$ tail -n 20 logs/old/7683177-7-filtlong.err.log
+
+Scoring long reads
+  900,550 reads (6,064,478,591 bp)
+
+Filtering long reads
+  target: 500,000,000 bp
+  keeping 500,011,726 bp
+
+Outputting passed long reads
+
+[Wed Feb 22 16:33:33 2023]
+Finished job 0.
+1 of 1 steps (100%) done
+```
+
 
 
 ### Assemble reads into a draft assembly
@@ -66,20 +97,20 @@ Create a file named 02_assemble-flye.sh and submit the job with sbatch:
 #SBATCH --partition=normal
 
 # Define IO
-INPUT="output/filtlong/output.fastq.gz"
-OUTPUT="output/flye" # Note: this is a directory, not a file.
+in="output/filtlong/output.fastq.gz"
+out="output/flye" # Note: this is a directory, not a file.
 
 # Make sure that the output directory exists
-#mkdir --parents $OUTPUT
+#mkdir --parents $out
 
 
 flye \
-    --nano-raw $INPUT \
+    --nano-raw $in \
     --meta \
     --threads $SLURM_NPROCS \
-    --out-dir $OUTPUT \
+    --out-dir $out \
     --iterations 2
-    
+
 ```
 
 
