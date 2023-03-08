@@ -28,8 +28,12 @@ Create a file named 01_filter-filtlong.sh and submit the job with sbatch:
 #SBATCH --mem=8G
 #SBATCH --partition=normal
 
+# Define IO
 INPUT="output/samtools/mapped.sorted.bam.fastq.gz"
 OUTPUT="output/filtlong/output.fastq.gz"
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $OUTPUT)
 
 filtlong \
     --min_length 1000 \
@@ -56,8 +60,12 @@ Create a file named 02_assemble-flye.sh and submit the job with sbatch:
 #SBATCH --mem=16G
 #SBATCH --partition=normal
 
+# Define IO
 INPUT="output/filtlong/output.fastq.gz"
 OUTPUT="output/flye" # Note: this is a directory, not a file.
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $OUTPUT)
 
 flye \
     --nano-raw $INPUT \
@@ -71,6 +79,8 @@ flye \
 
 ### Polishing with Racon and Medaka
 
+#### Racon
+
 Create a file named 03_polish-racon.sh and submit the job with sbatch:
 
 
@@ -82,6 +92,13 @@ Create a file named 03_polish-racon.sh and submit the job with sbatch:
 #SBATCH --mem=16G
 #SBATCH --partition=normal
 
+# Define IO
+INPUT.draft_assembly="output/flye/assembly.fasta"
+INPUT.reads="output/filtlong/output.fastq.gz"
+OUTPUT.polished_assembly="output/racon/racon_round2.fna"
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $OUTPUT.polished_assembly)
 
 
 >&2 echo "Round 1"
@@ -89,23 +106,66 @@ Create a file named 03_polish-racon.sh and submit the job with sbatch:
 minimap2 \
     -x map-ont \
     -t 8 \
-    output/flye/assembly.fasta \
-    output/filtlong/output.fastq.gz \
-    > output/racon_art/minimap2_round1.paf
+    $INPUT.draft_assembly \
+    $INPUT.reads \
+    > output/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
-racon             -t 8             output/filtlong/output.fastq.gz             output/racon_art/minimap2_round1.paf             output/flye/assembly.fasta > output/racon_art/racon_round1.fna
+racon \
+    -t 8 \
+    $INPUT.reads \
+    output/racon/minimap2_round1.paf \
+    $INPUT.draft_assembly > output/racon/racon_round1.fna
 
 
 >&2 echo "Round 2"
 >&2 echo "Mapping minimap2 ..."
-minimap2             -x map-ont             -t 8             output/racon_art/racon_round1.fna             output/filtlong/output.fastq.gz > output/racon_art/minimap2_round2.paf
+minimap2 \
+    -x map-ont \
+    -t 8 \
+    output/racon/racon_round1.fna \
+    $INPUT.reads > output/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
-racon             -t 8             output/filtlong/output.fastq.gz             output/racon_art/minimap2_round2.paf             output/racon_art/racon_round1.fna > output/racon_art/racon_round2.fna
+racon \
+    -t 8 \
+    $INPUT.reads \
+    output/racon/minimap2_round2.paf \
+    output/racon/racon_round1.fna > $OUTPUT.polished_assembly
 ```
 
 
+
+#### Medaka
+
+
+Create a file named 04_polish-medaka.sh and submit the job with sbatch:
+
+```
+#!/bin/bash
+#SBATCH --job-name=polish1-racon
+#SBATCH --time=04:00:00
+#SBATCH --cpus-per-task 4
+#SBATCH --mem=16G
+#SBATCH --partition=normal
+
+# Define IO
+INPUT.assembly="output/racon_art/racon_round2.fna"
+INPUT.reads="output/filtlong/output.fastq.gz"
+OUTPUT="output/medaka_art"
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $OUTPUT)
+
+
+medaka_consensus \
+    -t $SLURM_NPROCS \
+    -d $INPUT.assembly \
+    -i $INPUT.reads \
+    -o $OUTPUT \
+    -m r1041_e82_260bps_hac_g632
+
+```
 
 
 
