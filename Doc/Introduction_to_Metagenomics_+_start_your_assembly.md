@@ -98,7 +98,6 @@ We can visualize the quality of these reads with nanoplot.
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
-                /mnt/SCRATCH/bio326-21/GenomeAssembly/condaenvironments/ONPTools/
 
 # Define IO
 in="output/filtlong/output.fastq.gz"
@@ -106,7 +105,7 @@ in="output/filtlong/output.fastq.gz"
 
 NanoPlot \
     --threads $SLURM_NPROCS \
-    --fastq $in_reads \
+    --fastq $in \
     --plots hex dot 
 
 
@@ -263,7 +262,7 @@ medaka_consensus \
 
 ```
 
-## Binning with Metabat2 🦇🗑️
+## Binning with Metabat2 🗑️🗑️
 
 
 
