@@ -6,6 +6,26 @@ Hello! Welcome to the metagenomic dry lab session! Here we will take the raw bas
 
 There is a conda environment in /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1 that we will use in each of the slurm batch scripts.
 
+You can activate it temporarily to check that all software is ready to rock and roll:
+
+```
+flye --version
+#> 2.9.1-b1780
+filtlong --version
+#> Filtlong v0.2.1
+flye --version
+#> 2.9.1-b1780
+minimap2 --version
+#> 2.24-r1122
+racon --version
+#> 1.5.0
+medaka --version
+#> medaka 1.7.2
+metabat2 2> >(grep -oE "\(version.+$")
+#> (version 2:2.15 (Bioconda); 2022-11-19T22:34:33)
+
+```
+
 
 ## Quality control and filtering of the raw reads 🛂
 
