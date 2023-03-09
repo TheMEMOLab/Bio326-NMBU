@@ -4,7 +4,10 @@
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they come from.
 
 
-## Quality control and Filtering of the raw reads 🛂
+There is a conda environment in /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1 that we will use in each of the slurm batch scripts.
+
+
+## Quality control and filtering of the raw reads 🛂
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
@@ -29,8 +32,10 @@ Then create a slurm-script with the following contents:
 #SBATCH --cpus-per-task 1
 #SBATCH --mem=8G
 
-# Define IO
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1
 
+# Define IO
 in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
 out="output/filtlong/output.fastq.gz"
 
@@ -94,6 +99,9 @@ You can read more about how to configure flye here: https://github.com/fendergla
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
 
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1
+
 # Define IO
 in="output/filtlong/output.fastq.gz"
 out="output/flye" # Note: this is a directory, not a file.
@@ -127,6 +135,9 @@ flye \
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
+
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1
 
 # Define IO
 in_draft_assembly="output/flye/assembly.fasta"
@@ -186,6 +197,9 @@ racon \
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
 
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1
+
 # Define IO
 in_assembly="output/racon_art/racon_round2.fna"
 in_reads="output/filtlong/output.fastq.gz"
@@ -219,6 +233,9 @@ medaka_consensus \
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
+
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/data/metagenomic_assembly/prok1
 
 # Define IO
 in_assembly="output/medaka_art/consensus.fasta"
