@@ -28,7 +28,6 @@ Then create a slurm-script with the following contents:
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 1
 #SBATCH --mem=8G
-#SBATCH --partition=normal
 
 # Define IO
 
@@ -94,7 +93,6 @@ You can read more about how to configure flye here: https://github.com/fendergla
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
-#SBATCH --partition=normal
 
 # Define IO
 in="output/filtlong/output.fastq.gz"
@@ -129,7 +127,6 @@ flye \
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
-#SBATCH --partition=normal
 
 # Define IO
 in_draft_assembly="output/flye/assembly.fasta"
@@ -188,7 +185,6 @@ racon \
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
-#SBATCH --partition=normal
 
 # Define IO
 in_assembly="output/racon_art/racon_round2.fna"
@@ -223,7 +219,6 @@ medaka_consensus \
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
-#SBATCH --partition=normal
 
 # Define IO
 in_assembly="output/medaka_art/consensus.fasta"
