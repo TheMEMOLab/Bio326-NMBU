@@ -4,7 +4,7 @@
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they come from.
 
 
-## Filter raw reads
+## Quality control and Filtering of the raw reads 🛂
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
@@ -78,7 +78,7 @@ tail -n 20 logs/old/7683177-7-filtlong.err.log
 
 
 
-## Assemble reads into a draft assembly
+## Assemble reads into a draft assembly 🏗
 
 Then we will use flye in "meta" mode. Flye builds contiguous sequences by overlapping each read.
 You can read more about how to configure flye here: https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md
@@ -112,7 +112,7 @@ flye \
 ```
 
 
-## Polishing with Racon and Medaka
+## Polishing with Racon and Medaka ✨
 
 ### Racon
 
@@ -204,7 +204,7 @@ medaka_consensus \
 
 ```
 
-## Binning with Metabat2
+## Binning with Metabat2 🗑️🗑️
 
 
 
