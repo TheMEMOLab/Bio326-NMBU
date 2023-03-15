@@ -242,17 +242,14 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 # Define IO
 in_assembly="output/racon/racon_round2.fna"
 in_reads="output/filtlong/output.fastq.gz"
-OUTPUT="output/medaka"
-
-# Make sure that the output directory exists
-#mkdir --parents $OUTPUT
+out="output/medaka"
 
 
 medaka_consensus \
     -t $SLURM_NPROCS \
     -d $in_assembly \
     -i $in_reads \
-    -o $OUTPUT \
+    -o $out \
     -m r1041_e82_400bps_sup_g615
 
 
