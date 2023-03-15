@@ -161,7 +161,7 @@ flye \
 
 ### Racon
 
-📝 Create a file named 03a_polish-racon.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 03a_polish1-racon.sh with the following contents, and submit the job with sbatch:
 
 
 ```bash
@@ -220,7 +220,7 @@ racon \
 
 ```
 
-
+??consider merging these two steps
 
 ### Medaka
 
@@ -272,7 +272,7 @@ medaka_consensus \
 #!/bin/bash
 
 # Define slurm parameters
-#SBATCH --job-name=depth-metabat
+#SBATCH --job-name=depth-minimap
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
