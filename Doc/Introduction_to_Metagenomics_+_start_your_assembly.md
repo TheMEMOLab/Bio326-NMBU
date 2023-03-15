@@ -10,8 +10,6 @@ You can activate it temporarily and check that all software is ready to rock and
 
 ```bash
 conda activate /mnt/courses/BIO326/PROK/condaenv
-flye --version
-#> 2.9.1-b1780
 filtlong --version
 #> Filtlong v0.2.1
 flye --version
@@ -51,7 +49,7 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 #SBATCH --job-name=filter-filtlong
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 1
-#SBATCH --mem=8G
+#SBATCH --mem=1G
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
@@ -136,9 +134,9 @@ You can read more about how to configure flye here: https://github.com/fendergla
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
-#SBATCH --time=08:00:00
+#SBATCH --time=24:00:00
 #SBATCH --cpus-per-task 4
-#SBATCH --mem=16G
+#SBATCH --mem=30G
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
@@ -146,9 +144,6 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 # Define IO
 in="output/filtlong/output.fastq.gz"
 out="output/flye" # Note: this is a directory, not a file.
-
-# Make sure that the output directory exists
-#mkdir --parents $out
 
 
 flye \
@@ -174,7 +169,7 @@ flye \
 
 # Define slurm parameters
 #SBATCH --job-name=polish1-racon
-#SBATCH --time=08:00:00
+#SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
 
@@ -194,14 +189,14 @@ mkdir --parents $(dirname $out_polished_assembly)
 >&2 echo "Mapping minimap2 ..."
 minimap2 \
     -x map-ont \
-    -t 8 \
+    -t $SLURM_NPROCS \
     $in_draft_assembly \
     $in_reads \
     > output/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
 racon \
-    -t 8 \
+    -t $SLURM_NPROCS \
     $in_reads \
     output/racon/minimap2_round1.paf \
     $in_draft_assembly > output/racon/racon_round1.fna
@@ -211,13 +206,13 @@ racon \
 >&2 echo "Mapping minimap2 ..."
 minimap2 \
     -x map-ont \
-    -t 8 \
+    -t $SLURM_NPROCS \
     output/racon/racon_round1.fna \
     $in_reads > output/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
 racon \
-    -t 8 \
+    -t $SLURM_NPROCS \
     $in_reads \
     output/racon/minimap2_round2.paf \
     output/racon/racon_round1.fna > $out_polished_assembly
@@ -230,24 +225,24 @@ racon \
 ### Medaka
 
 
-📝 Create a file named 04_polish-medaka.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 04_polish2-medaka.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
 
 # Define slurm parameters
-#SBATCH --job-name=polish1-racon
+#SBATCH --job-name=polish2-medaka
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
-#SBATCH --mem=16G
+#SBATCH --mem=4G
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define IO
-in_assembly="output/racon_art/racon_round2.fna"
+in_assembly="output/racon/racon_round2.fna"
 in_reads="output/filtlong/output.fastq.gz"
-OUTPUT="output/medaka_art"
+OUTPUT="output/medaka"
 
 # Make sure that the output directory exists
 #mkdir --parents $OUTPUT
@@ -258,17 +253,78 @@ medaka_consensus \
     -d $in_assembly \
     -i $in_reads \
     -o $OUTPUT \
-    -m r1041_e82_260bps_hac_g632
+    -m r1041_e82_400bps_sup_g615
 
 
 ```
 
+
+
+
 ## Binning with Metabat2 🗑️🗑️
 
 
+### Calculating contig depths
+
+📝 Create a file named 05_depth-minimap.sh with the following contents, and submit the job with sbatch:
+
+```bash
+#!/bin/bash
+
+# Define slurm parameters
+#SBATCH --job-name=depth-metabat
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task 4
+#SBATCH --mem=8G
+
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/condaenv
+
+# Define IO
+in_assembly="output/medaka/consensus.fasta"
+in_reads="output/filtlong/output.fastq.gz"
+out_alignment="output/contig_depths/bam_for_depths.bam"
+out_depth="output/contig_depths/depth.tsv"
+
+# Make sure that the output directory exists
+mkdir --parents $(dirname $out_alignment)
 
 
-📝 Create a file named 05_bin-metabat.sh with the following contents, and submit the job with sbatch:
+# Map reads to polished assembly and sort the alignment
+minimap2 \
+    -ax map-ont \
+    --sam-hit-only \
+    -t $SLURM_NPROCS \
+    $in_assembly $in_reads \
+| samtools sort \
+    -@ $SLURM_NPROCS \
+    -o $out_alignment
+
+# Calculate depths of above alignment
+jgi_summarize_bam_contig_depths \ 
+    --outputDepth $out_depth \
+    $out_alignment
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Binning 
+
+📝 Create a file named 06_bin-metabat.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -283,7 +339,8 @@ medaka_consensus \
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define IO
-in_assembly="output/medaka_art/consensus.fasta"
+in_assembly="output/medaka/consensus.fasta"
+in_depth="output/contig_depths/depth.tsv"
 out_bins="output/metabat2/bin"
 
 # Make sure that the output directory exists
@@ -291,9 +348,10 @@ mkdir --parents $(dirname $out_bins)
 
 
 metabat2 \
-    --numThreads 4 \
+    --numThreads $SLURM_NPROCS \
     --inFile $in_assembly \
     --outFile $out_bins \
+    --abdFile $in_depth \
     --minClsSize 1000000
 
 
