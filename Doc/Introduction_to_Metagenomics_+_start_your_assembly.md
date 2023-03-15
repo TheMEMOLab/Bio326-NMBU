@@ -40,7 +40,7 @@ Sometimes when we sequence, we see a lot of low quality reads that we want to ge
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
 
-📝 Create a file named 01_filter-filtlong.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -161,7 +161,7 @@ flye \
 
 ### Racon
 
-📝 Create a file named 03_polish-racon.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 03a_polish-racon.sh with the following contents, and submit the job with sbatch:
 
 
 ```bash
@@ -225,7 +225,7 @@ racon \
 ### Medaka
 
 
-📝 Create a file named 04_polish2-medaka.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 03b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -266,7 +266,7 @@ medaka_consensus \
 
 ### Calculating contig depths
 
-📝 Create a file named 05_depth-minimap.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 04a_depth-minimap.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -324,7 +324,7 @@ jgi_summarize_bam_contig_depths \
 
 ### Binning 
 
-📝 Create a file named 06_bin-metabat.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 04b_bin-metabat.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
