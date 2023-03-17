@@ -192,7 +192,7 @@ racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round2.paf  output/rac
 
 ??consider merging these two steps
 
-### Medaka
+### Medaka 🐟
 
 
 📝 Create a file named 03b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
