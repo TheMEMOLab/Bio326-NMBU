@@ -54,7 +54,7 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
 out="output/filtlong/output.fastq.gz"
 
@@ -62,12 +62,7 @@ out="output/filtlong/output.fastq.gz"
 mkdir --parents $(dirname $out)
 
 
-filtlong \
-    --min_length 1000 \
-    --keep_percent 90 \
-    $in \
-    | gzip \
-    > $out
+filtlong  --min_length 1000  --keep_percent 90  $in  | gzip  > $out
 
 
 ```
@@ -98,14 +93,11 @@ We can visualize the quality of these reads with nanoplot.
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in="output/filtlong/output.fastq.gz"
 
 
-NanoPlot \
-    --threads $SLURM_NPROCS \
-    --fastq $in \
-    --plots hex dot 
+NanoPlot  --threads $SLURM_NPROCS  --fastq $in  --plots hex dot 
 
 
 ```
@@ -141,17 +133,12 @@ You can read more about how to configure flye here: https://github.com/fendergla
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in="output/filtlong/output.fastq.gz"
 out="output/flye" # Note: this is a directory, not a file.
 
 
-flye \
-    --nano-raw $in \
-    --meta \
-    --threads $SLURM_NPROCS \
-    --out-dir $out \
-    --iterations 2
+flye  --nano-raw $in  --meta  --threads $SLURM_NPROCS  --out-dir $out  --iterations 2
 
 
 ```
@@ -176,7 +163,7 @@ flye \
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in_draft_assembly="output/flye/assembly.fasta"
 in_reads="output/filtlong/output.fastq.gz"
 out_polished_assembly="output/racon/racon_round2.fna"
@@ -187,35 +174,18 @@ mkdir --parents $(dirname $out_polished_assembly)
 
 >&2 echo "Round 1"
 >&2 echo "Mapping minimap2 ..."
-minimap2 \
-    -x map-ont \
-    -t $SLURM_NPROCS \
-    $in_draft_assembly \
-    $in_reads \
-    > output/racon/minimap2_round1.paf
+minimap2  -x map-ont  -t $SLURM_NPROCS  $in_draft_assembly  $in_reads  > output/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
-racon \
-    -t $SLURM_NPROCS \
-    $in_reads \
-    output/racon/minimap2_round1.paf \
-    $in_draft_assembly > output/racon/racon_round1.fna
+racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round1.paf  $in_draft_assembly > output/racon/racon_round1.fna
 
 
 >&2 echo "Round 2"
 >&2 echo "Mapping minimap2 ..."
-minimap2 \
-    -x map-ont \
-    -t $SLURM_NPROCS \
-    output/racon/racon_round1.fna \
-    $in_reads > output/racon/minimap2_round2.paf
+minimap2  -x map-ont  -t $SLURM_NPROCS  output/racon/racon_round1.fna  $in_reads > output/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
-racon \
-    -t $SLURM_NPROCS \
-    $in_reads \
-    output/racon/minimap2_round2.paf \
-    output/racon/racon_round1.fna > $out_polished_assembly
+racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round2.paf  output/racon/racon_round1.fna > $out_polished_assembly
 
 
 ```
@@ -232,25 +202,20 @@ racon \
 
 # Define slurm parameters
 #SBATCH --job-name=polish2-medaka
-#SBATCH --time=04:00:00
+#SBATCH --time=15:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=4G
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in_assembly="output/racon/racon_round2.fna"
 in_reads="output/filtlong/output.fastq.gz"
 out="output/medaka"
 
 
-medaka_consensus \
-    -t $SLURM_NPROCS \
-    -d $in_assembly \
-    -i $in_reads \
-    -o $out \
-    -m r1041_e82_400bps_sup_g615
+medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r1041_e82_400bps_sup_g615
 
 
 ```
@@ -277,7 +242,7 @@ medaka_consensus \
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in_assembly="output/medaka/consensus.fasta"
 in_reads="output/filtlong/output.fastq.gz"
 out_alignment="output/contig_depths/bam_for_depths.bam"
@@ -288,19 +253,12 @@ mkdir --parents $(dirname $out_alignment)
 
 
 # Map reads to polished assembly and sort the alignment
-minimap2 \
-    -ax map-ont \
-    --sam-hit-only \
-    -t $SLURM_NPROCS \
-    $in_assembly $in_reads \
-| samtools sort \
-    -@ $SLURM_NPROCS \
-    -o $out_alignment
+minimap2  -ax map-ont  --sam-hit-only  -t $SLURM_NPROCS  $in_assembly $in_reads \
+| samtools sort  -@ $SLURM_NPROCS  -o $out_alignment
 
 # Calculate depths of above alignment
 jgi_summarize_bam_contig_depths \ 
-    --outputDepth $out_depth \
-    $out_alignment
+    --outputDepth $out_depth  $out_alignment
 
 
 ```
@@ -335,7 +293,7 @@ jgi_summarize_bam_contig_depths \
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
-# Define IO
+# Define paths
 in_assembly="output/medaka/consensus.fasta"
 in_depth="output/contig_depths/depth.tsv"
 out_bins="output/metabat2/bin"
@@ -344,12 +302,7 @@ out_bins="output/metabat2/bin"
 mkdir --parents $(dirname $out_bins)
 
 
-metabat2 \
-    --numThreads $SLURM_NPROCS \
-    --inFile $in_assembly \
-    --outFile $out_bins \
-    --abdFile $in_depth \
-    --minClsSize 1000000
+metabat2  --numThreads $SLURM_NPROCS  --inFile $in_assembly  --outFile $out_bins  --abdFile $in_depth  --minClsSize 1000000
 
 
 ```
