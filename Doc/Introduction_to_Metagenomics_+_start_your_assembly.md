@@ -146,7 +146,7 @@ flye  --nano-raw $in  --meta  --threads $SLURM_NPROCS  --out-dir $out  --iterati
 
 ## Polishing with Racon and Medaka ✨
 
-### Racon
+### Racon 🦝
 
 📝 Create a file named 03a_polish1-racon.sh with the following contents, and submit the job with sbatch:
 
