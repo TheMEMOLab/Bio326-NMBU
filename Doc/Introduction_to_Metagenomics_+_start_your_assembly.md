@@ -223,7 +223,7 @@ medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r
 
 
 
-## Binning with Metabat2 🗑️🗑️
+## Binning with Metabat2 🦇🗑️
 
 
 ### Calculating contig depths
