@@ -74,7 +74,7 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 ---
 
-When Flye finishes, you will see a lot of output files in the results/flye directory. The main result file that we'll continue with is the results/flye/assembly.fasta file
+When Flye finishes, you will see a lot of output files in the results/flye directory. The main result file that we'll continue with is the results/flye/assembly.fasta file.
 
 ```bash
 ls -lh results/flye/
@@ -97,9 +97,15 @@ ls -lh results/flye/
 
 ## Polishing with Racon and Medaka ✨
 
-The draft assembly output by flye might contain some of the sequencing errors tha
+The sequenced reads have an error rate around 1/100. This is not a big deal, as the assembly algorithm in flye is tolerant and perfectly happy with this. The problem for us though is that some of the positions in the draft assembly might then be representing these errors, rather than the actual biology of the organism. Luckily there is a process termed *polishing* that can reduce the number of erroneous positions by overlapping the reads and calculating the probabilites for error. This process is reminiscent of extracting a *consensus* sequence from a set of aligned genomes.
+
+Here we are going to apply several rounds of racon, and a final round of medaka. Note that Flye also has an internal polisher that we have already applied. As it turns out, Racon and Medaka have better performance, so we'll apply those as well.
 
 ### Racon 🦝
+
+In order to run Racon we need to give it our draft assembly and our reads. First we'll map the reads to the draft with minimap2, then racon sifts through the alignment in the .paf file, and outputs a corrected assembly. This process is repeated for a total of two rounds of polishing.
+
+If you want to know more about how to set up Racon, you can read about it here: https://github.com/isovic/racon#usage
 
 📝 Create a file named 02a_polish1-racon.sh with the following contents, and submit the job with sbatch:
 
@@ -143,9 +149,11 @@ racon  -t $SLURM_CPUS_PER_TASK  $in_reads  results/racon/minimap2_round2.paf  re
 
 ```
 
-??consider merging these two steps
-
 ### Medaka 🐟
+
+From the polished output of two rounds of Racon, we have an assembly that is quite good, but we can make it even better. Here we'll apply one round of medaka polishing. Medaka works much the same way but uses a different internal algorithm. In this case, we're telling medaka which exact sequencing platform we used for sequencing the reads - This is to let Medaka know about the specifics of the errors that this specific platform creates??.
+
+If curious, you can read more about how to set up Medaka here: https://github.com/nanoporetech/medaka#usage
 
 
 📝 Create a file named 02b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
