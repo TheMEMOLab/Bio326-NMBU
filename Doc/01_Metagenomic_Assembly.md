@@ -7,7 +7,7 @@ Hello! Welcome to the metagenomic dry lab session! Here we will take the raw bas
 #### Checking access to conda environment
 For these exercises we will be using a conda environment in /mnt/courses/BIO326/PROK/condaenv that contains most of the required software.
 
-You can activate it temporarily, and check that all software is ready to rock-and-roll 🤘:
+You can activate it temporarily, and check that all software is ready to rock-and-roll 🤘
 
 ```bash
 conda activate /mnt/courses/BIO326/PROK/condaenv
