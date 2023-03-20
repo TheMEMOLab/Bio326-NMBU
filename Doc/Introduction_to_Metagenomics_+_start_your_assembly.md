@@ -72,7 +72,7 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 **Bonus points**: If you look closely at the flye program call in the sbatch script above, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
 
-
+---
 
 When Flye finishes, you will see a lot of output files in the results/flye directory. The main result file that we'll continue with is the results/flye/assembly.fasta file
 
