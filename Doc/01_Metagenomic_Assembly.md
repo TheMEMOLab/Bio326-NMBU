@@ -121,13 +121,15 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 
 Now check your output/filtlong/ directory. There should be a compressed fastq output file.
 
+
 ```bash
-tree -sh results/filtlong/
-#> results/filtlong/
-#> └── output.fastq.gz
+tree -sh output/filtlong/
+#> output/filtlong/
+#> └── [4.1G]  output.fastq.gz
 #> 
 #> 0 directories, 1 file
 ```
+
 
 You can learn more about how to use filtlong for different scenarios by referring to the filtlong documentation at https://github.com/rrwick/Filtlong
 
