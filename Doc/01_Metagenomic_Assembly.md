@@ -111,7 +111,7 @@ assembly-stats results/flye/assembly.fasta
 ```
 
 As the algorithms implemented in Flye are not deterministic, your output may vary slightly.
-As you can see here, we have draft assembly with 10266 contigs totalling 239 Megabases. N50 represents the shortest contig that together with all larger contigs represents half of the total bases in the full draft assembly. 
+As you can see here, we have draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
 
 
 
