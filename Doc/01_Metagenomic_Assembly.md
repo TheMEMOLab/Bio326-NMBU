@@ -165,6 +165,8 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 ---
 
+When Flye finishes, you will see a lot of output files in the results/flye directory.
+
 ```bash
 ls -lh results/flye/
 #> total 480M
