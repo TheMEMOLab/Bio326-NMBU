@@ -46,7 +46,13 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 ```
 
 
-Fastq is a raw read format containing a base quality scores for nucleotide position along each read.
+Our raw reads are saved in the fastq-format, which encodes base quality scores for the nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. 
+
+```bash
+zcat raw_reads_nanopore.fastq.gz | less -S
+```
+
+
 Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
