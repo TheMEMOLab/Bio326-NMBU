@@ -78,20 +78,18 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 #> TAGCGGCTTTATCTTCAAGATCCAGGCCAACATGAACCCGGCTCACAGAGACCGGCTCGCATTCTCCCGCATCTGCTCCGGCGAGTTCCAGAGAGGCATGACCGCCACGCTGTCCCGCACGGGCAAACCCATCA
 ```
 
-If you look closely, you will observe the repeating pattern of "@, sequence, +, quality" for every fourth lines.
+If you look closely, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every fourth lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: Hence the seemingly random lines of garble.
+You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
 
 Wikipedia is a good place to learn more about the fastq format (https://en.wikipedia.org/wiki/FASTQ_format) which is widely used in biological sequencing workflows.
 
 
 ## Quality control and filtering of the raw reads 🛂
 
-Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
+Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of, because they mostly contain noise that possibly confuse the downstream analysis. 
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
-
-?? check out your fastq with zcat
 
 
 📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads. If you copied the raw reads file to your current directory, you can just put the filename.
@@ -131,7 +129,7 @@ tree results/filtlong/
 #> 0 directories, 1 file
 ```
 
-
+You can learn more about how to use filtlong for different scenarios by referring to the filtlong documentation at https://github.com/rrwick/Filtlong
 
 
 ## Assemble reads into a draft assembly 🏗
