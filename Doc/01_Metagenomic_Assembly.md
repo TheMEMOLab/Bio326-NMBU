@@ -137,7 +137,7 @@ Currently, we have the sequenced reads that represent fragments of the biologica
 
 Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from genomic sequencing, and puts out a long draft assembly that contains sequence contigs from all the species that are present in the samples we sequenced.
 
-📝 Create a file named 01b_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
+📝 Create a file named 01b_assemble-flye.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
