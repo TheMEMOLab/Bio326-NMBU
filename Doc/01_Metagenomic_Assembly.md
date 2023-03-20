@@ -78,7 +78,7 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 #> TAGCGGCTTTATCTTCAAGATCCAGGCCAACATGAACCCGGCTCACAGAGACCGGCTCGCATTCTCCCGCATCTGCTCCGGCGAGTTCCAGAGAGGCATGACCGCCACGCTGTCCCGCACGGGCAAACCCATCA
 ```
 
-If you look closely, you will observe the repeating pattern of "@, <sequence>, +, <quality>" for every fourth lines.
+If you look closely, you will observe the repeating pattern of "@, sequence, +, quality" for every fourth lines.
 
 Wikipedia is a good place to learn more about the fastq format (https://en.wikipedia.org/wiki/FASTQ_format) which is widely used in biological sequencing.
 
