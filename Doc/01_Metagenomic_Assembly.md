@@ -11,6 +11,8 @@ You can activate it temporarily, and check that all software is ready to rock an
 
 ```bash
 conda activate /mnt/courses/BIO326/PROK/condaenv
+filtlong --version
+#> Filtlong v0.2.1
 flye --version
 #> 2.9.1-b1780
 assembly-stats -v
@@ -29,13 +31,58 @@ conda deactivate
 
 
 
+
 ## Quality control and filtering of the raw reads 🛂
 
-We already merged the files from the three sequencing runs and performed rudimentary quality control. Everything looks great! Your reads reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
+Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
-There is one file named "nanopore_reads_filtered.fastq.gz"
+There is one file named "raw_reads_nanopore_2308.fastq.gz"
 
-**Task**: Copy this file into your preferred working directory, so we can start using it in the next step.
+Fastq is a raw read format containing a base quality scores for nucleotide position along each read.
+Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
+
+By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
+
+
+📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads.
+
+```bash
+#!/bin/bash
+
+# Define slurm parameters
+#SBATCH --job-name=filter-filtlong
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task 1
+#SBATCH --mem=1G
+
+# Activate the conda environment
+source activate /mnt/courses/BIO326/PROK/condaenv
+
+# Define paths
+in="<path to raw reads>"
+#in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
+out="results/filtlong/output.fastq.gz"
+
+# Make sure that the output directory exists
+mkdir -p results/filtlong/
+
+
+filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
+
+
+```
+
+Now check your output/filtlong/ directory. There should be a compressed fastq output file.
+
+```bash
+tree output/filtlong/
+#> output/filtlong/
+#> └── output.fastq.gz
+#> 
+#> 0 directories, 1 file
+```
+
+
 
 
 ## Assemble reads into a draft assembly 🏗
@@ -44,7 +91,7 @@ Currently, we have the sequenced reads that represent fragments of the biologica
 
 Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from genomic sequencing, and puts out a long draft assembly that contains sequence contigs from all the species that are present in the samples we sequenced.
 
-📝 Create a file named 01_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
+📝 Create a file named 01b_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
 
 ```bash
 #!/bin/bash
