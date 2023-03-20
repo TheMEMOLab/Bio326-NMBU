@@ -78,7 +78,7 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 #> TAGCGGCTTTATCTTCAAGATCCAGGCCAACATGAACCCGGCTCACAGAGACCGGCTCGCATTCTCCCGCATCTGCTCCGGCGAGTTCCAGAGAGGCATGACCGCCACGCTGTCCCGCACGGGCAAACCCATCA
 ```
 
-If you look closely, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every fourth lines.
+If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every fourth lines.
 
 You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
 
@@ -122,7 +122,7 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 Now check your output/filtlong/ directory. There should be a compressed fastq output file.
 
 ```bash
-tree results/filtlong/
+tree -sh results/filtlong/
 #> results/filtlong/
 #> └── output.fastq.gz
 #> 
@@ -210,5 +210,5 @@ As you can see here, we have draft assembly with 10266 contigs totalling 239 Meg
 
 #### Summary
 
-At this point you will have a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to be split into each of the species in the microbial community.
+At this point you will have created a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to be split into each of the species in the microbial community.
 

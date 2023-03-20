@@ -27,7 +27,7 @@ So, here we will first calculate the depth of each contig
 #SBATCH --mem=8G
 
 # Activate the conda environment
-source activate /mnt/courses/BIO326/PROK/condaenv
+source activate /mnt/courses/BIO326/PROK/checkm2_condaenv
 
 # Define paths
 in_assembly="results/medaka/consensus.fasta"
