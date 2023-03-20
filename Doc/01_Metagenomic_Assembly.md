@@ -1,6 +1,6 @@
 # Prokaryota dry lab: 01 Metagenomic Assembly
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
-#### Wednesday 5th of April 2023
+#### Wednesday 22nd of March 2023
 
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they came from.
 
