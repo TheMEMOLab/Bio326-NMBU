@@ -43,6 +43,8 @@ Sometimes when we sequence, we see a lot of low quality reads that we want to ge
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
+?? check out your fastq with zcat
+
 
 📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads.
 
@@ -160,7 +162,7 @@ As the algorithms implemented in Flye are not deterministic, your output may var
 As you can see here, we have draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
 
 
-**Summary**
+#### Summary
 
 At this point you will have a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to be split into each of the species in the microbial community.
 
