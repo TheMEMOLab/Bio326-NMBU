@@ -60,7 +60,6 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
 in="<path to raw reads>"
-#in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
 out="results/filtlong/output.fastq.gz"
 
 # Make sure that the output directory exists
@@ -75,8 +74,8 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 Now check your output/filtlong/ directory. There should be a compressed fastq output file.
 
 ```bash
-tree output/filtlong/
-#> output/filtlong/
+tree results/filtlong/
+#> results/filtlong/
 #> └── output.fastq.gz
 #> 
 #> 0 directories, 1 file
