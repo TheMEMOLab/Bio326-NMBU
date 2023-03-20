@@ -131,20 +131,20 @@ out_polished_assembly="results/racon/racon_round2.fna"
 mkdir --parents $(dirname $out_polished_assembly)
 
 
->&2 echo "Round 1"
->&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_CPUS_PER_TASK  $in_draft_assembly  $in_reads  > results/racon/minimap2_round1.paf
 
->&2 echo "Correcting Racon ..."
-racon  -t $SLURM_CPUS_PER_TASK  $in_reads  results/racon/minimap2_round1.paf  $in_draft_assembly > results/racon/racon_round1.fna
+# Mapping minimap2 round 1
+minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK $in_draft_assembly $in_reads > results/racon/minimap2_round1.paf
+
+# Correcting Racon round 1
+racon -t $SLURM_CPUS_PER_TASK $in_reads results/racon/minimap2_round1.paf $in_draft_assembly > results/racon/racon_round1.fna
 
 
->&2 echo "Round 2"
->&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_CPUS_PER_TASK  results/racon/racon_round1.fna  $in_reads > results/racon/minimap2_round2.paf
 
->&2 echo "Correcting Racon ..."
-racon  -t $SLURM_CPUS_PER_TASK  $in_reads  results/racon/minimap2_round2.paf  results/racon/racon_round1.fna > $out_polished_assembly
+# Mapping minimap2 round 2
+minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK results/racon/racon_round1.fna $in_reads > results/racon/minimap2_round2.paf
+
+# Correcting Racon round 2
+racon -t $SLURM_CPUS_PER_TASK $in_reads results/racon/minimap2_round2.paf results/racon/racon_round1.fna > $out_polished_assembly
 
 
 ```
@@ -176,7 +176,7 @@ in_reads="results/filtlong/output.fastq.gz"
 out="results/medaka"
 
 
-medaka_consensus  -t $SLURM_CPUS_PER_TASK  -d $in_assembly  -i $in_reads  -o $out  -m r1041_e82_400bps_sup_g615
+medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m r1041_e82_400bps_sup_g615
 
 
 ```
@@ -214,12 +214,10 @@ mkdir --parents $(dirname $out_alignment)
 
 
 # Map reads to polished assembly and sort the alignment
-minimap2  -ax map-ont  --sam-hit-only  -t $SLURM_CPUS_PER_TASK  $in_assembly $in_reads \
-| samtools sort  -@ $SLURM_CPUS_PER_TASK  -o $out_alignment
+minimap2 -ax map-ont --sam-hit-only -t $SLURM_CPUS_PER_TASK $in_assembly $in_reads | samtools sort -@ $SLURM_CPUS_PER_TASK -o $out_alignment
 
 # Calculate depths of above alignment
-jgi_summarize_bam_contig_depths \ 
-    --outputDepth $out_depth  $out_alignment
+jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 
 
 ```
