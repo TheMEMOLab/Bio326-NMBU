@@ -155,9 +155,6 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 in="<path to nanopore reads>"
 out="results/flye" # Note: this is a directory, not a file.
 
-# Prepare output directory
-mkdir results
-
 flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
 
