@@ -11,10 +11,10 @@ You can activate it temporarily and check that all software is ready to rock and
 
 ```bash
 conda activate /mnt/courses/BIO326/PROK/condaenv
-filtlong --version
-#> Filtlong v0.2.1
 flye --version
 #> 2.9.1-b1780
+assembly-stats -v
+#> Version: 1.0.1
 minimap2 --version
 #> 2.24-r1122
 racon --version
@@ -96,8 +96,18 @@ ls -lh results/flye/
 
 You can investigate some basic statistics of the Flye assembly using the assembly-stats software:
 
+```bash
+assembly-stats results/flye/assembly.fasta 
+#> stats for output/flye/assembly.fasta
+#> sum = 239436989, n = 10266, ave = 23323.30, largest = 1194178
+#> N50 = 33581, n = 1668
+#> N60 = 25598, n = 2487
+#> N70 = 19593, n = 3565
+#> N80 = 15137, n = 4951
+#> N90 = 10904, n = 6804
+#> N100 = 114, n = 10266
+#> N_count = 0
+#> Gaps = 0
 ```
-assembly-stats -t output/flye/assembly.fasta 
-#> filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
-#> output/flye/assembly.fasta      239436989       10266   23323.30        1194178 114     0       0       33581   1668    19593   3565    10904   6804
-```
+
+As the algorithms used in Flye are not deterministic, your output may vary slightly.
