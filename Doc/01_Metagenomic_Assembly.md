@@ -32,13 +32,13 @@ conda deactivate
 
 
 
-## Quality control and filtering of the raw reads 🛂
+## Brief introduction to the fastq-format.
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
 There is one file named "raw_reads_nanopore.fastq.gz"
 
-You should create a directory that you want the following analysis steps to live in. Enter that directory and copy the raw reads with the following command.
+You should create a directory that you want the following analysis steps to live in. Enter that directory and copy the raw reads with the following command:
 
 ```bash
 cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz .
@@ -46,12 +46,44 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 ```
 
 
-Our raw reads are saved in the fastq-format, which encodes base quality scores for the nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. 
+Our raw reads are saved in the fastq-format, which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using less to open this file, you should press "q" on your keyboard to return to your terminal.
 
 ```bash
 zcat raw_reads_nanopore.fastq.gz | less -S
+#> @90082f7c-d334-40f4-bb82-ee6a84a7cfc9
+#> TCGATGAGGACGGAATATACTATTTTATCCTGGATGACGAGGGATATGATAACACTGCGGATGTGATCGCATACGTATACACCCTGACAGACGACGGCGAAGGATACATAGAGATCGGAGAGACCTATGACCTT
+#> +
+#> 2366HFFEA@@@@CBEFGGDHEA?=:8=DEBCBBCEEEAA??@ABEEFDD<<<<;;::2323=@?@AIFEEEFGAAA@AEDA@>>?ABIEEDCCDDDFDGMJDBAA=<<==EHGGG@@:;61011010/007>D
+#> @cdaa99bb-bc12-489c-8424-3ec02dae6960
+#> TGCCTCGGTCAGGACACAGCCGTCCTCCCCGATCGGCTCGTTCAGGTCCGTCATGTTCACCCGTTTGTCCGTTCCCTTCAGGGTCCATTCAAATTCCCAGGGCCCTTTCGCGGCCGGGGCAACGTCACCCGCCT
+#> +
+#> AAAAABBCFFFGDDCBC>>@IDE?:;::;A@BCB=;::;=>?BCGCBBAACCCDBBBABBAAAABEEDDBBBFEFC>A@>???@@ABFDEEFHFHFC=88450,***+.7>98876678:AABABABDCECGFG
+#> @b21b0309-0c3c-45be-927f-24c92533da2d
+#> ACAGGAAAATATCCTGACTATACGGTTTATTTAAGACCTGTGTATGGTAATGTGCATTACCTTACTTTCTATAATTCCATAGATGGAGCACCGGTATATTCAAGAATACAGGTGGATGATGAGAAGACATCAAC
+#> +
+#> BBCHEEEGNJLFD@@@BDEEGFHFGEFLINK6+)))DEEDDCACCDBCBCCDECBCEHDC656))22103??AHM{JBBAABDCDAA;;;;<@@@@CEJGH?;DDEFDFAA=::ABCC@>1-'&'''''''&')
+#> @8a4f3b0d-f888-4438-88c5-7b8c3d1eaa29
+#> GACAAGGCGATCCTGATCGCGTGGATGGGAGTGCCGGACGTGTCTTATATCGACAGATGAAGAAGACTGGGCGGGATGCCTGACGCTTCCCGAGAGAGCTTACGGTCAGACGCAGACGTCTGATCCAGCAGCCG
+#> +
+#> .9BDDEEEEHHFEEEGMKILHFEDDEEDCB??@@AGGDDCCBC@@?12++)(),-DFDAAMHGB?>>BB@?><?BDIFHDF@@::755110*+:::AJMIIEA-++)&&%%&(,-.///8000322HJHGIIGH
+#> @8df69a6f-ecab-4204-95a8-53302e32f326
+#> GCTGAGAAGATGGGCGTCGTCCTGTGGGATCACGGCGGCGGCAGCATCGAGGGAGTCTGCTGGGATGAGTATGATGAGGACTGCCTGACGCTGCGCGAGATCGACGCGGCTCTCCTTAGCGTGTACAAGACCAT
+#> +
+#> DDFDCBBCDCDCEFFEFFDCCCDCDCDCDGFDDBBCA@A@@BAABCCDECGCBBBBCCCB@@@ACFEFDDD@@?@?DB@@@><;;=?GFFFECFFFHHGFHEDEDCBAA@ABBBEEE6544537667977776:
+#> @2d8b28a2-d8d2-4aa8-9e68-046963e1420c
+#> AGCATCGAGGGAGTCTGCTGGGATGAGTATGATGAGGACTGCCTGACGCTGCGCGAGATCGACGCGGCTCTCCTTAGCGTGTACAAGACCATGACCGACAAGTTCGAGTTCGTCGGGATGGACGCCTGCCTGAT
+#> +
+#> FBBBDCIIGCAAADDBBB??ADEE65555AAA??C@=>>=<<<<@HJGGIHIIJGGGEEDEFFFFFEDDEEAACEEDE@@@@@D>>>==@?@AFEGEEHHIKIKGBBCCFLLLHPGHHHEA@A@BE?>>==ADG
+#> @b768247e-fbbe-4988-85b8-ee10fceaaff2
+#> TAGCGGCTTTATCTTCAAGATCCAGGCCAACATGAACCCGGCTCACAGAGACCGGCTCGCATTCTCCCGCATCTGCTCCGGCGAGTTCCAGAGAGGCATGACCGCCACGCTGTCCCGCACGGGCAAACCCATCA
 ```
 
+If you look closely, you will observe the repeating pattern of "@, <sequence>, +, <quality>" for every fourth lines.
+
+Wikipedia is a good place to learn more about the fastq format which is widely used in biological sequencing.
+
+
+## Quality control and filtering of the raw reads 🛂
 
 Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
 
