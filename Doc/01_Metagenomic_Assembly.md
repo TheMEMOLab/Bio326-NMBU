@@ -77,7 +77,7 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 #> TAGCGGCTTTATCTTCAAGATCCAGGCCAACATGAACCCGGCTCACAGAGACCGGCTCGCATTCTCCCGCATCTGCTCCGGCGAGTTCCAGAGAGGCATGACCGCCACGCTGTCCCGCACGGGCAAACCCATCA
 ```
 
-If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every fourth lines.
+If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
 You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
 
