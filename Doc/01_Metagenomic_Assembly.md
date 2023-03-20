@@ -161,5 +161,6 @@ As you can see here, we have draft assembly with 10266 contigs totalling 239 Meg
 
 
 **Summary**
+
 At this point you will have a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to be split into each of the species in the microbial community.
 
