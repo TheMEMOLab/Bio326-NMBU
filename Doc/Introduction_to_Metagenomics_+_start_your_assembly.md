@@ -30,94 +30,19 @@ conda deactivate
 
 ## Quality control and filtering of the raw reads 🛂
 
-Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
+We already merged the files from the three sequencing runs and performed rudimentary quality control. Everything looks great! Your reads reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
 There is one file named "raw_reads_nanopore.fastq.gz"
-
-Fastq is a raw read format containing a base quality scores for nucleotide position along each read.
-Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
-
-By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
-
-
-📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch:
-
-```bash
-#!/bin/bash
-
-# Define slurm parameters
-#SBATCH --job-name=filter-filtlong
-#SBATCH --time=01:00:00
-#SBATCH --cpus-per-task 1
-#SBATCH --mem=1G
-
-# Activate the conda environment
-source activate /mnt/courses/BIO326/PROK/condaenv
-
-# Define paths
-in="/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz"
-out="output/filtlong/output.fastq.gz"
-
-# Make sure that the output directory exists
-mkdir --parents $(dirname $out)
-
-
-filtlong  --min_length 1000  --keep_percent 90  $in  | gzip  > $out
-
-
-```
-
-Now check your output/filtlong/ directory. There should be a compressed fastq output file.
-
-```bash
-tree output/filtlong/
-#> output/filtlong/
-#> └── output.fastq.gz
-#> 
-#> 0 directories, 1 file
-```
-
-We can visualize the quality of these reads with nanoplot.
-
-📝 Create a file named 01b_visualize-nanoplot.sh with the following contents, and submit the job with sbatch:
-
-```bash
-#!/bin/bash
-
-# Define slurm parameters
-#SBATCH --job-name=visualize-nanoplot
-#SBATCH --time=02:00:00
-#SBATCH --cpus-per-task 2
-#SBATCH --mem=8G
-
-# Activate the conda environment
-source activate /mnt/courses/BIO326/PROK/condaenv
-
-# Define paths
-in="output/filtlong/output.fastq.gz"
-
-
-NanoPlot  --threads $SLURM_NPROCS  --fastq $in  --plots hex dot 
-
-
-```
-
-Now check your output/filtlong/ directory. There should be a compressed fastq output file.
-
-```bash
-tree output/filtlong/
-#> output/filtlong/
-#> └── output.fastq.gz
-#> 
-#> 0 directories, 1 file
-```
-
 
 
 ## Assemble reads into a draft assembly 🏗
 
-Then we will use flye in "meta" mode. Flye builds contiguous sequences by overlapping each read.
-You can read more about how to configure flye here: https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md
+The sequenced reads represents fragments of biological genomic sequences - These we want to reconstruct inside the computer. It works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". These contigs can then be put together into "scaffolds" than represent large parts of the original biological chromosomes and plasmids that habor the prokaryotic cells.
+
+Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in sequencing reads, and puts out a long draft assembly that contains many scaffolds.
+
+EXERCISE: We are using the Flye assembler in "meta" mode, by passing the --meta option in the call parameters. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we're using it in this setting?
+
 
 📝 Create a file named 02_assemble-flye.sh with the following contents, and submit the job with sbatch:
 
@@ -134,8 +59,8 @@ You can read more about how to configure flye here: https://github.com/fendergla
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="output/filtlong/output.fastq.gz"
-out="output/flye" # Note: this is a directory, not a file.
+in="results/filtlong/output.fastq.gz"
+out="results/flye" # Note: this is a directory, not a file.
 
 
 flye  --nano-raw $in  --meta  --threads $SLURM_NPROCS  --out-dir $out  --iterations 2
@@ -164,9 +89,9 @@ flye  --nano-raw $in  --meta  --threads $SLURM_NPROCS  --out-dir $out  --iterati
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_draft_assembly="output/flye/assembly.fasta"
-in_reads="output/filtlong/output.fastq.gz"
-out_polished_assembly="output/racon/racon_round2.fna"
+in_draft_assembly="results/flye/assembly.fasta"
+in_reads="results/filtlong/output.fastq.gz"
+out_polished_assembly="results/racon/racon_round2.fna"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $out_polished_assembly)
@@ -174,18 +99,18 @@ mkdir --parents $(dirname $out_polished_assembly)
 
 >&2 echo "Round 1"
 >&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_NPROCS  $in_draft_assembly  $in_reads  > output/racon/minimap2_round1.paf
+minimap2  -x map-ont  -t $SLURM_NPROCS  $in_draft_assembly  $in_reads  > results/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
-racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round1.paf  $in_draft_assembly > output/racon/racon_round1.fna
+racon  -t $SLURM_NPROCS  $in_reads  results/racon/minimap2_round1.paf  $in_draft_assembly > results/racon/racon_round1.fna
 
 
 >&2 echo "Round 2"
 >&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_NPROCS  output/racon/racon_round1.fna  $in_reads > output/racon/minimap2_round2.paf
+minimap2  -x map-ont  -t $SLURM_NPROCS  results/racon/racon_round1.fna  $in_reads > results/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
-racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round2.paf  output/racon/racon_round1.fna > $out_polished_assembly
+racon  -t $SLURM_NPROCS  $in_reads  results/racon/minimap2_round2.paf  results/racon/racon_round1.fna > $out_polished_assembly
 
 
 ```
@@ -210,9 +135,9 @@ racon  -t $SLURM_NPROCS  $in_reads  output/racon/minimap2_round2.paf  output/rac
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_assembly="output/racon/racon_round2.fna"
-in_reads="output/filtlong/output.fastq.gz"
-out="output/medaka"
+in_assembly="results/racon/racon_round2.fna"
+in_reads="results/filtlong/output.fastq.gz"
+out="results/medaka"
 
 
 medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r1041_e82_400bps_sup_g615
@@ -243,10 +168,10 @@ medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_assembly="output/medaka/consensus.fasta"
-in_reads="output/filtlong/output.fastq.gz"
-out_alignment="output/contig_depths/bam_for_depths.bam"
-out_depth="output/contig_depths/depth.tsv"
+in_assembly="results/medaka/consensus.fasta"
+in_reads="results/filtlong/output.fastq.gz"
+out_alignment="results/contig_depths/bam_for_depths.bam"
+out_depth="results/contig_depths/depth.tsv"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $out_alignment)
@@ -294,9 +219,9 @@ jgi_summarize_bam_contig_depths \
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_assembly="output/medaka/consensus.fasta"
-in_depth="output/contig_depths/depth.tsv"
-out_bins="output/metabat2/bin"
+in_assembly="results/medaka/consensus.fasta"
+in_depth="results/contig_depths/depth.tsv"
+out_bins="results/metabat2/bin"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $out_bins)
