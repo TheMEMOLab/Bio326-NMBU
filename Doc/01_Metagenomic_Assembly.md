@@ -84,12 +84,12 @@ You can use the arrow keys on your keyboard to get a very real feeling about len
 
 ## Quality control and filtering of the raw reads 🛂
 
-Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of, because they mostly contain noise that possibly confuse the downstream analysis. 
+Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of because they mostly contain noise that possibly confuse the downstream analysis. 
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
 
-📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads. If you copied the raw reads file to your current directory, you can just put the filename.
+📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
 
 ```bash
 #!/bin/bash
@@ -133,7 +133,7 @@ You can learn more about how to use filtlong for different scenarios by referrin
 
 ## Assemble reads into a draft assembly 🏗
 
-Currently, we have the sequenced reads that represent fragments of the biological genomic sequences that we want to reconstruct inside the computer. We're going to use an approach that works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". Hopefully, these contigs will represent larger parts of the original biological chromosomes and plasmids that harbor the prokaryotic cells in our sampled microbial community.
+Currently, we have the sequenced reads that represent fragments of the biological genomic sequences that we want to reconstruct inside the computer. We're going to use an approach that works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". Hopefully, these contigs will represent larger parts of the original biological chromosomes and plasmids that harbor the prokaryotic cells, in our sampled microbial community.
 
 Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from genomic sequencing, and puts out a long draft assembly that contains sequence contigs from all the species that are present in the samples we sequenced.
 
@@ -167,8 +167,6 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
 
 ---
-
-When Flye finishes, you will see a lot of output files in the results/flye directory. The main result file that we'll continue with is the results/flye/assembly.fasta file.
 
 ```bash
 ls -lh results/flye/
@@ -206,10 +204,10 @@ assembly-stats results/flye/assembly.fasta
 ```
 
 As the algorithms implemented in Flye are not deterministic, your output may vary slightly.
-As you can see here, we have draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
+As you can see here, we have a draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
 
 
 #### Summary
 
-At this point you will have created a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to be split into each of the species in the microbial community.
+At this point you will have created a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to become split into each of the several resident species in our sequenced microbial community.
 
