@@ -152,7 +152,7 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="<path to nanopore reads>"
+in="results/filtlong/output.fastq.gz"
 out="results/flye" # Note: this is a directory, not a file.
 
 flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
