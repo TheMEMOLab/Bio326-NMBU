@@ -123,8 +123,8 @@ Now check your output/filtlong/ directory. There should be a compressed fastq ou
 
 
 ```bash
-tree -sh output/filtlong/
-#> output/filtlong/
+tree -sh results/filtlong/
+#> results/filtlong/
 #> └── [4.1G]  output.fastq.gz
 #> 
 #> 0 directories, 1 file
