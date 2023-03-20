@@ -38,7 +38,7 @@ Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/B
 
 There is one file named "raw_reads_nanopore.fastq.gz"
 
-You should create a directory that you want the following analysis steps to live in. Enter that directory and copy the raw reads with the following command:
+You should create a directory where you want the forthcoming analysis results to live in. Enter that directory and copy the raw reads with the following command:
 
 ```bash
 cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz .
