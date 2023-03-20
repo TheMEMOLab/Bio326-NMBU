@@ -32,19 +32,19 @@ conda deactivate
 
 We already merged the files from the three sequencing runs and performed rudimentary quality control. Everything looks great! Your reads reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
-There is one file named "raw_reads_nanopore.fastq.gz"
+There is one file named "nanopore_reads.fastq.gz"
+
+**Task**: Copy this file into your preferred working directory, so we can start using it in the next step.
 
 
 ## Assemble reads into a draft assembly 🏗
 
 The sequenced reads represents fragments of biological genomic sequences - These we want to reconstruct inside the computer. It works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". These contigs can then be put together into "scaffolds" than represent large parts of the original biological chromosomes and plasmids that habor the prokaryotic cells.
 
-Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in sequencing reads, and puts out a long draft assembly that contains many scaffolds.
-
-EXERCISE: If you look closely at the flye program call in the sbatch script below, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we want to use it in this setting?
+Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in sequencing reads, and puts out a long draft assembly that contains sequence scaffolds from all the species that are present in the samples we sequenced.
 
 
-📝 Create a file named 02_assemble-flye.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 01_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
 
 ```bash
 #!/bin/bash
@@ -59,7 +59,7 @@ EXERCISE: If you look closely at the flye program call in the sbatch script belo
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="results/filtlong/output.fastq.gz"
+in="<path to nanopore reads>"
 out="results/flye" # Note: this is a directory, not a file.
 
 
@@ -69,11 +69,15 @@ flye --meta --nano-raw $in --threads $SLURM_NPROCS --out-dir $out --iterations 2
 ```
 
 
+**Bonus points**: If you look closely at the flye program call in the sbatch script above, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we want to use it in this setting?
+
+
+
 ## Polishing with Racon and Medaka ✨
 
 ### Racon 🦝
 
-📝 Create a file named 03a_polish1-racon.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 02a_polish1-racon.sh with the following contents, and submit the job with sbatch:
 
 
 ```bash
@@ -120,7 +124,7 @@ racon  -t $SLURM_NPROCS  $in_reads  results/racon/minimap2_round2.paf  results/r
 ### Medaka 🐟
 
 
-📝 Create a file named 03b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 02b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -153,7 +157,7 @@ medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r
 
 ### Calculating contig depths
 
-📝 Create a file named 04a_depth-minimap.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 03a_depth-minimap.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
@@ -204,7 +208,7 @@ jgi_summarize_bam_contig_depths \
 
 ### Binning 
 
-📝 Create a file named 04b_bin-metabat.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 03b_bin-metabat.sh with the following contents, and submit the job with sbatch:
 
 ```bash
 #!/bin/bash
