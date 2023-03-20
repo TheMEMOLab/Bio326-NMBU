@@ -32,7 +32,7 @@ conda deactivate
 
 
 
-## Brief introduction to the fastq-format.
+## Brief introduction to the fastq-format 💾
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
