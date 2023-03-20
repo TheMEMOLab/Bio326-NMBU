@@ -1,4 +1,4 @@
-# Prokaryota dry lab: 01 Metagenomic Reconstruction
+# Prokaryota dry lab: 01 Metagenomic Assembly
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
 #### Date??
 
@@ -91,4 +91,13 @@ ls -lh results/flye/
 #> 384K Mar 16 04:18 assembly_info.txt
 #>  20M Mar 16 04:18 flye.log
 #>   92 Mar 16 04:17 params.json
+```
+
+
+You can investigate some basic statistics of the Flye assembly using the assembly-stats software:
+
+```
+assembly-stats -t output/flye/assembly.fasta 
+#> filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
+#> output/flye/assembly.fasta      239436989       10266   23323.30        1194178 114     0       0       33581   1668    19593   3565    10904   6804
 ```
