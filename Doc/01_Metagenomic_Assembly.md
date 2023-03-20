@@ -189,6 +189,8 @@ ls -lh results/flye/
 #>   92 Mar 16 04:17 params.json
 ```
 
+**Bonus points**: Which of the output files from Flye do you think is the final draft assembly that we will continue our downstream analysis on?
+
 
 You can investigate some basic statistics of the Flye assembly using the assembly-stats software:
 
