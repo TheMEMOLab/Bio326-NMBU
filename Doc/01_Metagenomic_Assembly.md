@@ -36,7 +36,15 @@ conda deactivate
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
-There is one file named "raw_reads_nanopore_2308.fastq.gz"
+There is one file named "raw_reads_nanopore.fastq.gz"
+
+You should create a directory that you want the following analysis steps to live in. Enter that directory and copy the raw reads with the following command.
+
+```bash
+cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz .
+#> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
+```
+
 
 Fastq is a raw read format containing a base quality scores for nucleotide position along each read.
 Sometimes when we sequence, we see a lot of low quality reads that we want to get rid of, because they mostly contain noise that confuse the downstream analysis.
