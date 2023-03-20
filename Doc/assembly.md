@@ -1,6 +1,6 @@
 # Prokaryota dry lab: 01 Metagenomic Assembly
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
-#### Date??
+#### Wednesday 5th of April 2023
 
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they come from.
 
@@ -40,9 +40,9 @@ There is one file named "nanopore_reads_filtered.fastq.gz"
 
 ## Assemble reads into a draft assembly 🏗
 
-The sequenced reads represents fragments of biological genomic sequences - These we want to reconstruct inside the computer. It works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". These contigs can then be put together into "scaffolds" that represent larger parts of the original biological chromosomes and plasmids that harbor the prokaryotic cells.
+Currently, we have the sequenced reads that represent fragments of the biological genomic sequences that we want to reconstruct inside the computer. We're going to use an approach that works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". Hopefully, these contigs will represent larger parts of the original biological chromosomes and plasmids that harbor the prokaryotic cells in our sampled microbial community.
 
-Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from from genomic sequencing, and puts out a long draft assembly that contains sequence scaffolds from all the species that are present in the samples we sequenced.
+Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from genomic sequencing, and puts out a long draft assembly that contains sequence contigs from all the species that are present in the samples we sequenced.
 
 📝 Create a file named 01_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
 
@@ -62,8 +62,8 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 in="<path to nanopore reads>"
 out="results/flye" # Note: this is a directory, not a file.
 
+# Prepare output directory
 mkdir results
-
 
 flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
@@ -71,7 +71,7 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 ```
 
 
-**Bonus points**: If you look closely at the flye program call in the sbatch script above, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
+**Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
 
 ---
 
@@ -98,7 +98,7 @@ You can investigate some basic statistics of the Flye assembly using the assembl
 
 ```bash
 assembly-stats results/flye/assembly.fasta 
-#> stats for output/flye/assembly.fasta
+#> stats for results/flye/assembly.fasta
 #> sum = 239436989, n = 10266, ave = 23323.30, largest = 1194178
 #> N50 = 33581, n = 1668
 #> N60 = 25598, n = 2487
@@ -110,4 +110,9 @@ assembly-stats results/flye/assembly.fasta
 #> Gaps = 0
 ```
 
-As the algorithms used in Flye are not deterministic, your output may vary slightly.
+As the algorithms implemented in Flye are not deterministic, your output may vary slightly.
+As you can see here, we have draft assembly with 10266 contigs totalling 239 Megabases. N50 represents the shortest contig that together with all larger contigs represents half of the total bases in the full draft assembly. 
+
+
+
+
