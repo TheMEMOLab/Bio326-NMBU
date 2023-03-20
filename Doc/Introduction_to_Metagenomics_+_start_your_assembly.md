@@ -51,7 +51,7 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
 #SBATCH --time=24:00:00
-#SBATCH --cpus-per-task 4
+#SBATCH --cpus-per-task 8
 #SBATCH --mem=30G
 
 # Activate the conda environment
@@ -64,17 +64,40 @@ out="results/flye" # Note: this is a directory, not a file.
 mkdir results
 
 
-flye --meta --nano-raw $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
+flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
 
 ```
 
 
-**Bonus points**: If you look closely at the flye program call in the sbatch script above, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we want to use it in this setting?
+**Bonus points**: If you look closely at the flye program call in the sbatch script above, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
+
+
+
+When Flye finishes, you will see a lot of output files in the results/flye directory. The main result file that we'll continue with is the results/flye/assembly.fasta file
+
+```bash
+ls -lh results/flye/
+#> total 480M
+#>    2 Mar 15 15:00 00-assembly/
+#>    3 Mar 15 15:49 10-consensus/
+#>    6 Mar 15 16:13 20-repeat/
+#>    7 Mar 15 16:15 30-contigger/
+#>   11 Mar 16 04:17 40-polishing/
+#> 233M Mar 16 04:18 assembly.fasta
+#> 224M Mar 16 04:18 assembly_graph.gfa
+#> 3.1M Mar 16 04:17 assembly_graph.gv
+#> 384K Mar 16 04:18 assembly_info.txt
+#>  20M Mar 16 04:18 flye.log
+#>   92 Mar 16 04:17 params.json
+```
+
 
 
 
 ## Polishing with Racon and Medaka ✨
+
+The draft assembly output by flye might contain some of the sequencing errors tha
 
 ### Racon 🦝
 
