@@ -60,7 +60,7 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 ?? check out your fastq with zcat
 
 
-📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads.
+📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of the actual raw reads. If you copied the raw reads file to your current directory, you can just put the filename.
 
 ```bash
 #!/bin/bash
