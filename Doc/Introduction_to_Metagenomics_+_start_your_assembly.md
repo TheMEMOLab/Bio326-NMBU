@@ -41,7 +41,7 @@ The sequenced reads represents fragments of biological genomic sequences - These
 
 Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in sequencing reads, and puts out a long draft assembly that contains many scaffolds.
 
-EXERCISE: We are using the Flye assembler in "meta" mode, by passing the --meta option in the call parameters. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we're using it in this setting?
+EXERCISE: If you look closely at the flye program call in the sbatch script below, you can see that we're passing the "--meta" argument to flye. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain what the "meta" modes does, and argue why we want to use it in this setting?
 
 
 📝 Create a file named 02_assemble-flye.sh with the following contents, and submit the job with sbatch:
@@ -63,7 +63,7 @@ in="results/filtlong/output.fastq.gz"
 out="results/flye" # Note: this is a directory, not a file.
 
 
-flye  --nano-raw $in  --meta  --threads $SLURM_NPROCS  --out-dir $out  --iterations 2
+flye --meta --nano-raw $in --threads $SLURM_NPROCS --out-dir $out --iterations 2
 
 
 ```
