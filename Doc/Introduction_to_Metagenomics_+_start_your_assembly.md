@@ -32,22 +32,22 @@ conda deactivate
 
 We already merged the files from the three sequencing runs and performed rudimentary quality control. Everything looks great! Your reads reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
-There is one file named "nanopore_reads.fastq.gz"
+There is one file named "nanopore_reads_filtered.fastq.gz"
 
 **Task**: Copy this file into your preferred working directory, so we can start using it in the next step.
 
 
 ## Assemble reads into a draft assembly 🏗
 
-The sequenced reads represents fragments of biological genomic sequences - These we want to reconstruct inside the computer. It works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". These contigs can then be put together into "scaffolds" than represent large parts of the original biological chromosomes and plasmids that habor the prokaryotic cells.
+The sequenced reads represents fragments of biological genomic sequences - These we want to reconstruct inside the computer. It works a bit by solving a puzzle: Each piece is compared to many other pieces, until the whole picture can be put together. In the same way, we overlap the reads with one another, until we get long continuous sequences a.k.a. "contigs". These contigs can then be put together into "scaffolds" that represent larger parts of the original biological chromosomes and plasmids that harbor the prokaryotic cells.
 
-Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in sequencing reads, and puts out a long draft assembly that contains sequence scaffolds from all the species that are present in the samples we sequenced.
-
+Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from from genomic sequencing, and puts out a long draft assembly that contains sequence scaffolds from all the species that are present in the samples we sequenced.
 
 📝 Create a file named 01_assemble-flye.sh with the following contents, and submit the job with sbatch: Remember to change the "in" variable to point to your copy of the nanopore_reads.fastq.gz file.
 
 ```bash
 #!/bin/bash
+set -euo pipefail # Use strict mode
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
@@ -62,8 +62,10 @@ source activate /mnt/courses/BIO326/PROK/condaenv
 in="<path to nanopore reads>"
 out="results/flye" # Note: this is a directory, not a file.
 
+mkdir results
 
-flye --meta --nano-raw $in --threads $SLURM_NPROCS --out-dir $out --iterations 2
+
+flye --meta --nano-raw $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
 
 ```
@@ -103,18 +105,18 @@ mkdir --parents $(dirname $out_polished_assembly)
 
 >&2 echo "Round 1"
 >&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_NPROCS  $in_draft_assembly  $in_reads  > results/racon/minimap2_round1.paf
+minimap2  -x map-ont  -t $SLURM_CPUS_PER_TASK  $in_draft_assembly  $in_reads  > results/racon/minimap2_round1.paf
 
 >&2 echo "Correcting Racon ..."
-racon  -t $SLURM_NPROCS  $in_reads  results/racon/minimap2_round1.paf  $in_draft_assembly > results/racon/racon_round1.fna
+racon  -t $SLURM_CPUS_PER_TASK  $in_reads  results/racon/minimap2_round1.paf  $in_draft_assembly > results/racon/racon_round1.fna
 
 
 >&2 echo "Round 2"
 >&2 echo "Mapping minimap2 ..."
-minimap2  -x map-ont  -t $SLURM_NPROCS  results/racon/racon_round1.fna  $in_reads > results/racon/minimap2_round2.paf
+minimap2  -x map-ont  -t $SLURM_CPUS_PER_TASK  results/racon/racon_round1.fna  $in_reads > results/racon/minimap2_round2.paf
 
 >&2 echo "Correcting Racon ..."
-racon  -t $SLURM_NPROCS  $in_reads  results/racon/minimap2_round2.paf  results/racon/racon_round1.fna > $out_polished_assembly
+racon  -t $SLURM_CPUS_PER_TASK  $in_reads  results/racon/minimap2_round2.paf  results/racon/racon_round1.fna > $out_polished_assembly
 
 
 ```
@@ -144,7 +146,7 @@ in_reads="results/filtlong/output.fastq.gz"
 out="results/medaka"
 
 
-medaka_consensus  -t $SLURM_NPROCS  -d $in_assembly  -i $in_reads  -o $out  -m r1041_e82_400bps_sup_g615
+medaka_consensus  -t $SLURM_CPUS_PER_TASK  -d $in_assembly  -i $in_reads  -o $out  -m r1041_e82_400bps_sup_g615
 
 
 ```
@@ -182,8 +184,8 @@ mkdir --parents $(dirname $out_alignment)
 
 
 # Map reads to polished assembly and sort the alignment
-minimap2  -ax map-ont  --sam-hit-only  -t $SLURM_NPROCS  $in_assembly $in_reads \
-| samtools sort  -@ $SLURM_NPROCS  -o $out_alignment
+minimap2  -ax map-ont  --sam-hit-only  -t $SLURM_CPUS_PER_TASK  $in_assembly $in_reads \
+| samtools sort  -@ $SLURM_CPUS_PER_TASK  -o $out_alignment
 
 # Calculate depths of above alignment
 jgi_summarize_bam_contig_depths \ 
@@ -231,7 +233,7 @@ out_bins="results/metabat2/bin"
 mkdir --parents $(dirname $out_bins)
 
 
-metabat2  --numThreads $SLURM_NPROCS  --inFile $in_assembly  --outFile $out_bins  --abdFile $in_depth  --minClsSize 1000000
+metabat2  --numThreads $SLURM_CPUS_PER_TASK  --inFile $in_assembly  --outFile $out_bins  --abdFile $in_depth  --minClsSize 1000000
 
 
 ```
