@@ -97,7 +97,7 @@ ls -lh results/flye/
 
 ## Polishing with Racon and Medaka ✨
 
-The sequenced reads have an error rate around 1/100. This is not a big deal, as the assembly algorithm in flye is tolerant and perfectly happy with this. The problem for us though is that some of the positions in the draft assembly might then be representing these errors, rather than the actual biology of the organism. Luckily there is a process termed *polishing* that can reduce the number of erroneous positions by overlapping the reads and calculating the probabilites for error. This process is reminiscent of extracting a *consensus* sequence from a set of aligned genomes.
+The sequenced reads have an error rate around 1/100. This is not a big deal, as the assembly algorithm in flye is tolerant and perfectly happy with this. The problem for us though is that some of the positions in the draft assembly might then be representing these errors, rather than the actual biological sequence of the organism. Luckily there is a process referred to as *polishing* that can reduce the number of erroneous positions by overlapping the reads and calculating the probabilites for error. This process is reminiscent of extracting a *consensus* sequence from a set of aligned genomes.
 
 Here we are going to apply several rounds of racon, and a final round of medaka. Note that Flye also has an internal polisher that we have already applied. As it turns out, Racon and Medaka have better performance, so we'll apply those as well.
 
@@ -128,7 +128,7 @@ in_reads="results/filtlong/output.fastq.gz"
 out_polished_assembly="results/racon/racon_round2.fna"
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $out_polished_assembly)
+mkdir results/racon/
 
 
 
@@ -210,7 +210,7 @@ out_alignment="results/contig_depths/bam_for_depths.bam"
 out_depth="results/contig_depths/depth.tsv"
 
 # Make sure that the output directory exists
-mkdir --parents $(dirname $out_alignment)
+mkdir results/contig_depths/
 
 
 # Map reads to polished assembly and sort the alignment
