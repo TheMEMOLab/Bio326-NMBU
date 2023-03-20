@@ -47,7 +47,6 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 
 ```bash
 #!/bin/bash
-set -euo pipefail # Use strict mode
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
