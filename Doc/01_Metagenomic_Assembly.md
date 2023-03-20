@@ -80,7 +80,9 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely, you will observe the repeating pattern of "@, sequence, +, quality" for every fourth lines.
 
-Wikipedia is a good place to learn more about the fastq format (https://en.wikipedia.org/wiki/FASTQ_format) which is widely used in biological sequencing.
+You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: Hence the seemingly random lines of garble.
+
+Wikipedia is a good place to learn more about the fastq format (https://en.wikipedia.org/wiki/FASTQ_format) which is widely used in biological sequencing workflows.
 
 
 ## Quality control and filtering of the raw reads 🛂
