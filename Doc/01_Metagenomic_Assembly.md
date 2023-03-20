@@ -45,8 +45,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
 
-
-Our raw reads are saved in the fastq-format, which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using less to open this file, you should press "q" on your keyboard to return to your terminal.
+Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using less to open this file, you should press "q" on your keyboard to return to your terminal.
 
 ```bash
 zcat raw_reads_nanopore.fastq.gz | less -S
@@ -81,8 +80,6 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every fourth lines.
 
 You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
-
-Wikipedia is a good place to learn more about the fastq format (https://en.wikipedia.org/wiki/FASTQ_format) which is widely used in biological sequencing workflows.
 
 
 ## Quality control and filtering of the raw reads 🛂
