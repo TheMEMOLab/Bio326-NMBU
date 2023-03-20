@@ -1,10 +1,11 @@
-# Prokaryota dry lab: 01 Metagenomic Reconstruction
+# Prokaryota dry lab: 02 Polishing
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
+#### date??
 
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they come from.
 
 #### Checking access to conda environment
-There is a conda environment in /mnt/courses/BIO326/PROK/condaenv that we will use in each of the slurm batch scripts.
+We created a conda environment in /mnt/courses/BIO326/PROK/condaenv that contains all the software that we'll use to complete the metagenomic assembly.
 
 You can activate it temporarily and check that all software is ready to rock and roll:
 
