@@ -186,8 +186,13 @@ medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m
 
 ## Binning with Metabat2 🦇🗑️
 
-RECAP:
-So far we created a draft assembly, containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced (cattle rumen), which we then polished to remove potential sequencing errors. Now comes the task of extracting each of the several species present in our sample. This process in referred to as *binning*. This is because we effectively classify each contig in the assembly as coming from one of several sources (species). The way the binning algorithms typically work is that they look into the abundance of each of the contigs. This is done by mapping the reads onto the assembly (like we did in the racon polishing step, and then counting the read coverage of each contig). The smart thing here is that contigs coming from the same species will have similar coverage, because the abundance is linked. The binning algorithm uses this information to classify each contig ??
+
+So far we created a draft assembly, containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced (cattle rumen). In this *draft assembly* we then proceeded to remove the potential sequencing errors in order to create a polished *assembly*.
+
+Now comes the task of extracting each of the several species present in our sample. This process in referred to as *binning*. This is because we effectively classify each contig in the assembly as coming from one of several sources (species). The way the binning algorithms typically work is that they look into the abundance of each of the contigs. This is done by mapping the reads onto the assembly (like we did in the racon polishing step, and then counting the read depth of each contig). The smart thing here is that contigs coming from the same species will have similar depth, because the abundance is linked. The binning algorithm uses this information to classify each contig ??
+
+
+So, here we will first calculate the depth of each contig
 
 ### Calculating contig depths
 
@@ -223,17 +228,6 @@ jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 
 
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 
 
