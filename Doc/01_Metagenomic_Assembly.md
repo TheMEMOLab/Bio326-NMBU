@@ -175,6 +175,8 @@ echo "Bye!"
 
 ```
 
+*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/fitlong.sh ```  please feel free to copy this to your $SCRATCH*
+
 Now submit the job with sbatch.
 
 Once finished, check your output/filtlong/ directory. There should be a compressed fastq output file.
@@ -216,7 +218,7 @@ module load Miniconda3 && eval "$(conda shell.bash hook)"
 conda activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="results/filtlong/output.fastq.gz"
+in="$SCRATCH/BIO326PROK/results/filtlong/output.fastq.gz"
 out="flye" # Note: this is a directory, not a file.
 
 cd $TMPDIR
@@ -262,6 +264,7 @@ rm -r tmpDir_of.$SLURM_JOB_ID
 echo "Bye!"
 
 ```
+*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/fly.sh ```  please feel free to copy this to your $SCRATCH*
 
 
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
