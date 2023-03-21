@@ -88,6 +88,8 @@ If you look closely at the beginning of each line, you will observe the repeatin
 You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble. Nonetheles, these symbols are used in all FASTQ files, and the reason is that quality scores are encoded into a compact form, which uses only 1 byte per quality value. In this encoding, the quality score is represented as the character with an ASCII code equal to its value + 33. You can use this likn to check the [Quality score Encoding](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm#).
 
 Also, the folowing caption correlatates the values of the **quality** as a *Phred quality (Q) score* with the base call acuracy or probability of incorrect base calling: 
+
+
 ![Q](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/PhredScore.png) 
 
 
