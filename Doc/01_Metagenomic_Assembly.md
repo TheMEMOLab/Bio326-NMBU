@@ -10,6 +10,7 @@ For these exercises we will be using a conda environment in /mnt/courses/BIO326/
 You can activate it temporarily, and check that all software is ready to rock-and-roll 🤘
 
 ```bash
+module load Miniconda3 && eval "$(conda shell.vash hook)"
 conda activate /mnt/courses/BIO326/PROK/condaenv
 filtlong --version
 #> Filtlong v0.2.1
@@ -29,18 +30,19 @@ conda deactivate
 
 ```
 
-
-
-
 ## Brief introduction to the fastq-format 💾
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
 There is one file named "raw_reads_nanopore.fastq.gz"
 
-You should create a directory where you want the forthcoming analysis results to live in. Enter that directory and copy the raw reads with the following command:
+Let's take a look inside this directory:
 
-It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance.
+```bash
+ls -lrth /mnt/courses/BIO326/PROK/data/metagenomic_assembly/
+```
+
+You should create a directory where you want the forthcoming analysis results to live in. **We strongly sugest to use the $SCRATCH directory** Enter the $SCRATCH directory and copy the raw reads with the following command:
 
 ```bash
 mkdir -p $SCRATCH/prok
@@ -83,7 +85,7 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
+You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer *ASCII* characters including symbols, numbers and text: It mostly looks like a random garble. However, 
 
 
 ## Quality control and filtering of the raw reads 🛂
