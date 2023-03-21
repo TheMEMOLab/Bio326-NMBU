@@ -40,7 +40,11 @@ There is one file named "raw_reads_nanopore.fastq.gz"
 
 You should create a directory where you want the forthcoming analysis results to live in. Enter that directory and copy the raw reads with the following command:
 
+It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance.
+
 ```bash
+mkdir -p $SCRATCH/assembly
+cd $SCRATCH/assembly 
 cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz .
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
