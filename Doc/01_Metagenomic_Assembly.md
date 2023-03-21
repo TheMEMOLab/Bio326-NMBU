@@ -146,7 +146,7 @@ cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
 echo "I am on"
 pwd
 
-time cp -r $in .
+cp -r $in .
 
 echo "My files"
 ls
@@ -241,7 +241,7 @@ cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
 echo "I am on"
 pwd
 
-time cp -r $in .
+cp -r $in .
 
 echo "Running fly..."
 
