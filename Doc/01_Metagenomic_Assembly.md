@@ -42,7 +42,7 @@ Let's take a look inside this directory:
 ls -lrth /mnt/courses/BIO326/PROK/data/metagenomic_assembly/
 ```
 
-You should create a directory where you want the forthcoming analysis results to live in. **We strongly sugest to use the $SCRATCH directory** Enter the $SCRATCH directory and copy the raw reads with the following command:
+You should create a directory where you want the forthcoming analysis results to live in. **We strongly suggest to use the $SCRATCH directory** Enter the $SCRATCH directory and copy the raw reads with the following command:
 
 ```bash
 mkdir -p $SCRATCH/prok
@@ -51,7 +51,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
 
-Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal.
+Our raw reads are stored in a fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we need to use zcat to read the file. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal. 
 
 ```bash
 zcat raw_reads_nanopore.fastq.gz | less -S
@@ -85,9 +85,9 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble. Nonetheles, these symbols are used in all FASTQ files, and the reason is that quality scores are encoded into a compact form, which uses only 1 byte per quality value. In this encoding, the quality score is represented as the character with an ASCII code equal to its value + 33. You can use this likn to check the [Quality score Encoding](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm#).
+You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble. Nonetheless, these symbols are used in all FASTQ files, and the reason is that quality scores are encoded into a compact form, which uses only 1 byte per quality value. In this encoding, the quality score is represented as the character with an ASCII code equal to its value + 33. You can use this link to check the [Quality score Encoding](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm#).
 
-Also, the folowing caption correlatates the values of the **quality** as a *Phred quality (Q) score* with the base call acuracy or probability of incorrect base calling: 
+Also, the following caption correlatates the values of the **quality** as a *Phred quality (Q) score* with the basecall accuracy or probability of incorrect base calling: 
 
 
 ![Q](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/PhredScore.png) 
@@ -95,12 +95,12 @@ Also, the folowing caption correlatates the values of the **quality** as a *Phre
 
 ## Quality control and filtering of the raw reads 🛂
 
-Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of because they mostly contain "noise" that may confuse the downstream analysis. 
+Sometimes when we sequence, we see a lot of low quality reads. We want to get rid of these because they mostly contain "noise" that may confuse the downstream analysis. 
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
 
-📝 Create a file named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
+📝 Create a job file (remember; use the text editors 'nano' or 'vim' as you did in the EUK dry-lab) named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
 
 ```bash
 #!/bin/bash
