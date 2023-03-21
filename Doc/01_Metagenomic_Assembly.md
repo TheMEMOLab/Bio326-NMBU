@@ -85,7 +85,10 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer *ASCII* characters including symbols, numbers and text: It mostly looks like a random garble. However, 
+You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer *ASCII* characters including symbols, numbers and text: It mostly looks like a random garble. 
+
+The folowing caption correlatates the values of the **quality** as a *Phred quality (Q) score*:
+![Q](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/PhredScore.png) 
 
 
 ## Quality control and filtering of the raw reads 🛂
