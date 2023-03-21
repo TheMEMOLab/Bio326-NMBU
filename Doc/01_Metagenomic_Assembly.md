@@ -146,7 +146,7 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
-#SBATCH --time=24:00:00
+#SBATCH --time=1-08:00:00
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=30G
 
@@ -164,6 +164,9 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
+
+Flye takes a very long time to run. As you can see in the batch script for Flye we allocated more than a days worth of running time. If you don't want to wait that long, you can copy the results from the demo directory: "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/".
+
 
 ---
 
