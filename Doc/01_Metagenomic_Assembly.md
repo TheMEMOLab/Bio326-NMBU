@@ -79,17 +79,17 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about length of some of these reads. Remember that since every forth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
+You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
 
 
 ## Quality control and filtering of the raw reads 🛂
 
-Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of because they mostly contain noise that possibly confuse the downstream analysis. 
+Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of because they mostly contain noise that may confuse the downstream analysis. 
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
 
-📝 Create a file named 01a_filter-filtlong.sh with the following contents, and submit the job with sbatch: Make sure to change the <path to raw reads> into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
+📝 Create a file named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
 
 ```bash
 #!/bin/bash
@@ -116,7 +116,9 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 
 ```
 
-Now check your output/filtlong/ directory. There should be a compressed fastq output file.
+Now submit the job with sbatch.
+
+Once finished, check your output/filtlong/ directory. There should be a compressed fastq output file.
 
 
 ```bash
