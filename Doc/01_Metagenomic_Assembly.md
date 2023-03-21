@@ -43,8 +43,8 @@ You should create a directory where you want the forthcoming analysis results to
 It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance.
 
 ```bash
-mkdir -p $SCRATCH/assembly
-cd $SCRATCH/assembly 
+mkdir -p $SCRATCH/prok
+cd $SCRATCH/prok 
 cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz .
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
