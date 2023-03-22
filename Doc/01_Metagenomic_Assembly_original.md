@@ -161,7 +161,7 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
-#SBATCH --time=1-08:00:00
+#SBATCH --time=4-00:00:00
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=30G
 
