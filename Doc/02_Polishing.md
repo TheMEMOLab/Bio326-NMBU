@@ -24,8 +24,8 @@ After you run these commands on orion, it should automatically log you out, and 
 
 
 
-<img width="346" alt="Screenshot 2023-03-22 at 15 41 45" src="https://user-images.githubusercontent.com/5913696/226940225-aa785252-56bb-4607-914c-a12033ae7608.png">
 
+<img width="346" alt="Screenshot 2023-03-22 at 15 41 45" src="https://user-images.githubusercontent.com/5913696/226940379-933b380a-e6a8-4af9-873c-202c799e435b.png">
 
 
 ---
