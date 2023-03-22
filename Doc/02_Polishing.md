@@ -73,15 +73,6 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assem
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_info.txt' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_info.txt'
 ```
 
-Don't worry about the "cp: omitting directory" warnings for now, these subdirectories are not necessary for polishing.
-
-Lastly, before we continue - Make sure that you are in the $SCRATCH/prok/ directory. This will make it easier for you to access the log files that will come out of the subsequent slurm jobs.
-
-```bash
-cd $SCRATCH/prok/ && pwd
-#> /mnt/SCRATCH/cako/prok
-```
-
 Now we're ready to continue with polishing. 
 
 ---
@@ -109,7 +100,7 @@ If you want to know more about how to set up Racon, you can read about it here: 
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
-#SBATCH --output slurm-%j-%x.out.log
+#SBATCH --output slurm-%x-%j.out.log
 
 
 # Activate the conda environment
