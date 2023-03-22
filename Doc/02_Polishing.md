@@ -61,7 +61,14 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/* $SC
 
 Don't worry about the "cp: omitting directory" warnings for now, these subdirectories are not necessary for polishing.
 
-Now we're ready to continue with polishing.
+Lastly, before we continue - Make sure that you are in the $SCRATCH/prok/ directory. This will make it easier for you to access the log files that will come out of the subsequent slurm jobs.
+
+```bash
+cd $SCRATCH/prok/ && pwd
+#> /mnt/SCRATCH/cako/prok
+```
+
+Now we're ready to continue with polishing. 
 
 
 
