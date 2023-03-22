@@ -143,6 +143,10 @@ tree -sh results/filtlong/
 
 You can learn more about how to use filtlong for different scenarios by referring to the filtlong documentation at https://github.com/rrwick/Filtlong
 
+If you have issues running filtlong and just want to continue, you can copy the output files that we already created beforehand from this directory:
+"/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong"
+
+
 
 ## Assemble reads into a draft assembly 🏗
 
