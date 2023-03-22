@@ -155,7 +155,7 @@ ls
 
 echo "Running filtlong..."
 
-time filtlong --min_length 1000 --keep_percent 90 $in | pigz -p 4 > $out
+time filtlong --min_length 1000 --keep_percent 90 raw_reads_nanopore.fastq.gz | pigz -p 4 > $out
 
 echo "Filt long has done"
 
