@@ -177,7 +177,7 @@ echo "Bye!"
 
 ```
 
-*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/fitlong.sh ```  please feel free to copy this to your $SCRATCH*
+*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/filtlong.sh ```  please feel free to copy this to your $SCRATCH*
 
 Now submit the job with sbatch.
 
