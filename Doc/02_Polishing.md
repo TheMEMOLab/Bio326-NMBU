@@ -30,11 +30,32 @@ After you run these commands on orion, it should automatically log you out, and 
 
 ---
 
-## Recap
+## Recap 
 
-Last time we filtered our raw nanopore reads with Filtlong, and then we created an assembly using Flye. Ideally, you should have a directory in your $SCRATCH directory named prok, containing the results for both Filtlong and Flye. 
+Last time we filtered our raw nanopore reads with Filtlong, and then we created an assembly using Flye. Ideally, you should have a directory in your personal $SCRATCH directory named prok, containing the results for both Filtlong and Flye. 
 
 For the analysis today we need the assembly from flye. We will account on it to be in the directory that is specified in the polishing scripts, and before we start, you should check that it is in fact present and is not an empty file.
+
+First let's go into your $SCRATCH/prok/ directory and list its contents.
+
+```bash
+mkdir -p $SCRATCH/prok/ && cd $SCRATCH/prok/ && pwd
+#> /mnt/SCRATCH/cako/prok
+```
+
+Then we list the contents of this directory.
+
+```bash
+ls
+#> 01a_filter-filtlong.sh  raw_reads_nanopore.fastq.gz  slurm-11939921.out
+#> 01b_assemble-flye.sh    results                      slurm-11939933.out
+```
+
+
+
+
+
+Now 
 
 ```bash
 ls -lh $SCRATCH/prok/results/flye/assembly.fasta
