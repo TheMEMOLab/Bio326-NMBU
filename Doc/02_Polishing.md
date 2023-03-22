@@ -3,6 +3,29 @@
 #### Wednesday 12th of April 2023
 
 
+## A note about the problems that we had last time 
+
+Last time we ran into some issues with filtlong because the locale settings on your user accounts are not set up correctly. This is of course not your fault, but we think that we solved the issue, and we just need you to run a few commands. Hopefully we will not get into more trouble.
+
+Once logged into orion, please copy and paste these commands.
+```bash
+echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile # Fixes filtlong
+echo """ 
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+""" >> ~/.bash_profile
+export PS1="\[\e[32m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\] \[\e[35m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] " # Makes your terminal show where you are.
+exit
+
+```
+
+After you run these commands on orion, it should automatically log you out, and you can log in again.
+
+
+
+
+
 
 ## Polishing with Racon and Medaka ✨
 
