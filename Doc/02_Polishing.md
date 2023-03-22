@@ -52,10 +52,7 @@ ls
 ```
 
 
-
-
-
-Now 
+For the polishing exercise we will do today we need the assembly from Flye to be present in a specific directory. You can make sure that this file is present by running this command:
 
 ```bash
 ls -lh $SCRATCH/prok/results/flye/assembly.fasta
@@ -63,7 +60,7 @@ ls -lh $SCRATCH/prok/results/flye/assembly.fasta
 
 ```
 
-If you do not see that your file either does not exist, or does not have a size comparable to the 233M (Megabytes) that is shown in the output above, you can copy it from the demo directory using the following command:
+If see that your file either does not exist, or does not have a size comparable to the 233M (Megabytes) that is shown in the output above, you can copy it from the demo directory using the following command:
 
 ```bash
 cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/* $SCRATCH/prok/results/flye/
