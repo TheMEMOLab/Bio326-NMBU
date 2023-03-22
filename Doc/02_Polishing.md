@@ -66,7 +66,7 @@ If see that your file either does not exist, or does not have a size comparable 
 
 
 ```bash
-#> cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly* $SCRATCH/prok/results/flye/
+cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly* $SCRATCH/prok/results/flye/
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly.fasta' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly.fasta'
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gfa' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gfa'
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gv' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gv'
