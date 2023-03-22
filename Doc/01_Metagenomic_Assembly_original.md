@@ -10,7 +10,6 @@ For these exercises we will be using a conda environment in /mnt/courses/BIO326/
 You can activate it temporarily, and check that all software is ready to rock-and-roll 🤘
 
 ```bash
-module load Miniconda3 && eval "$(conda shell.vash hook)"
 conda activate /mnt/courses/BIO326/PROK/condaenv
 filtlong --version
 #> Filtlong v0.2.1
@@ -30,19 +29,18 @@ conda deactivate
 
 ```
 
+
+
+
 ## Brief introduction to the fastq-format 💾
 
 Your raw reads from the prokaryotic sequencing session reside in "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/".
 
 There is one file named "raw_reads_nanopore.fastq.gz"
 
-Let's take a look inside this directory:
+You should create a directory where you want the forthcoming analysis results to live in. Enter that directory and copy the raw reads with the following command:
 
-```bash
-ls -lrth /mnt/courses/BIO326/PROK/data/metagenomic_assembly/
-```
-
-You should create a directory where you want the forthcoming analysis results to live in. **We strongly suggest to use the $SCRATCH directory** Enter the $SCRATCH directory and copy the raw reads with the following command:
+It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance.
 
 ```bash
 mkdir -p $SCRATCH/prok
@@ -51,7 +49,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
 
-Our raw reads are stored in a fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we need to use zcat to read the file. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal. 
+Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal.
 
 ```bash
 zcat raw_reads_nanopore.fastq.gz | less -S
@@ -85,99 +83,42 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble. Nonetheless, these symbols are used in all FASTQ files, and the reason is that quality scores are encoded into a compact form, which uses only 1 byte per quality value. In this encoding, the quality score is represented as the character with an ASCII code equal to its value + 33. You can use this link to check the [Quality score Encoding](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm#).
-
-Also, the following caption correlatates the values of the **quality** as a *Phred quality (Q) score* with the basecall accuracy or probability of incorrect base calling: 
-
-
-![Q](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/PhredScore.png) 
+You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
 
 
 ## Quality control and filtering of the raw reads 🛂
 
-Sometimes when we sequence, we see a lot of low quality reads. We want to get rid of these because they mostly contain "noise" that may confuse the downstream analysis. 
+Sometimes when we sequence, we see a lot of low quality reads. These, we want to get rid of because they mostly contain noise that may confuse the downstream analysis. 
 
 By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads that live up to these requirements.
 
 
-📝 Create a job file (remember; use the text editors 'nano' or 'vim' as you did in the EUK dry-lab) named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
+📝 Create a file named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
 
 ```bash
 #!/bin/bash
 
 # Define slurm parameters
 #SBATCH --job-name=filter-filtlong
-#SBATCH --time=04:00:00
-#SBATCH --cpus-per-task 4
-#SBATCH --mem=10M
-#SBATCH -o slurm-%x-%A.out
-#SBATCH -p smallmem,hugemem
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task 1
+#SBATCH --mem=1G
 
 # Activate the conda environment
-module load Miniconda3 && eval "$(conda shell.bash hook)"
-conda activate /mnt/courses/BIO326/PROK/condaenv
+source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="<path to raw reads>" #Write the path of your input reads (e.g. $SCRTACH/prok/name.of.my.fastqfile.gz)
-out="output.fastq.gz"
+in="<path to raw reads>"
+out="results/filtlong/output.fastq.gz"
 
 # Make sure that the output directory exists
-mkdir -p $SCRATCH/BIO326PROK/results/
-
-#Copy data to $TMPRDIR for faster computation
-
-## Copying data to local node for faster computation
-
-cd $TMPDIR
-
-#Check if $USER exists in $TMPDIR
-
-if [[ -d $USER ]]
-        then
-                echo "$USER exists on $TMPDIR"
-        else
-                mkdir $USER
-fi
+mkdir -p results/filtlong/
 
 
-echo "copying files to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
+filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 
-mkdir $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
-cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
-
-echo "I am on"
-pwd
-
-cp -r $in .
-
-echo "My files"
-ls
-
-echo "Running filtlong..."
-
-time filtlong --min_length 1000 --keep_percent 90 $in | pigz -p 4 > $out
-
-echo "Filt long has done"
-
-##Moving output to results folder
-
-echo "Moving results..."
-
-cp -r $out $SCRATCH/BIO326PROK/results/
-
-echo "Your results are in" $SCRATCH/BIO326PROK/results/
-
-#Clean the $TMPDIR
-
-cd $TMPDIR/$USER
-
-rm -r tmpDir_of.$SLURM_JOB_ID
-
-echo "Bye!"
 
 ```
-
-*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/fitlong.sh ```  please feel free to copy this to your $SCRATCH*
 
 Now submit the job with sbatch.
 
@@ -209,64 +150,21 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
-#SBATCH --time=4-00:00:00
+#SBATCH --time=1-08:00:00
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=30G
-#SBATCH -o slurm-%x-%A.out
-#SBATCH -p smallmem
 
 # Activate the conda environment
-module load Miniconda3 && eval "$(conda shell.bash hook)"
-conda activate /mnt/courses/BIO326/PROK/condaenv
+source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="$SCRATCH/BIO326PROK/results/filtlong/output.fastq.gz"
-out="flye" # Note: this is a directory, not a file.
+in="results/filtlong/output.fastq.gz"
+out="results/flye" # Note: this is a directory, not a file.
 
-cd $TMPDIR
+flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
-#Check if $USER exists in $TMPDIR
-
-if [[ -d $USER ]]
-        then
-                echo "$USER exists on $TMPDIR"
-        else
-                mkdir $USER
-fi
-
-
-echo "copying files to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
-
-mkdir $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
-cd $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
-
-echo "I am on"
-pwd
-
-cp -r $in .
-
-echo "Running fly..."
-
-time flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
-
-##Moving output to results folder
-
-echo "Moving results..."
-
-cp -r $out $SCRATCH/BIO326PROK/results/
-
-echo "Your results are in" $SCRATCH/BIO326PROK/results/$out
-
-#Clean the $TMPDIR
-
-cd $TMPDIR/$USER
-
-rm -r tmpDir_of.$SLURM_JOB_ID
-
-echo "Bye!"
 
 ```
-*A copy of this script can be located in: ``` /mnt/courses/BIO326/PROK/scripts/fly.sh ```  please feel free to copy this to your $SCRATCH*
 
 
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
