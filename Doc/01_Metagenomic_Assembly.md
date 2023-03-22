@@ -122,7 +122,7 @@ in="<path to raw reads>" #Write the path of your input reads (e.g. $SCRTACH/prok
 out="output.fastq.gz"
 
 # Make sure that the output directory exists
-mkdir -p $SCRATCH/BIO326PROK/results/filtlong
+mkdir -p $SCRATCH/prok/results/filtlong
 
 #Copy data to $TMPRDIR for faster computation
 
@@ -163,9 +163,9 @@ echo "Filt long has done"
 
 echo "Moving results..."
 
-cp -r $out $SCRATCH/BIO326PROK/results/filtlong
+cp -r $out $SCRATCH/prok/results/filtlong
 
-echo "Your results are in" $SCRATCH/BIO326PROK/results/filtlong
+echo "Your results are in" $SCRATCH/prok/results/filtlong
 
 #Clean the $TMPDIR
 
