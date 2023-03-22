@@ -28,7 +28,7 @@ After you run these commands on orion, it should automatically log you out, and 
 
 
 
-
+---
 
 ## Recap
 
@@ -70,7 +70,7 @@ cd $SCRATCH/prok/ && pwd
 
 Now we're ready to continue with polishing. 
 
-
+---
 
 ## Polishing with Racon and Medaka ✨
 
