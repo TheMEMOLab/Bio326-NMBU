@@ -61,7 +61,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/* $SC
 
 Don't worry about the "cp: omitting directory" warnings for now, these subdirectories are not necessary for polishing.
 
-
+Now we're ready to continue with polishing.
 
 
 
