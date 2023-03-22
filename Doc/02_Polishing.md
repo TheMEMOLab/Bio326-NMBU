@@ -30,6 +30,38 @@ After you run these commands on orion, it should automatically log you out, and 
 
 
 
+## Recap
+
+Last time we filtered our raw nanopore reads with Filtlong, and then we created an assembly using Flye. Ideally, you should have a directory in your $SCRATCH directory named prok, containing the results for both Filtlong and Flye. 
+
+For the analysis today we need the assembly from flye. We will account on it to be in the directory that is specified in the polishing scripts, and before we start, you should check that it is in fact present and is not an empty file.
+
+```bash
+ls -lh $SCRATCH/prok/results/flye/assembly.fasta
+#> -rw-rw-r-- 1 cako nobody 233M Mar 22 15:16 /mnt/SCRATCH/cako/prok/results/flye/assembly.fasta
+
+```
+
+If you do not see that your file either does not exist, or does not have a size comparable to the 233M (Megabytes) that is shown in the output above, you can copy it from the demo directory using the following command:
+
+```bash
+cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/* $SCRATCH/prok/results/flye/
+#> cp: omitting directory '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/00-assembly'
+#> cp: omitting directory '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/10-consensus'
+#> cp: omitting directory '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/20-repeat'
+#> cp: omitting directory '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/30-contigger'
+#> cp: omitting directory '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/40-polishing'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly.fasta' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly.fasta'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gfa' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gfa'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gv' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gv'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_info.txt' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_info.txt'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/flye.log' -> '/mnt/SCRATCH/cako/prok/results/flye/flye.log'
+#> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/params.json' -> '/mnt/SCRATCH/cako/prok/results/flye/params.json'
+```
+
+Don't worry about the "cp: omitting directory" warnings for now, these subdirectories are not necessary for polishing.
+
+
 
 
 
