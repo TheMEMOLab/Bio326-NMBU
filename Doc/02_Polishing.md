@@ -12,15 +12,17 @@ Once logged into orion, please copy and paste these commands.
 echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile # Fixes filtlong
 echo """ 
 if [ -f ~/.bashrc ]; then
-        . ~/.bashrc
+  . ~/.bashrc
 fi
 """ >> ~/.bash_profile
-export PS1="\[\e[32m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\] \[\e[35m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] " # Makes your terminal show where you are.
+export PS1="\[\e[32m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\] \[\e[35m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] " >> ~/.bash_profile # Makes your terminal always show your current working directory
 exit
 
 ```
 
-After you run these commands on orion, it should automatically log you out, and you can log in again.
+After you run these commands on orion, it should automatically log you out, and you can log in again. When you log in again, you should see your terminal having new colors:
+
+
 
 
 
@@ -50,6 +52,8 @@ If you want to know more about how to set up Racon, you can read about it here: 
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
+#SBATCH --output slurm-%j-%x.out.log
+
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
@@ -63,13 +67,11 @@ out_polished_assembly="results/racon/racon_round2.fna"
 mkdir results/racon/
 
 
-
 # Mapping minimap2 round 1
 minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK $in_draft_assembly $in_reads > results/racon/minimap2_round1.paf
 
 # Correcting Racon round 1
 racon -t $SLURM_CPUS_PER_TASK $in_reads results/racon/minimap2_round1.paf $in_draft_assembly > results/racon/racon_round1.fna
-
 
 
 # Mapping minimap2 round 2
