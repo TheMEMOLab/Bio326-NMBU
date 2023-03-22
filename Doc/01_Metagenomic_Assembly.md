@@ -10,7 +10,7 @@ For these exercises we will be using a conda environment in /mnt/courses/BIO326/
 You can activate it temporarily, and check that all software is ready to rock-and-roll 🤘
 
 ```bash
-module load Miniconda3 && eval "$(conda shell.vash hook)"
+module load Miniconda3 && eval "$(conda shell.bash hook)"
 conda activate /mnt/courses/BIO326/PROK/condaenv
 filtlong --version
 #> Filtlong v0.2.1
