@@ -108,7 +108,7 @@ echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile
 
 # Define slurm parameters
 #SBATCH --job-name=filter-filtlong
-#SBATCH --time=01:00:00
+#SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 1
 #SBATCH --mem=1G
 
