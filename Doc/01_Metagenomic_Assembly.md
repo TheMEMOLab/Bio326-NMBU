@@ -107,7 +107,6 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 
 # Define slurm parameters
 #SBATCH --job-name=filter-filtlong
-#SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=10M
 #SBATCH -o slurm-%x-%A.out
@@ -209,7 +208,6 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 
 # Define slurm parameters
 #SBATCH --job-name=assemble-flye
-#SBATCH --time=1-08:00:00
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=30G
 #SBATCH -o slurm-%x-%A.out
