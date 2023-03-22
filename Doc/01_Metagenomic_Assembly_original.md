@@ -97,7 +97,7 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 If you get the infamous "locale facet \_S_create_c_locale name not valid" error, run the following, log out and log in again, and rerun the filtlong job.
 
 ```
-echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bashrc
+echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile
 ```
 
 📝 Create a file named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
