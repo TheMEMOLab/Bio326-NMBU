@@ -95,7 +95,7 @@ By specifying `--min_length 1000` and `--keep_percent 90` we keep only the reads
 
 
 
-<table style = "background_color: red;"><tr><td>
+<table><tr><td style = "background_color: red;">
 If you get the infamous "locale facet \_S_create_c_locale name not valid" error, run the following, log out and log in again, and rerun the filtlong job.
 
 ```
