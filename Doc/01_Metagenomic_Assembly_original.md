@@ -116,7 +116,7 @@ cd $SCRATCH/prok/
 
 
 
-📝 Create a file named 01a_filter-filtlong.sh with the following contents. Make sure to change the `<path to raw reads>` into the path of your actual raw reads. If you copied the raw reads file to your current directory, you can simply put the filename there.
+📝 Create a file named 01a_filter-filtlong.sh with the following contents.
 
 
 ```bash
