@@ -118,7 +118,7 @@ module load Miniconda3 && eval "$(conda shell.bash hook)"
 conda activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="<path to raw reads>" #Write the path of your input reads (e.g. $SCRTACH/prok/name.of.my.fastqfile.gz)
+in="raw_reads_nanopore.fastq.gz"
 out="output.fastq.gz"
 
 # Make sure that the output directory exists
