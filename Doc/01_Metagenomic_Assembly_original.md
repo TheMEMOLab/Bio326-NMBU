@@ -116,8 +116,8 @@ echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="<path to raw reads>"
-out="results/filtlong/output.fastq.gz"
+in="$SCRATCH/prok/raw_reads_nanopore.fastq.gz"
+out="$SCRATCH/prok/results/filtlong/output.fastq.gz"
 
 # Make sure that the output directory exists
 mkdir -p results/filtlong/
@@ -133,7 +133,7 @@ Once finished, check your output/filtlong/ directory. There should be a compress
 
 
 ```bash
-tree -sh results/filtlong/
+tree -sh $SCRATCH/prok/results/filtlong/
 #> results/filtlong/
 #> └── [4.1G]  output.fastq.gz
 #> 
@@ -169,8 +169,8 @@ Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It t
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in="results/filtlong/output.fastq.gz"
-out="results/flye" # Note: this is a directory, not a file.
+in="$SCRATCH/prok/results/filtlong/output.fastq.gz"
+out="$SCRATCH/prok/results/flye" # Note: this is a directory, not a file.
 
 flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterations 2
 
@@ -188,7 +188,7 @@ Flye takes a very long time to run. As you can see in the batch script for Flye 
 When Flye finishes, you will see a lot of output files in the results/flye directory.
 
 ```bash
-ls -lh results/flye/
+ls -lh $SCRATCH/prok/results/flye/
 #> total 480M
 #>    2 Mar 15 15:00 00-assembly/
 #>    3 Mar 15 15:49 10-consensus/
@@ -209,7 +209,7 @@ ls -lh results/flye/
 You can investigate some basic statistics of the Flye assembly using the assembly-stats software:
 
 ```bash
-assembly-stats results/flye/assembly.fasta 
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta 
 #> stats for results/flye/assembly.fasta
 #> sum = 239436989, n = 10266, ave = 23323.30, largest = 1194178
 #> N50 = 33581, n = 1668
