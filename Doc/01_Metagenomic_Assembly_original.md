@@ -41,7 +41,7 @@ There is one file named "raw_reads_nanopore.fastq.gz"
 
 You should create a directory where you want the forthcoming analysis results to live in. Enter that directory and copy the raw reads with the following command:
 
-It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance.
+It is recommended that you use a subdirectory of the $SCRATCH directory, as the storage mounted at this specific location has better performance. Note: the raw_reads_nanopore.fastq.gz file is large, and copying ``cp`` will take some minutes.   
 
 ```bash
 mkdir -p $SCRATCH/prok
@@ -50,7 +50,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
 
-Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use zcat. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal.
+Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use ``zcat``. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal.
 
 ```bash
 zcat raw_reads_nanopore.fastq.gz | less -S
@@ -143,9 +143,9 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 
 ```
 
-Now submit the job with sbatch.
+Now submit the job with sbatch e.g. ``sbatch 01a_filter-filtlong.sh``.
 
-Once finished, check your output/filtlong/ directory. There should be a compressed fastq output file.
+Once finished, check your output/filtlong/ directory. There should be a compressed fastq output file. Filtlong will use ~40 minutes to finish, possibly longer if Orion is busy. If the job finish after a couple of minutes, you can suspect that something went wrong! Read the file called slurm-<jobID>.out using ``less`` or ``more`` and check if you have any error! _Hint: scroll up to see how to fix one of the possible issues._ 
 
 
 ```bash
@@ -159,8 +159,8 @@ tree -sh $SCRATCH/prok/results/filtlong/
 
 You can learn more about how to use filtlong for different scenarios by referring to the filtlong documentation at https://github.com/rrwick/Filtlong
 
-If you have issues running filtlong and just want to continue, you can copy the output files that we already created beforehand from this directory:
-"/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong"
+If you have issues running filtlong and just want to continue, you can copy the output file ("output.fastq.gz") that we already created beforehand from this directory:
+"/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong". _Unsure on how? Scroll up and get inspired by how we used ``cp`` to copy the raw fastq file. Remember to change paths and file name._
 
 
 
@@ -170,7 +170,7 @@ Currently, we have the sequenced reads that represent fragments of the biologica
 
 Here we will use the Flye assembler (https://github.com/fenderglass/Flye/). It takes in reads from genomic sequencing, and puts out a long draft assembly that contains sequence contigs from all the species that are present in the samples we sequenced.
 
-📝 Create a file named 01b_assemble-flye.sh with the following contents, and submit the job with sbatch:
+📝 Create a file named 01b_assemble-flye.sh with the following contents, and submit the job with ``sbatch``:
 
 ```bash
 #!/bin/bash
@@ -196,7 +196,7 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?
 
-Flye takes a very long time to run. As you can see in the batch script for Flye we allocated more than a days worth of running time. If you don't want to wait that long, you can copy the results from the demo directory: "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/".
+Flye takes a very long time to run. As you can see in the batch script for Flye we allocated more than a days worth of running time. If your job fails or you don't want or don't have time to wait that long, you can copy the results from the demo directory: "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/".
 
 
 ---
@@ -239,7 +239,7 @@ You can investigate some basic statistics of the Flye assembly using the assembl
 ```
 
 As the algorithms implemented in Flye are not deterministic, your output may vary slightly from what is presented here.
-As you can see here, we have a draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
+As you can see above, we have a draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
 
 
 #### Summary
