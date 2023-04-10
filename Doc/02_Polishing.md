@@ -131,6 +131,19 @@ racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_rou
 
 ```
 
+#### Assembly-stats progress check on Racon results
+
+Before we continue we should check how the Racon polisher has changed our assembly. 
+
+
+```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
+??
+```
+
+If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
+
+
 ### Medaka 🐟
 
 From the polished output of two rounds of Racon, we have an assembly that is quite good, but we can make it even better. Here we'll apply one round of medaka polishing. Medaka works much the same way but uses a different internal algorithm. In this case, we're telling medaka which exact sequencing platform we used for sequencing the reads - This is to let Medaka know about the specifics of the errors that this specific platform creates??.
@@ -166,3 +179,15 @@ medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m
 ```
 
 
+
+#### Assembly-stats progress check on Medaka results
+
+We should also check how Medaka enhances our assembly.
+
+
+```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/medaka/consensus.fasta
+??
+```
+
+Do you see fewer contigs now, that what you had with your initial Flye assembly?
