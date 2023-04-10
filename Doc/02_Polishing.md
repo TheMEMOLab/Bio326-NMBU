@@ -10,8 +10,8 @@ Last time we ran into some issues with filtlong because the locale settings on y
 Once logged into orion, please copy and paste these commands.
 ```bash
 echo """ 
-export LC_ALL=C; unset LANGUAGE
-if [ -f ~/.bashrc ]; then
+export LC_ALL=C; unset LANGUAGE # Fixes a bug in filtlong
+if [ -f ~/.bashrc ]; then 
   . ~/.bashrc
 fi
 export PS1=\"\\[\\e[32m\\]\\u\\[\\e[m\\]\\[\\e[33m\\]@\\[\\e[m\\]\\[\\e[34m\\]\\h\\[\\e[m\\] \\[\\e[35m\\]\\W\\[\\e[m\\] \\[\\e[33m\\]\\\\$\\[\\e[m\\] \"
