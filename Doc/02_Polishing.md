@@ -14,8 +14,8 @@ echo """
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
+export PS1=\"\\[\\e[32m\\]\\u\\[\\e[m\\]\\[\\e[33m\\]@\\[\\e[m\\]\\[\\e[34m\\]\\h\\[\\e[m\\] \\[\\e[35m\\]\\W\\[\\e[m\\] \\[\\e[33m\\]\\\\$\\[\\e[m\\] \"
 """ >> ~/.bash_profile # Sets up a bash profile for your terminal.
-export PS1="\[\e[32m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\] \[\e[35m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] " >> ~/.bash_profile # Makes your terminal always show your current working directory
 exit
 
 ```
@@ -53,7 +53,7 @@ ls
 
 
 
-For the polishing exercise today we require the assembly from Flye to be present in a specific directory. You can make sure that this file is present by running this command:
+For the polishing exercise today we require the assembly from Flye to be present in a specific directory. You can make sure that this file is present by running the `ls` command:
 
 ```bash
 ls -lh $SCRATCH/prok/results/flye/assembly.fasta
