@@ -173,9 +173,9 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_assembly="results/racon/racon_round2.fna"
-in_reads="results/filtlong/output.fastq.gz"
-out="results/medaka"
+in_assembly="$SCRATCH/prok/results/racon/racon_round2.fna"
+in_reads="$SCRATCH/prok/results/filtlong/output.fastq.gz"
+out="$SCRATCH/prok/results/medaka"
 
 
 medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m r1041_e82_400bps_sup_g615
