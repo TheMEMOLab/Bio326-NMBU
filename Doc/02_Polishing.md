@@ -197,7 +197,7 @@ We should also check how Medaka enhances our assembly.
 ??
 ```
 
-Do you see fewer contigs now, that what you had with your initial Flye assembly?
+Do you see fewer contigs now, than what you had with your initial Flye assembly?
 
 </td></tr></table>
 
