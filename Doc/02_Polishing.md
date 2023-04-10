@@ -184,6 +184,8 @@ medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m
 ```
 
 
+<table><tr><td>
+
 
 #### Assembly-stats progress check on Medaka results
 
@@ -196,6 +198,9 @@ We should also check how Medaka enhances our assembly.
 ```
 
 Do you see fewer contigs now, that what you had with your initial Flye assembly?
+
+</td></tr></table>
+
 
 
 ---

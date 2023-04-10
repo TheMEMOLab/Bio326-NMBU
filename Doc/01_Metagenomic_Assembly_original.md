@@ -243,7 +243,7 @@ As you can see above, we have a draft assembly with 10266 contigs totalling 239 
 
 ---
 
-#### Summary
+### Summary
 
 At this point you will have created a draft assembly that represents the longest sequences that can be recovered by overlapping the reads. In the next exercise we will polish this draft assembly and prepare it to become split into each of the several resident species in our sequenced microbial community.
 
