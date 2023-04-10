@@ -191,3 +191,10 @@ We should also check how Medaka enhances our assembly.
 ```
 
 Do you see fewer contigs now, that what you had with your initial Flye assembly?
+
+
+---
+
+#### Summary 
+
+At this point you have taken your draft assembly from Flye and polished it with both Racon (2x) and Medaka (1x). Now, we can refer to our assembly without using the term _draft_. 
