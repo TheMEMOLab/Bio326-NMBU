@@ -107,26 +107,26 @@ If you want to know more about how to set up Racon, you can read about it here: 
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_draft_assembly="results/flye/assembly.fasta"
-in_reads="results/filtlong/output.fastq.gz"
-out_polished_assembly="results/racon/racon_round2.fna"
+in_draft_assembly="$SCRATCH/prok/results/flye/assembly.fasta"
+in_reads="$SCRATCH/prok/results/filtlong/output.fastq.gz"
+out_polished_assembly="$SCRATCH/prok/results/racon/racon_round2.fna"
 
 # Make sure that the output directory exists
-mkdir results/racon/
+mkdir $SCRATCH/prok/results/racon/
 
 
 # Mapping minimap2 round 1
-minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK $in_draft_assembly $in_reads > results/racon/minimap2_round1.paf
+minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK $in_draft_assembly $in_reads > $SCRATCH/prok/results/racon/minimap2_round1.paf
 
 # Correcting Racon round 1
-racon -t $SLURM_CPUS_PER_TASK $in_reads results/racon/minimap2_round1.paf $in_draft_assembly > results/racon/racon_round1.fna
+racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_round1.paf $in_draft_assembly > $SCRATCH/prok/results/racon/racon_round1.fna
 
 
 # Mapping minimap2 round 2
-minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK results/racon/racon_round1.fna $in_reads > results/racon/minimap2_round2.paf
+minimap2 -x map-ont -t $SLURM_CPUS_PER_TASK $SCRATCH/prok/results/racon/racon_round1.fna $in_reads > $SCRATCH/prok/results/racon/minimap2_round2.paf
 
 # Correcting Racon round 2
-racon -t $SLURM_CPUS_PER_TASK $in_reads results/racon/minimap2_round2.paf results/racon/racon_round1.fna > $out_polished_assembly
+racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_round2.paf $SCRATCH/prok/results/racon/racon_round1.fna > $out_polished_assembly
 
 
 ```
@@ -148,6 +148,8 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 #SBATCH --time=15:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=4G
+#SBATCH --output slurm-%x-%j.out.log
+
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
