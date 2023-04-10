@@ -9,12 +9,12 @@ Last time we ran into some issues with filtlong because the locale settings on y
 
 Once logged into orion, please copy and paste these commands.
 ```bash
-echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile # Fixes filtlong
+echo "export LC_ALL=C; unset LANGUAGE" >> ~/.bash_profile # Fixes filtlong by defining a locale
 echo """ 
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
-""" >> ~/.bash_profile
+""" >> ~/.bash_profile # Sets up a bash profile for your terminal.
 export PS1="\[\e[32m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\] \[\e[35m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] " >> ~/.bash_profile # Makes your terminal always show your current working directory
 exit
 
