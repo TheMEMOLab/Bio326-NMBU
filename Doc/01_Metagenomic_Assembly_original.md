@@ -241,6 +241,7 @@ You can investigate some basic statistics of the Flye assembly using the assembl
 As the algorithms implemented in Flye are not deterministic, your output may vary slightly from what is presented here.
 As you can see above, we have a draft assembly with 10266 contigs totalling 239 Megabases. N50 shows the length of the shortest contig that together with all larger contigs sums to at least half of the total bases in the full draft assembly. 
 
+---
 
 #### Summary
 
