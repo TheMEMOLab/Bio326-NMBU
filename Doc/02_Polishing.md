@@ -131,6 +131,9 @@ racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_rou
 
 ```
 
+
+<table><tr><td>
+
 #### Assembly-stats progress check on Racon results
 
 Before we continue we should check how the Racon polisher has changed our assembly. 
@@ -142,6 +145,8 @@ Before we continue we should check how the Racon polisher has changed our assemb
 ```
 
 If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
+
+</td></tr></table>
 
 
 ### Medaka 🐟
