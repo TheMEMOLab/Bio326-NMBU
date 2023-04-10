@@ -5,7 +5,7 @@
 
 ## A note about the problems that we had last time 
 
-Last time we ran into some issues with filtlong because the locale settings on your user accounts are not set up correctly. This is of course not your fault, but we think that we solved the issue, and we just need you to run a few commands. Hopefully we will not get into more trouble.
+Last time we ran into some issues with filtlong because the locale settings on your user accounts are not set up correctly. This is of course not at your fault, but we think that we solved the issue, and we just need you to run a few commands to fix it. Hopefully we will not get into more trouble.
 
 Once you are logged into orion, please copy and paste these commands.
 ```bash
@@ -141,7 +141,7 @@ Before we continue we should check how the Racon polisher has changed our assemb
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
-??
+#> ??
 ```
 
 If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
@@ -194,7 +194,7 @@ We should also check how Medaka enhances our assembly.
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/medaka/consensus.fasta
-??
+#> ??
 ```
 
 Do you see fewer contigs now, than what you had with your initial Flye assembly?
