@@ -131,12 +131,14 @@ racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_rou
 
 ```
 
+Wait for the Racon job to finish. It should take less than an hour.
+
 
 <table><tr><td>
 
 #### Assembly-stats progress check on Racon results
 
-Before we continue we should check how the Racon polisher has changed our assembly. 
+Let's check how Racon has improved our Flye assembly.
 
 
 ```bash
@@ -194,13 +196,14 @@ medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m
 
 ```
 
+Wait for the medaka job to finish. It could take several hours.
 
 <table><tr><td>
 
 
 #### Assembly-stats progress check on Medaka results
 
-We should also check how Medaka enhances our assembly.
+We should also check how Medaka improves our assembly.
 
 
 ```bash
