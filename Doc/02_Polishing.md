@@ -100,7 +100,7 @@ If you want to know more about how to set up Racon, you can read about it here: 
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
-#SBATCH --output slurm-%x-%j.out.log
+#SBATCH --output slurm-%j-%x.out.log
 
 
 # Activate the conda environment
@@ -141,7 +141,16 @@ Before we continue we should check how the Racon polisher has changed our assemb
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
-#> ??
+#> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/racon/racon_round2.fna
+#> sum = 234221872, n = 9546, ave = 24536.13, largest = 1187476
+#> N50 = 33613, n = 1620
+#> N60 = 25811, n = 2417
+#> N70 = 19643, n = 3465
+#> N80 = 15334, n = 4811
+#> N90 = 11080, n = 6602
+#> N100 = 463, n = 9546
+#> N_count = 0
+#> Gaps = 0
 ```
 
 If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
@@ -166,7 +175,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 #SBATCH --time=15:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=4G
-#SBATCH --output slurm-%x-%j.out.log
+#SBATCH --output slurm-%j-%x.out.log
 
 
 # Activate the conda environment
