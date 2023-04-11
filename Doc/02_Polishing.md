@@ -79,7 +79,7 @@ Now we're ready to continue with polishing.
 
 A basic model of how polishing works is that the polisher stacks all relevant reads on top of the genome and decides for each position whether the present nucleotide letter is the best representative for that position, or not. There are several sources of variation that make draft assemblies _polishable_. The main sources are multistrain variation from closely related species as well as incorporation of sequencing errors during the sequencing process. Ideally, assemblers would be perfect, and we wouldn't have to perform polishing. But because of some noise or artefacts that are present in our data, we might make our genomes more truthful to their biological origin by performing these polishing steps.
 
-Genome polishing is reminiscent of generating a consensus genome. Consensus genome creation is a term used in reference mapping. This is why you may incidentally see the term _consensus_ being used in the literature.
+Genome polishing is reminiscent of generating a consensus genome. Consensus genome creation is a term used in reference mapping. This is why you may incidentally see the term _consensus_ being used in the tools that we're gonna run.
 
 Here we are going to apply several rounds of racon, and a final round of medaka. Note that Flye also has an internal polisher that we have already applied (if you look closely at the program call for Flye, it says "--iterations 2" ...). As it turns out, Racon and Medaka have better performance, so we'll apply those as well.
 
@@ -167,10 +167,9 @@ If you compare the assembly-stats statistics before and after running Racon, wha
 
 ### Medaka 🐟
 
-From the polished output of two rounds of Racon, we have an assembly that is quite good, but we can make it even better. Here we'll apply one round of medaka polishing. Medaka works much the same way but uses a different internal algorithm. In this case, we're telling medaka which exact sequencing platform we used for sequencing the reads - This is to let Medaka know about the specifics of the errors that this specific platform creates??.
+From the polished output of two rounds of Racon, we have an assembly that is quite good, but we can make it even better. Here we'll apply one round of medaka polishing. Medaka works much the same way but uses a different internal algorithm. In this case, we're telling medaka which exact sequencing platform we used for sequencing the reads - This is to let Medaka know about the specifics of the errors that this specific platform creates.
 
 If curious, you can read more about how to set up Medaka here: https://github.com/nanoporetech/medaka#usage
-
 
 📝 Create a file named 02b_polish2-medaka.sh with the following contents, and submit the job with sbatch:
 
@@ -179,7 +178,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 
 # Define slurm parameters
 #SBATCH --job-name=polish2-medaka
-#SBATCH --time=15:00:00
+#SBATCH --time=24:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
@@ -217,8 +216,6 @@ We should also check how Medaka improves our assembly.
 Do you see fewer contigs now, than what you had with your initial Flye assembly?
 
 </td></tr></table>
-
-
 
 ---
 
