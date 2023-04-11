@@ -176,7 +176,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 #SBATCH --job-name=polish2-medaka
 #SBATCH --time=15:00:00
 #SBATCH --cpus-per-task 4
-#SBATCH --mem=4G
+#SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
 
 
