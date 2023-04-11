@@ -154,6 +154,8 @@ Before we continue we should check how the Racon polisher has changed our assemb
 ```
 
 If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
+  - Is the average contig length longer?
+  - Are there fewer contigs?
 
 </td></tr></table>
 
