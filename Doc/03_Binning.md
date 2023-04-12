@@ -139,11 +139,11 @@ alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run --live-
 ```
 
 
-Assemblycomparator2 is installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts with sbatch. 
+Assemblycomparator2 is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts. 
 
 
 
-Simply, enter the directory where your bins reside, and launch the pipeline.
+First, enter the directory where your bins reside.
 
 ```bash 
 
@@ -155,7 +155,7 @@ ls *.fa
 #> rumenN.fa
 ```
 
-Launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
+Then, launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
 
 ```bash 
 
