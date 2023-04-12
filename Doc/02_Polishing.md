@@ -53,12 +53,25 @@ ls
 ```
 
 
-For the polishing exercise today we require the assembly from Flye to be present in a predefined directory. You can make sure that this file is present by running the `ls` command:
+For the polishing exercise today we require the assembly from Flye to be present in a predefined directory. You can make sure that the output from Flye is present by running the `ls` command:
+
 
 ```bash
-ls -lh $SCRATCH/prok/results/flye/assembly.fasta
-#> -rw-rw-r-- 1 cako nobody 233M Mar 22 15:16 /mnt/SCRATCH/cako/prok/results/flye/assembly.fasta
+ls -lh $SCRATCH/prok/results/flye/
+#> total 480M
+#>    2 Mar 15 15:00 00-assembly/
+#>    3 Mar 15 15:49 10-consensus/
+#>    6 Mar 15 16:13 20-repeat/
+#>    7 Mar 15 16:15 30-contigger/
+#>   11 Mar 16 04:17 40-polishing/
+#> 233M Mar 16 04:18 assembly.fasta
+#> 224M Mar 16 04:18 assembly_graph.gfa
+#> 3.1M Mar 16 04:17 assembly_graph.gv
+#> 384K Mar 16 04:18 assembly_info.txt
+#>  20M Mar 16 04:18 flye.log
+#>   92 Mar 16 04:17 params.json
 ```
+
 
 If you see that your file either does not exist or does not have a size comparable to around 233M (megabytes) which is exemplified in the ls output above, you can copy the assembly file we made for you in the demo directory using the following command:
 
@@ -71,7 +84,21 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assem
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_info.txt' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_info.txt'
 ```
 
-Now we're ready to continue with polishing.
+Let's quickly run assembly-stats to get an idea of the baseline quality.
+
+```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta 
+#> stats for results/flye/assembly.fasta
+#> sum = 239436989, n = 10266, ave = 23323.30, largest = 1194178
+#> N50 = 33581, n = 1668
+#> N60 = 25598, n = 2487
+#> N70 = 19593, n = 3565
+#> N80 = 15137, n = 4951
+#> N90 = 10904, n = 6804
+#> N100 = 114, n = 10266
+#> N_count = 0
+#> Gaps = 0
+```
 
 ---
 
