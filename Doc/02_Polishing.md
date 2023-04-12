@@ -84,21 +84,7 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assem
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_info.txt' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_info.txt'
 ```
 
-Let's quickly run assembly-stats to get an idea of the baseline quality.
-
-```bash
-/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta 
-#> stats for results/flye/assembly.fasta
-#> sum = 239436989, n = 10266, ave = 23323.30, largest = 1194178
-#> N50 = 33581, n = 1668
-#> N60 = 25598, n = 2487
-#> N70 = 19593, n = 3565
-#> N80 = 15137, n = 4951
-#> N90 = 10904, n = 6804
-#> N100 = 114, n = 10266
-#> N_count = 0
-#> Gaps = 0
-```
+Now we're ready to continue with polishing.
 
 ---
 
@@ -170,9 +156,24 @@ Wait for the Racon job to finish. It should take less than an hour.
 
 Let's check how Racon has improved our Flye assembly.
 
+If you run assembly-stats on both the original Flye draft assembly, and on the the new polished racon assembly, you can see how our assembly has been improved.
+
 
 ```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
+#>
+#> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/flye/assembly.fasta
+#> sum = 239251443, n = 10266, ave = 23305.23, largest = 1190509
+#> N50 = 33554, n = 1668
+#> N60 = 25596, n = 2486
+#> N70 = 19567, n = 3564
+#> N80 = 15104, n = 4951
+#> N90 = 10900, n = 6804
+#> N100 = 114, n = 10266
+#> N_count = 0
+#> Gaps = 0
+#>
 #> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/racon/racon_round2.fna
 #> sum = 234221872, n = 9546, ave = 24536.13, largest = 1187476
 #> N50 = 33613, n = 1620
@@ -183,6 +184,7 @@ Let's check how Racon has improved our Flye assembly.
 #> N100 = 463, n = 9546
 #> N_count = 0
 #> Gaps = 0
+
 ```
 
 If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
