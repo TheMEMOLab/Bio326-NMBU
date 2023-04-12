@@ -101,7 +101,7 @@ If you want to know more about how to set up Racon, you can read about it here: 
 # Define slurm parameters
 #SBATCH --job-name=polish1-racon
 #SBATCH --time=04:00:00
-#SBATCH --cpus-per-task 4
+#SBATCH --cpus-per-task 8
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
 
@@ -178,7 +178,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 
 # Define slurm parameters
 #SBATCH --job-name=polish2-medaka
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
