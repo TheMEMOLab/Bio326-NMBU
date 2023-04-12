@@ -166,7 +166,6 @@ Let's first check the assembly-stats on the original Flye assembly.
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta
-#>
 #> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/flye/assembly.fasta
 #> sum = 239251443, n = 10266, ave = 23305.23, largest = 1190509
 #> N50 = 33554, n = 1668
