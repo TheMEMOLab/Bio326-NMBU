@@ -125,9 +125,9 @@ checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-director
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
 
-Assemblycomparator2 is installed and set up specifically to use the slurm/sbatch system on orion, so there is no need to create or launch any shell (.sh) scripts with sbatch. 
+Assemblycomparator2 is installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts with sbatch. 
 
-Simply, enter the directory where your bins reside, and launch the tool using the command here:
+Simply, enter the directory where your bins reside, and launch the pipeline.
 
 ```bash 
 
@@ -147,14 +147,19 @@ assemblycomparator2 --until assembly_stats sequence_lengths prokka busco checkm2
 
 ```
 
-You will se a lot of output in your terminal. This is because assemblycomparator2 runs around different analyses at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
+The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs.
 
-It is a good idea to open a new tab in your terminal window, and log in with another session, so you can let assemblycomparator2 run in the first login window while you browse the results as the finish in real time in the second.
+You will se a lot of output in your terminal. This is because assemblycomparator2 runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
 
-Log in in a second tab and surveil the output from assemblycomparator by running tree on the newly created "results_ac2" directory where assemblycomparator2 outputs its results.
+It is a good idea to open a new tab in your terminal window, and log in with another session. Then you can let assemblycomparator2 run in the first login window while you browse the results as they finish in real time in the second.
+
+Log into Orion in a second tab and surveil the output from assemblycomparator by running "tree" on the newly created "results_ac2" directory where assemblycomparator2 outputs its results.
 
 ```bash
 tree -L 2 
 #> ???
 ```
+
+The "-L 2" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory.
+
 
