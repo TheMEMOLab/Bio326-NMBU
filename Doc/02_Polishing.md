@@ -147,7 +147,6 @@ racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_rou
 
 ```
 
-Wait for the Racon job to finish. It should take less than an hour.
 
 
 <table><tr><td>
@@ -172,7 +171,10 @@ Let's first check the assembly-stats on the original Flye assembly.
 
 ```
 
-Now, when Racon finishes, also run assembly-stats on that one, and compare to Flye.
+Now, wait till Racon finishes, also run assembly-stats on that one, and compare to Flye.
+
+(If you want to see the results before your finishes, you can copy a premade file from "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/racon/racon_round2.fna
+")
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
