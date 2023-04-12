@@ -154,14 +154,10 @@ Wait for the Racon job to finish. It should take less than an hour.
 
 #### Assembly-stats progress check on Racon results
 
-Let's check how Racon has improved our Flye assembly.
-
-If you run assembly-stats on both the original Flye draft assembly, and on the the new polished racon assembly, you can see how our assembly has been improved.
-
+Let's first check the assembly-stats on the original Flye assembly.
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/flye/assembly.fasta
-/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
 #>
 #> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/flye/assembly.fasta
 #> sum = 239251443, n = 10266, ave = 23305.23, largest = 1190509
@@ -173,7 +169,13 @@ If you run assembly-stats on both the original Flye draft assembly, and on the t
 #> N100 = 114, n = 10266
 #> N_count = 0
 #> Gaps = 0
-#>
+
+```
+
+Now, when Racon finishes, also run assembly-stats on that one, and compare to Flye.
+
+```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
 #> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/racon/racon_round2.fna
 #> sum = 234221872, n = 9546, ave = 24536.13, largest = 1187476
 #> N50 = 33613, n = 1620
@@ -187,7 +189,7 @@ If you run assembly-stats on both the original Flye draft assembly, and on the t
 
 ```
 
-If you compare the assembly-stats statistics before and after running Racon, what changes do you see in your assembly?
+What changes do you see before and after running Racon?
   - Is the average contig length longer?
   - Are there fewer contigs?
 
