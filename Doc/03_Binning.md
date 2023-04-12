@@ -30,13 +30,13 @@ So, here we will first calculate the depth of each contig
 source activate /mnt/courses/BIO326/PROK/checkm2_condaenv
 
 # Define paths
-in_assembly="results/medaka/consensus.fasta"
-in_reads="results/filtlong/output.fastq.gz"
-out_alignment="results/contig_depths/bam_for_depths.bam"
-out_depth="results/contig_depths/depth.tsv"
+in_assembly="$SCRATCH/prok/results/medaka/consensus.fasta"
+in_reads="$SCRATCH/prok/results/filtlong/output.fastq.gz"
+out_alignment="$SCRATCH/prok/results/contig_depths/bam_for_depths.bam"
+out_depth="$SCRATCH/prok/results/contig_depths/depth.tsv"
 
 # Make sure that the output directory exists
-mkdir results/contig_depths/
+mkdir $SCRATCH/prok/results/contig_depths/
 
 
 # Map reads to polished assembly and sort the alignment
@@ -68,9 +68,9 @@ jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
-in_assembly="results/medaka/consensus.fasta"
-in_depth="results/contig_depths/depth.tsv"
-out_bins="results/metabat2/bin"
+in_assembly="$SCRATCH/prok/results/medaka/consensus.fasta"
+in_depth="$SCRATCH/prok/results/contig_depths/depth.tsv"
+out_bins="$SCRATCH/prok/results/metabat2/bin"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $out_bins)
@@ -109,8 +109,8 @@ Quality control is something we can do on all levels of our microbiological work
 source activate /mnt/courses/BIO326/PROK/checkm2
 
 # Define paths
-in_dir="results/metabat2/"
-out_dir="results/checkm2"
+in_dir="$SCRATCH/prok/results/metabat2/"
+out_dir="$SCRATCH/prok/results/checkm2"
 
 
 checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-directory $out_dir --extension .fa --force
