@@ -125,7 +125,23 @@ checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-director
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
 
+You can setup a shortcut to call the pipeline, by calling this command in your terminal:
+
+```bash
+
+echo """
+
+export ASSCOM2_BASE=/mnt/courses/BIO326/PROK/assemblycomparator2
+alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run --live-stream --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2     snakemake --snakefile /mnt/courses/BIO326/PROK/assemblycomparator2/snakefile         --profile /mnt/courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion/         --configfile /mnt/courses/BIO326/PROK/assemblycomparator2/config.yaml'
+
+""" > ~/.bashrc && source ~/.bashrc
+
+```
+
+
 Assemblycomparator2 is installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts with sbatch. 
+
+
 
 Simply, enter the directory where your bins reside, and launch the pipeline.
 
@@ -156,15 +172,15 @@ It is a good idea to open a new tab in your terminal window, and log in with ano
 Log into Orion in a second tab and surveil the output from assemblycomparator by running "tree" on the newly created "results_ac2" directory where assemblycomparator outputs its results.
 
 ```bash
-tree -L 2 
+tree -L 3
 #> ???
 ```
 
-The "-L 2" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory. This is to avoid overflowing your terminal window.
+The "-L 3" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory. This is to avoid overflowing your terminal window.
 
 ---
 
-When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web-browser.
+When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser.
 
 All platforms (windows, mac, linux) should be able to work with the FileZilla client (https://filezilla-project.org/).
 
