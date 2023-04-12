@@ -121,7 +121,7 @@ checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-director
 
 
 
-### Bin Analysis
+### Qualitative Bin Analysis and Annotation
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
 
