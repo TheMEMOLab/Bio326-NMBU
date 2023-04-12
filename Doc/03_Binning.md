@@ -6,12 +6,13 @@
 ## Binning with Metabat2 🦇🗑️
 
 
-So far we created a draft assembly, containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced (cattle rumen). In this *draft assembly* we then proceeded to remove the potential sequencing errors in order to create a polished *assembly*.
+So far we created an assembly containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced from the cattle rumen.
 
-Now comes the task of extracting each of the several species present in our sample. This process in referred to as *binning*. This is because we effectively classify each contig in the assembly as coming from one of several sources (species). The way the binning algorithms typically work is that they look into the abundance of each of the contigs. This is done by mapping the reads onto the assembly (like we did in the racon polishing step, and then counting the read depth of each contig). The smart thing here is that contigs coming from the same species will have similar depth, because the abundance is linked. The binning algorithm uses this information to classify each contig ??
+Presently, the assembly consists of thousands of contigs, each coming from a single species. By grouping together the contigs from each species present in our sample, we can create what is referred to as a MAG, short for Metagenome Assembled Genome.
 
+Popular binning algorithms like the one used in Metabat2 utilize contig depth as a tell tale to link the contigs together that come from the same species. This is done by mapping the reads onto the assembly and then it counts the read depth of each contig. The smart thing here is that contigs coming from the same species will have similar depth, because the abundance is linked. Another vital contig statistic that binners use is the GC-content. Each species has its own intrinsic GC-content, and by grouping contigs further on GC-content, we might get good representatives for distinct species in our sample.
 
-So, here we will first calculate the depth of each contig
+So, here we will first calculate the depth of each contig.
 
 ### Calculating contig depths
 
