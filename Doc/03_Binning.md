@@ -125,7 +125,7 @@ checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-director
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
 
-You can setup a shortcut to call the pipeline, by calling this command in your terminal:
+You can install a shortcut to run the pipeline, by calling this instruction in your terminal:
 
 ```bash
 
