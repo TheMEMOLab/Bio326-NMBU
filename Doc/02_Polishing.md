@@ -73,7 +73,7 @@ ls -lh $SCRATCH/prok/results/flye/
 ```
 
 
-If you see that your file either does not exist or does not have a size comparable to around 233M (megabytes) which is exemplified in the ls output above, you can copy the assembly file we made for you in the demo directory using the following command:
+If you see that your file either does not exist or does not have a size comparable to around 233M (megabytes) which is exemplified in the ls output above, you can copy the assembly file we made for you in the demo directory using the following command.
 
 
 ```bash
@@ -83,6 +83,13 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assem
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gfa' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gfa'
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_graph.gv' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_graph.gv'
 #> '/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/flye/assembly_info.txt' -> '/mnt/SCRATCH/cako/prok/results/flye/assembly_info.txt'
+```
+
+We also need the reads from filtlong, these you can get from here:
+
+```bash
+mkdir -p $SCRATCH/prok/results/filtlong/
+cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong/output.fastq.gz $SCRATCH/prok/results/filtlong/
 ```
 
 Now we're ready to continue with polishing.
