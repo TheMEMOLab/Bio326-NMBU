@@ -168,8 +168,5 @@ When all of the jobs in the pipeline have finished, an report document will resi
 
 All platforms (windows, mac, linux) should be able to work with the FileZilla client (https://filezilla-project.org/).
 
-If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our report from here: [report_metabat2_orion.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211663/report_metabat2_orion_carl.html.zip)
-
-
-
+If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
 
