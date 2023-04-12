@@ -160,6 +160,6 @@ tree -L 2
 #> ???
 ```
 
-The "-L 2" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory.
+The "-L 2" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory. This is to avoid overflowing your terminal window.
 
 
