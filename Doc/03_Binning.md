@@ -134,7 +134,7 @@ echo """
 export ASSCOM2_BASE=/mnt/courses/BIO326/PROK/assemblycomparator2
 alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run --live-stream --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2     snakemake --snakefile /mnt/courses/BIO326/PROK/assemblycomparator2/snakefile         --profile /mnt/courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion/         --configfile /mnt/courses/BIO326/PROK/assemblycomparator2/config.yaml'
 
-""" > ~/.bashrc && source ~/.bashrc
+""" >> ~/.bashrc && source ~/.bashrc
 
 ```
 
