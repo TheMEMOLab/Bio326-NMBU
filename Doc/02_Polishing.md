@@ -256,7 +256,7 @@ Do you see fewer contigs now, than what you had with your initial Flye assembly?
 At this point you will have taken your draft assembly from Flye and polished it with both Racon (2x) and Medaka (1x). Now, we can refer to our assembly without using the term _draft_.   
 
 
-#### Feedback
+### Feedback
 
 If you have any issues running any of the commands in this tutorial, please write an email to 
 carl.mathias.kobel AT nmbu.no
