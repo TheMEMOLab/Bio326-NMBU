@@ -118,3 +118,43 @@ checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-director
 
 ```
 
+
+
+
+### Bin Analysis
+
+We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
+
+Assemblycomparator2 is installed and set up specifically to use the slurm/sbatch system on orion, so there is no need to create or launch any shell (.sh) scripts with sbatch. 
+
+Simply, enter the directory where your bins reside, and launch the tool using the command here:
+
+```bash 
+
+cd $SCRATCH/prok/results/metabat2/
+ls *.fa
+#> rumen1.fa 
+#> rumen2.fa
+#> ...
+#> rumenN.fa
+```
+
+Launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
+
+```bash 
+
+assemblycomparator2 --until assembly_stats sequence_lengths prokka busco checkm2 kraken2 gtdbtk & 
+
+```
+
+You will se a lot of output in your terminal. This is because assemblycomparator2 runs around different analyses at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
+
+It is a good idea to open a new tab in your terminal window, and log in with another session, so you can let assemblycomparator2 run in the first login window while you browse the results as the finish in real time in the second.
+
+Log in in a second tab and surveil the output from assemblycomparator by running tree on the newly created "results_ac2" directory where assemblycomparator2 outputs its results.
+
+```bash
+tree -L 2 
+#> ???
+```
+
