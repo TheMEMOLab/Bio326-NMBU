@@ -131,7 +131,7 @@ You can install a shortcut to run the pipeline, by calling this instruction in y
 
 echo """
 
-SNAKEMAKE_CONDA_PREFIX=/mnt/users/cako/prok23/assemblycomparator2/conda_base
+export SNAKEMAKE_CONDA_PREFIX=/mnt/users/cako/prok23/assemblycomparator2/conda_base
 export ASSCOM2_BASE=/mnt/courses/BIO326/PROK/assemblycomparator2
 alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run \
     --live-stream \
