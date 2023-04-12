@@ -173,8 +173,7 @@ Let's first check the assembly-stats on the original Flye assembly.
 
 Now, wait till Racon finishes, also run assembly-stats on that one, and compare to Flye.
 
-(If you want to see the results before your finishes, you can copy a premade file from "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/racon/racon_round2.fna
-")
+(If you want to see the Racon results before your job finishes, you can copy a premade file from "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/racon/racon_round2.fna")
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/racon/racon_round2.fna
