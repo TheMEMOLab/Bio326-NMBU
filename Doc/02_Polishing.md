@@ -117,6 +117,7 @@ If you want to know more about how to set up Racon, you can read about it here: 
 #SBATCH --cpus-per-task 12
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
+#SBATCH -p smallmem,hugemem
 
 
 # Activate the conda environment
@@ -214,6 +215,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 #SBATCH --cpus-per-task 12
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
+#SBATCH -p smallmem,hugemem
 
 
 # Activate the conda environment
