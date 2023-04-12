@@ -151,9 +151,9 @@ The "--until" argument lets the pipeline know to only run the specified analyses
 
 You will se a lot of output in your terminal. This is because assemblycomparator2 runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
 
-It is a good idea to open a new tab in your terminal window, and log in with another session. Then you can let assemblycomparator2 run in the first login window while you browse the results as they finish in real time in the second.
+It is a good idea to open a new tab in your terminal window, and log in with another session. Then you can let assemblycomparator run in the first login window while you browse the results as they finish -real time- in the second.
 
-Log into Orion in a second tab and surveil the output from assemblycomparator by running "tree" on the newly created "results_ac2" directory where assemblycomparator2 outputs its results.
+Log into Orion in a second tab and surveil the output from assemblycomparator by running "tree" on the newly created "results_ac2" directory where assemblycomparator outputs its results.
 
 ```bash
 tree -L 2 
@@ -161,5 +161,13 @@ tree -L 2
 ```
 
 The "-L 2" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory. This is to avoid overflowing your terminal window.
+
+---
+
+When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web-browser.
+
+All platforms (windows, mac, linux) should be able to work with the FileZilla client (https://filezilla-project.org/).
+
+If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our report from here.
 
 
