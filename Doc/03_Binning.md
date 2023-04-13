@@ -3,6 +3,38 @@
 #### Friday 14th of April 2023
 
 
+
+## Checkpoint
+
+Today we will need the final polished assembly from medaka as well as the original reads that we produced with filtlong. The two binning related scripts that we will run today, expect these input files to be present in the $SCRATCH/prok directory. 
+
+You can check that your files are present and non-empty with these commands:
+
+```bash 
+cd $SCRATCH/prok
+du -h results/filtlong/output.fastq.gz 
+du -h results/medaka/consensus.fasta
+#> 4.1G    results/filtlong/output.fastq.gz
+#> 224M    results/medaka/consensus.fasta
+```
+
+Your files should be round about the same size. If you get a "No such file or directory" error, you can copy our file into your directory and continue with the binning exercise below.
+
+
+```bash
+mkdir -p $SCRATCH/prok/results/filtlong/
+cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong/output.fastq.gz $SCRATCH/prok/results/filtlong/
+mkdir -p $SCRATCH/prok/results/medaka/
+cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/medaka/consensus.fasta $SCRATCH/prok/results/medaka/
+
+```
+
+
+
+
+
+
+
 ## Binning with Metabat2 🦇🗑️
 
 
