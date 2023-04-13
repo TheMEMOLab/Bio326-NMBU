@@ -6,7 +6,7 @@
 
 ## Checkpoint
 
-Today we will need the final polished assembly from medaka as well as the original reads that we produced with filtlong. The binning scripts that we will run today expect these input files to be present in the $SCRATCH/prok directory. 
+Today we will need the final polished assembly from medaka as well as the original reads that we produced with filtlong. The binning scripts that we will run today expect these input files to be present in the $SCRATCH/prok subdirectories. 
 
 You can check that your files are present and non-empty with these commands:
 
@@ -18,7 +18,7 @@ du -h results/medaka/consensus.fasta
 #> 224M    results/medaka/consensus.fasta
 ```
 
-If you get a "No such file or directory" error, you can copy our file into your directory and continue with the binning exercise below. <ins>Be aware</ins> that this action will possibly overwrite your own files if they do indeed exist.
+If you get a "No such file or directory" error, you can copy our premade files into your directory and continue with the binning exercise below. <ins>Be aware</ins> that this action will possibly overwrite your own files if they do indeed exist.
 
 
 ```bash
@@ -56,6 +56,8 @@ So, here we will first calculate the depth of each contig.
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
+#SBATCH --output slurm-%j-%x.out.log
+#SBATCH -p smallmem,hugemem
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/checkm2_condaenv
@@ -94,6 +96,9 @@ jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
+#SBATCH --output slurm-%j-%x.out.log
+#SBATCH -p smallmem,hugemem
+
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
