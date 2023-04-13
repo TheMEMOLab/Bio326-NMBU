@@ -254,6 +254,20 @@ We should also check how Medaka improves our assembly.
 #> ??
 ```
 
+```bash
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/medaka/consensus.fasta
+#> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/medaka/consensus.fasta
+#> sum = 234434401, n = 9546, ave = 24558.39, largest = 1187215
+#> N50 = 33599, n = 1621
+#> N60 = 25856, n = 2417
+#> N70 = 19651, n = 3464
+#> N80 = 15333, n = 4812
+#> N90 = 11103, n = 6602
+#> N100 = 461, n = 9546
+#> N_count = 0
+#> Gaps = 0
+```
+
 Do you see fewer contigs now, than what you had with your initial Flye assembly?
 
 </td></tr></table>
