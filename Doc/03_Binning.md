@@ -22,6 +22,7 @@ If you get a "No such file or directory" error, you can copy our file into your 
 
 
 ```bash
+# Only run this if you didn't previously succesfully run filtlong and medaka
 mkdir -p $SCRATCH/prok/results/filtlong/
 cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong/output.fastq.gz $SCRATCH/prok/results/filtlong/
 mkdir -p $SCRATCH/prok/results/medaka/
