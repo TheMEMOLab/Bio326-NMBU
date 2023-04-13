@@ -54,8 +54,8 @@ So, here we will first calculate the depth of each contig.
 # Define slurm parameters
 #SBATCH --job-name=depth-minimap
 #SBATCH --time=01:00:00
-#SBATCH --cpus-per-task 4
-#SBATCH --mem=8G
+#SBATCH --cpus-per-task 8
+#SBATCH --mem=12G
 #SBATCH --output slurm-%j-%x.out.log
 #SBATCH -p smallmem,hugemem
 
@@ -69,7 +69,7 @@ out_alignment="$SCRATCH/prok/results/contig_depths/bam_for_depths.bam"
 out_depth="$SCRATCH/prok/results/contig_depths/depth.tsv"
 
 # Make sure that the output directory exists
-mkdir $SCRATCH/prok/results/contig_depths/
+mkdir --parents $SCRATCH/prok/results/contig_depths/
 
 
 # Map reads to polished assembly and sort the alignment
@@ -81,7 +81,7 @@ jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 
 ```
 
-
+Calculating the depth of each contig should take around 30 minutes.
 
 
 ### Binning 
@@ -117,10 +117,20 @@ metabat2  --numThreads $SLURM_CPUS_PER_TASK  --inFile $in_assembly  --outFile $o
 
 ```
 
+Binning should take a few minutes.
 
 --- 
 
 When the binning has completed, we can check the total length and number of contigs in each bin with assembly-stats.
+
+The binner automatically decides how many bins it thinks are present. If you run ls on its directory, you should see some 30 bins.
+
+```bash
+ls results/metabat2/
+#> bin.1.fa   bin.12.fa  bin.15.fa  bin.18.fa  bin.20.fa  bin.23.fa  bin.26.fa  bin.29.fa  bin.31.fa  bin.34.fa  bin.5.fa  bin.8.fa
+#> bin.10.fa  bin.13.fa  bin.16.fa  bin.19.fa  bin.21.fa  bin.24.fa  bin.27.fa  bin.3.fa   bin.32.fa  bin.35.fa  bin.6.fa  bin.9.fa
+#> bin.11.fa  bin.14.fa  bin.17.fa  bin.2.fa   bin.22.fa  bin.25.fa  bin.28.fa  bin.30.fa  bin.33.fa  bin.4.fa   bin.7.fa
+```
 
 
 
