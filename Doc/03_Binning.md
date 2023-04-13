@@ -145,7 +145,8 @@ We can also check the total length and number of contigs in each bin with assemb
 #> results/metabat2/bin.15.fa  2054121       15      136941.40    434392   21264     0        0     173722   4     149421   7     84010    11
 #> results/metabat2/bin.16.fa  7176178       273     26286.37     148334   3715      0        0     36670    64    22000    114   13444    199
 #> results/metabat2/bin.17.fa  2806080       23      122003.48    410382   7343      0        0     223668   5     113842   9     54987    15
-#> ...
+#> ... 
+#> (press q to exit)
 ```
 
 
@@ -219,6 +220,11 @@ ls *.fa
 #> rumen2.fa
 #> ...
 #> rumenN.fa
+```
+
+Because the pipeline needs group ownership of the files, you should run this command.
+```bash 
+chgrp $USER . * 
 ```
 
 Then, launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
