@@ -267,5 +267,4 @@ At this point you will have taken your draft assembly from Flye and polished it 
 
 ### Feedback
 
-If you have any issues running any of the commands in this tutorial, please write an email to 
-carl.mathias.kobel AT nmbu.no
+If you have any issues running any of the commands in this tutorial, please write an email to the instructors.
