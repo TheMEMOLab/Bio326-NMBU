@@ -27,11 +27,8 @@ mkdir -p $SCRATCH/prok/results/filtlong/
 cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong/output.fastq.gz $SCRATCH/prok/results/filtlong/
 mkdir -p $SCRATCH/prok/results/medaka/
 cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/medaka/consensus.fasta $SCRATCH/prok/results/medaka/
-
+cd $SCRATCH/prok
 ```
-
-
-
 
 
 
