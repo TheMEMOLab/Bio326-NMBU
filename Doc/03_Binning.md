@@ -60,7 +60,7 @@ So, here we will first calculate the depth of each contig.
 #SBATCH -p smallmem,hugemem
 
 # Activate the conda environment
-source activate /mnt/courses/BIO326/PROK/checkm2_condaenv
+source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
 in_assembly="$SCRATCH/prok/results/medaka/consensus.fasta"
