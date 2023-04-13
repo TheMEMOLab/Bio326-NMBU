@@ -18,7 +18,7 @@ du -h results/medaka/consensus.fasta
 #> 224M    results/medaka/consensus.fasta
 ```
 
-If you get a "No such file or directory" error, you can copy our file into your directory and continue with the binning exercise below. <u>Be aware</u> that this action will possibly overwrite your own files if they do indeed exist.
+If you get a "No such file or directory" error, you can copy our file into your directory and continue with the binning exercise below. <ins>Be aware</ins> that this action will possibly overwrite your own files if they do indeed exist.
 
 
 ```bash
