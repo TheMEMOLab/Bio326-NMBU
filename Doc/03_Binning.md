@@ -191,15 +191,15 @@ You can install a shortcut to run the pipeline, by calling this instruction in y
 
 echo """
 
-export SNAKEMAKE_CONDA_PREFIX=/mnt/users/cako/prok23/assemblycomparator2/conda_base
-export ASSCOM2_BASE=/mnt/courses/BIO326/PROK/assemblycomparator2
+export ASSCOM2_BASE=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2
+export SNAKEMAKE_CONDA_PREFIX=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/conda_base
 alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run \
     --live-stream \
     --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2 \
     snakemake \
-        --snakefile /mnt/courses/BIO326/PROK/assemblycomparator2/snakefile \
-        --profile /mnt/courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion/ \
-        --configfile /mnt/courses/BIO326/PROK/assemblycomparator2/config.yaml'
+        --snakefile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/snakefile \
+        --profile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion \
+        --configfile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/config.yaml'
 
 """ >> ~/.bashrc && source ~/.bashrc
 
