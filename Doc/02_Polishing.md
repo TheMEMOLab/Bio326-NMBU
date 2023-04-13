@@ -251,11 +251,6 @@ We should also check how Medaka improves our assembly.
 
 ```bash
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/medaka/consensus.fasta
-#> ??
-```
-
-```bash
-/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats $SCRATCH/prok/results/medaka/consensus.fasta
 #> stats for /mnt/SCRATCH/bio326-2023-19/prok/results/medaka/consensus.fasta
 #> sum = 234434401, n = 9546, ave = 24558.39, largest = 1187215
 #> N50 = 33599, n = 1621
