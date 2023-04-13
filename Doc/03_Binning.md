@@ -121,18 +121,32 @@ Binning should take a few minutes.
 
 --- 
 
-When the binning has completed, we can check the total length and number of contigs in each bin with assembly-stats.
+
 
 The binner automatically decides how many bins it thinks are present. If you run ls on its directory, you should see some 30 bins.
 
 ```bash
-ls results/metabat2/
+ls $SCRATCH/prok/results/metabat2/
 #> bin.1.fa   bin.12.fa  bin.15.fa  bin.18.fa  bin.20.fa  bin.23.fa  bin.26.fa  bin.29.fa  bin.31.fa  bin.34.fa  bin.5.fa  bin.8.fa
 #> bin.10.fa  bin.13.fa  bin.16.fa  bin.19.fa  bin.21.fa  bin.24.fa  bin.27.fa  bin.3.fa   bin.32.fa  bin.35.fa  bin.6.fa  bin.9.fa
 #> bin.11.fa  bin.14.fa  bin.17.fa  bin.2.fa   bin.22.fa  bin.25.fa  bin.28.fa  bin.30.fa  bin.33.fa  bin.4.fa   bin.7.fa
 ```
 
-
+We can also check the total length and number of contigs in each bin with assembly-stats.
+```bash 
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats -t $SCRATCH/prok/results/metabat2/*.fa | column -t | less
+#> filename                    total_length  number  mean_length  longest  shortest  N_count  Gaps  N50      N50n  N70      N70n  N90      N90n
+#> results/metabat2/bin.1.fa   1368180       34      40240.59     212034   5187      0        0     61619    7     35298    13    19171    23
+#> results/metabat2/bin.10.fa  2335282       31      75331.68     304038   3069      0        0     125057   6     90932    10    45038    18
+#> results/metabat2/bin.11.fa  7434991       306     24297.36     80231    5294      0        0     27951    86    20575    148   14098    235
+#> results/metabat2/bin.12.fa  2814547       123     22882.50     90800    5402      0        0     29328    30    19676    54    11538    92
+#> results/metabat2/bin.13.fa  1298639       2       649319.50    1187215  111424    0        0     1187215  1     1187215  1     1187215  1
+#> results/metabat2/bin.14.fa  1150712       52      22129.08     115632   3682      0        0     28276    13    17582    23    12284    39
+#> results/metabat2/bin.15.fa  2054121       15      136941.40    434392   21264     0        0     173722   4     149421   7     84010    11
+#> results/metabat2/bin.16.fa  7176178       273     26286.37     148334   3715      0        0     36670    64    22000    114   13444    199
+#> results/metabat2/bin.17.fa  2806080       23      122003.48    410382   7343      0        0     223668   5     113842   9     54987    15
+#> ...
+```
 
 
 ### Bin QC
