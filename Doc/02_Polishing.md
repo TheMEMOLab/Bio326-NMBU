@@ -263,7 +263,7 @@ We should also check how Medaka improves our assembly.
 #> Gaps = 0
 ```
 
-Do you see fewer contigs now, than what you had with your initial Flye assembly?
+Again, do you see that your assembly is improved?
 
 </td></tr></table>
 
