@@ -6,7 +6,7 @@
 
 ## Checkpoint
 
-Today we will need the final polished assembly from medaka as well as the original reads that we produced with filtlong. The two binning related scripts that we will run today, expect these input files to be present in the $SCRATCH/prok directory. 
+Today we will need the final polished assembly from medaka as well as the original reads that we produced with filtlong. The binning scripts that we will run today expect these input files to be present in the $SCRATCH/prok directory. 
 
 You can check that your files are present and non-empty with these commands:
 
