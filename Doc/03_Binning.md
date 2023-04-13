@@ -190,7 +190,6 @@ You can install a shortcut to run the pipeline, by calling this instruction in y
 ```bash
 
 echo """
-
 export ASSCOM2_BASE=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2
 export SNAKEMAKE_CONDA_PREFIX=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/conda_base
 alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run \
@@ -200,7 +199,6 @@ alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run \
         --snakefile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/snakefile \
         --profile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion \
         --configfile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/config.yaml'
-
 """ >> ~/.bashrc && source ~/.bashrc
 
 ```
