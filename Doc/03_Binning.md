@@ -55,7 +55,7 @@ So, here we will first calculate the depth of each contig.
 #SBATCH --job-name=depth-minimap
 #SBATCH --time=01:00:00
 #SBATCH --cpus-per-task 8
-#SBATCH --mem=12G
+#SBATCH --mem=24G
 #SBATCH --output slurm-%j-%x.out.log
 #SBATCH -p smallmem,hugemem
 
