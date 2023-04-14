@@ -150,37 +150,6 @@ We can also check the total length and number of contigs in each bin with assemb
 ```
 
 
-### Bin QC
-
-Quality control is something we can do on all levels of our microbiological workflow. We have been continuously running assembly-stats to follow how each tool has reshaped our assembly. Now the time has come to look into some more qualitative statistics with CheckM2 (https://github.com/chklovski/CheckM2/)
-
-📝 Create a file named 03c_qc-checkm2.sh with the following contents, and submit the job with sbatch:
-
-
-```bash
-#!/bin/bash
-
-# Define slurm parameters
-#SBATCH --job-name=qc-checkm2
-#SBATCH --time=01:00:00
-#SBATCH --cpus-per-task 8
-#SBATCH --mem=16G
-
-# Activate the conda environment. Note that we're using a separate conda environment for this software.
-source activate /mnt/courses/BIO326/PROK/checkm2
-
-# Define paths
-in_dir="$SCRATCH/prok/results/metabat2/"
-out_dir="$SCRATCH/prok/results/checkm2"
-
-
-checkm2 predict --threads $SLURM_CPUS_PER_TASK --input $in_dir --output-directory $out_dir --extension .fa --force
-
-```
-
-
-
-
 ## Qualitative Bin Analysis and Annotation
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
