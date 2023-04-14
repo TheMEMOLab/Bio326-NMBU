@@ -194,7 +194,7 @@ export ASSCOM2_BASE=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycompa
 export SNAKEMAKE_CONDA_PREFIX=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/conda_base
 alias assemblycomparator2='/mnt/orion/opt/conda/miniconda3/bin/conda run \
     --live-stream \
-    --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2_starter \
+    --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2_starter2 \
     snakemake \
         --snakefile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/snakefile \
         --profile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion \
