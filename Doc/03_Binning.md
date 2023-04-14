@@ -198,8 +198,8 @@ alias assemblycomparator2='conda run \
     snakemake \
         --snakefile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/snakefile \
         --profile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion \
-        --configfile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/config.yaml' \
-        --scheduler greedy
+        --configfile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/config.yaml \
+        --scheduler greedy'
 """ >> ~/.bashrc && source ~/.bashrc
 
 ```
