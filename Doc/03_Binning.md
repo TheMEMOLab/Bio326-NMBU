@@ -205,7 +205,7 @@ alias assemblycomparator2='conda run \
 ```
 
 
-Assemblycomparator2 is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts. 
+The pipeline is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts. 
 
 
 
@@ -230,7 +230,7 @@ module load Miniconda3
 eval "$(conda shell.bash hook)"
 ```
 
-Then, launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
+Then, launch the pipeline with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
 
 ```bash 
 
@@ -240,7 +240,7 @@ assemblycomparator2 --until assembly_stats sequence_lengths prokka busco checkm2
 
 The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs.
 
-You will se a lot of output in your terminal. This is because assemblycomparator2 runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
+You will se a lot of output in your terminal. This is because the pipeline runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
 
 It is a good idea to open a new tab in your terminal window, and log in with another session. Then you can let assemblycomparator run in the first login window while you browse the results as they finish -real time- in the second.
 
