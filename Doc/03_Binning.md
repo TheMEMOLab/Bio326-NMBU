@@ -104,6 +104,8 @@ cat $SCRATCH/prok/results/contig_depths/depth.tsv | column -t | less -S
 #> contig_7752   14634        0.405482       0.405482            0.241066
 #> ...
 #> (press q to exit)
+```
+
 
 
 ### Binning 
