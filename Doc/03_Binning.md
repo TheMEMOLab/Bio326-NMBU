@@ -223,6 +223,10 @@ ls *.fa
 Because the pipeline needs group ownership of the files, you should run this command.
 ```bash 
 chgrp $USER . * 
+
+# We also need to load the conda module
+module load Miniconda3
+eval "$(conda shell.bash hook)"
 ```
 
 Then, launch assemblycomparator2 with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
