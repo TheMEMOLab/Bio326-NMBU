@@ -83,6 +83,28 @@ jgi_summarize_bam_contig_depths --outputDepth $out_depth $out_alignment
 
 Calculating the depth of each contig should take around 30 minutes.
 
+When the job finishes, you can see the contig depths in the file below:
+```bash
+cat $SCRATCH/prok/results/contig_depths/depth.tsv | column -t | less -S
+#> contigName    contigLen    totalAvgDepth  bam_for_depths.bam  bam_for_depths.bam-var
+#> contig_6249   42425        4.15245        4.15245             16.7985
+#> contig_746    10384        0              0                   0
+#> contig_850    13519        0              0                   0
+#> contig_4906   9255         0.37441        0.37441             0.234247
+#> contig_2344   21841        5.9964         5.9964              19.6254
+#> contig_6063   40379        6.67968        6.67968             15.6048
+#> contig_2018   15964        2.46883        2.46883             3.64768
+#> contig_10853  15213        0.907256       0.907256            0.633342
+#> contig_5190   17779        1.36417        1.36417             1.6962
+#> contig_9671   10145        0.109855       0.109855            0.0978116
+#> contig_1104   105858       3.80065        3.80065             6.97997
+#> contig_7858   31531        6.38456        6.38456             40.9298
+#> contig_9245   16570        1.68544        1.68544             2.59145
+#> contig_2602   21434        1.71077        1.71077             2.06949
+#> contig_7752   14634        0.405482       0.405482            0.241066
+#> ...
+#> (press q to exit)
+
 
 ### Binning 
 
