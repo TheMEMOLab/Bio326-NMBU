@@ -134,7 +134,7 @@ ls $SCRATCH/prok/results/metabat2/
 
 We can also check the total length and number of contigs in each bin with assembly-stats.
 ```bash 
-/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats -t $SCRATCH/prok/results/metabat2/*.fa | column -t | less
+/mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats -t $SCRATCH/prok/results/metabat2/*.fa | column -t | less -S
 #> filename                    total_length  number  mean_length  longest  shortest  N_count  Gaps  N50      N50n  N70      N70n  N90      N90n
 #> results/metabat2/bin.1.fa   1368180       34      40240.59     212034   5187      0        0     61619    7     35298    13    19171    23
 #> results/metabat2/bin.10.fa  2335282       31      75331.68     304038   3069      0        0     125057   6     90932    10    45038    18
