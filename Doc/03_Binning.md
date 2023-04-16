@@ -156,7 +156,10 @@ ls $SCRATCH/prok/results/metabat2/
 #> bin.11.fa  bin.14.fa  bin.17.fa  bin.2.fa   bin.22.fa  bin.25.fa  bin.28.fa  bin.30.fa  bin.33.fa  bin.4.fa   bin.7.fa
 ```
 
-We can also check the total length and number of contigs in each bin with assembly-stats.
+Depending on destiny, you might see more or less than 30 files. Don't worry, this is normal. Metabat2 uses a non-deterministic algorithm, and if you rerun it, you might get a different number of bins.
+
+
+We can check the total length and number of contigs in each bin with assembly-stats.
 ```bash 
 /mnt/courses/BIO326/PROK/condaenv/bin/assembly-stats -t $SCRATCH/prok/results/metabat2/*.fa | column -t | less -S
 #> filename                    total_length  number  mean_length  longest  shortest  N_count  Gaps  N50      N50n  N70      N70n  N90      N90n
@@ -178,7 +181,7 @@ We can also check the total length and number of contigs in each bin with assemb
 
 We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
 
-You can install a shortcut to run the pipeline, by calling this instruction in your terminal:
+You can install a shortcut to run this pipeline, by calling this instruction in your terminal:
 
 ```bash
 
@@ -198,7 +201,7 @@ alias assemblycomparator2='conda run \
 ```
 
 
-The pipeline is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any shell (.sh) scripts. 
+The pipeline is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any more shell (.sh) scripts. 
 
 
 
@@ -208,17 +211,15 @@ First, enter the directory where your bins reside.
 
 cd $SCRATCH/prok/results/metabat2/
 ls *.fa
-#> rumen1.fa 
-#> rumen2.fa
+#> bin.1.fa 
+#> bin.2.fa
 #> ...
-#> rumenN.fa
+#> bin.N.fa
 ```
 
-Because the pipeline needs group ownership of the files, you should run this command.
-```bash 
-chgrp $USER . * 
+We also need to load the conda module
 
-# We also need to load the conda module
+```bash 
 module load Miniconda3
 eval "$(conda shell.bash hook)"
 ```
@@ -242,6 +243,8 @@ assemblycomparator2 --until assembly_stats sequence_lengths prokka busco checkm2
 
 ```
 
+(If you regret starting this command, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
+
 The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs.
 
 You will se a lot of output in your terminal. This is because the pipeline runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths, busco and kraken2) might finish after just 20 minutes. 
@@ -251,17 +254,15 @@ It is a good idea to open a new tab in your terminal window, and log in with ano
 Log into Orion in a second tab and surveil the output from assemblycomparator by running "tree" on the newly created "results_ac2" directory where assemblycomparator outputs its results.
 
 ```bash
-tree -L 3
+tree -L 3 $SCRATCH/prok/results/metabat2/results_ac2
 #> ???
 ```
 
-The "-L 3" argument lets tree know to stop listing files after hitting a depth level of 2 in the directory. This is to avoid overflowing your terminal window.
+The "-L <N>" argument lets tree know to stop listing files after hitting a depth level of N in the directory. This is to avoid overflowing your terminal window.
 
 ---
 
-When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser.
+When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser. On all platforms (windows, mac, linux), it should be possible to use  the FileZilla client to download this .html file (https://filezilla-project.org/).
 
-All platforms (windows, mac, linux) should be able to work with the FileZilla client (https://filezilla-project.org/).
-
-If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
+If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our demonstration report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
 
