@@ -87,5 +87,138 @@ We can then predict genes and annotate this by comparing with public databases. 
 
 ## DRAM: Distilled and Refined Annotation of Metabolism
 
-"[DRAM](https://github.com/WrightonLabCSU/DRAM) (Distilled and Refined Annotation of Metabolism) is a tool for annotating metagenomic assembled genomes and VirSorter identified viral contigs. DRAM annotates MAGs and viral contigs using KEGG (if provided by the user), UniRef90, PFAM, dbCAN, RefSeq viral, VOGDB and the MEROPS peptidase database as well as custom user databases..."
+**"[DRAM](https://github.com/WrightonLabCSU/DRAM) (Distilled and Refined Annotation of Metabolism) is a tool for annotating metagenomic assembled genomes and VirSorter identified viral contigs. DRAM annotates MAGs and viral contigs using KEGG (if provided by the user), UniRef90, PFAM, dbCAN, RefSeq viral, VOGDB and the MEROPS peptidase database as well as custom user databases..."**
  ![dramaanot](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/DRAM.jpg)
+
+To use DRAM we first need to create a directory and place there those bins we selected by completeness and contamination scoring (in this example rumen.3 and rumen.6). These bins are int he metabat2 results folder so let's create a new folder in the ```$SCRATCH/prok/results``` named ```bins_for_dram``` and move there those selected bins:
+
+```bash
+
+$ mkdir $SCRATCH/prok/results/bins_for_dram
+$ cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/
+$ cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/rumen.6.fa
+
+```
+
+Let's check these files were copied:
+
+```bash
+$ ls $SCRATCH/prok/results/bins_for_dram/
+rumen.3.fa  rumen.6.fa
+```
+
+With this we can run DRAM using the following ```sbatch``` script:
+
+```bash
+
+#!/bin/bash
+
+###############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=DRAM
+#
+## Wall time limit:
+#SBATCH --time=48:00:00
+#
+## Other parameters:
+#SBATCH --cpus-per-task 10
+#SBATCH --mem=80G
+#SBATCH -p hugemem
+#SBATCH -o slurm-%x-%A.out
+
+###########################################################
+
+## Set up job environment:
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3 && eval "$(conda shell.bash hook)"
+
+##Activate conda environments
+conda activate /mnt/users/auve/mycondaenvs/DRAM
+
+##Declaring variables: These needs to be passed as arguments in the command line
+
+magsdir=$1 #Directory with the MAG e.g /mnt/SCRATCH/auve/DRAM_Test/BinsForDram
+ext=$2 #Extension of the MAGs e.g. .fa
+outdir=$3 #output directory e.f /mnt/SCRATCH/auve/DRAM_Test/
+####Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+
+## Copying data to local node for faster computation
+
+cd $TMPDIR
+
+#Check if $USER exists in $TMPDIR
+
+if [[ -d $USER ]]
+        then
+                echo "$USER exists on $TMPDIR"
+        else
+                mkdir $USER
+fi
+
+cd $USER
+mkdir tmpDir_of.$SLURM_JOB_ID
+cd tmpDir_of.$SLURM_JOB_ID
+wd=$(pwd)
+
+#Copy the MAGs to the $TMPDIR
+
+echo "copying MAGs to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+mkdir MAGS && cd MAGS
+cp -r $magsdir/*$ext .
+cd $wd
+
+##################DRAM##############################
+
+echo "DRAM started at"
+date
+
+DRAM.py annotate \
+-i 'MAGS/*.'$ext \
+-o dram.annotation \
+--threads $SLURM_CPUS_ON_NODE
+
+echo "Distilling..."
+
+DRAM.py distill \
+-i dram.annotation/annotations.tsv \
+-o dram.genome_summaries \
+--trna_path dram.annotation/trnas.tsv \
+--rrna_path dram.annotation/rrnas.tsv
+
+echo "DRAM finished at"
+date
+
+
+mkdir DRAM.Results.dir
+mv dram.annotation DRAM.Results.dir
+mv dram.genome_summaries DRAM.Results.dir
+
+cp -r DRAM.Results.dir $outdir
+
+echo "DRAM results are in: " $outdir/DRAM.Resulits.dir
+
+##Clean TMPDIR
+
+cd $TMPDIR/$USER
+rm -r $wd
+
+##
+
+echo "I've done...Bye!"
+```
