@@ -41,6 +41,8 @@ We then can use the report from the ```assemblycomparator2``` to check the quali
 
 Let's go to the ```cd results_ac2/``` folder and enter the checkM results
 
+**If you have faced difficulties to run the assemblycomparator2 pipeline, do not worry, you can copy all the results from this path: ```$COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2``` just do something like: ```cp -r COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2 $SCRATCH/prok/results``` :-)** 
+
 ```console
 $ ls results_ac2/checkm2/
 checkm2.log  diamond_output  protein_files  quality_report.tsv
