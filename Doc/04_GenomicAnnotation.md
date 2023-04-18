@@ -263,8 +263,10 @@ There are two directories:
 
 Let's check the annotation directory:
 
-```
+```console
 ls
+```
+```console
 annotations.tsv  genbank  genes.faa  genes.fna  genes.gff  rrnas.tsv  scaffolds.fna  trnas.tsv
 ```
 
