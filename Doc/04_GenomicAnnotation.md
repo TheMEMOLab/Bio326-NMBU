@@ -6,7 +6,7 @@
 
 After binning with [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained a set of bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to asses the quality of these MAGs.
 
-Metabat2 produce a set of bins as the following example:
+Let's take a look on the Metabat2 bins:
 
 ```bash
 ls -1|grep .fa|sort -V
