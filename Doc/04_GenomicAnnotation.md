@@ -104,7 +104,7 @@ cp $SCRATCH/prok/results/metabat2/rumen.6.fa   bins_for_dram/
 
 Let's check these files were copied:
 
-```bash
+```console
 ls $SCRATCH/prok/results/bins_for_dram/
 ```
 ```console
@@ -280,6 +280,7 @@ Then take a look into the summaries directory:
 cd $SCRATCH/prok/results/DRAM.Results.dir/dram.genome_summaries
 ls
 ```
+
 ```console
 genome_stats.tsv  metabolism_summary.xlsx  product.html  product.tsv
 ```
