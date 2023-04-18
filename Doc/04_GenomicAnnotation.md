@@ -98,7 +98,7 @@ To use DRAM we first need to create a directory and place there those bins we se
 
 mkdir $SCRATCH/prok/results/bins_for_dram
 cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/
-cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/rumen.6.fa
+cp $SCRATCH/prok/results/metabat2/rumen.6.fa    bins_for_dram/
 
 ```
 
