@@ -96,16 +96,16 @@ To use DRAM we first need to create a directory and place there those bins we se
 
 ```bash
 
-$ mkdir $SCRATCH/prok/results/bins_for_dram
-$ cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/
-$ cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/rumen.6.fa
+mkdir $SCRATCH/prok/results/bins_for_dram
+cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/
+cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/rumen.6.fa
 
 ```
 
 Let's check these files were copied:
 
 ```bash
-$ ls $SCRATCH/prok/results/bins_for_dram/
+ls $SCRATCH/prok/results/bins_for_dram/
 rumen.3.fa  rumen.6.fa
 ```
 
@@ -237,7 +237,7 @@ For running this script, we need to provide in the same command line 3 arguments
 Let's run the script ```dram.SLURM.sh```
 
 ```bash
-$ sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
+sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
 ```
 
 ** !NB DRAM will take around 3-8 hrs for running and requires a lot of memory **
@@ -249,8 +249,10 @@ When DRAM finishes it will produce the following directory:
 We can then take a look:
 
 ```bash
-$ cd $SCRATCH/prok/results/DRAM.Results.dir
-$ ls
+cd $SCRATCH/prok/results/DRAM.Results.dir
+ls
+```
+```console
 dram.annotation  dram.genome_summaries
 ```
 There are two directories: 
@@ -260,7 +262,7 @@ There are two directories:
 Let's check the annotation directory:
 
 ```
-$ ls
+ls
 annotations.tsv  genbank  genes.faa  genes.fna  genes.gff  rrnas.tsv  scaffolds.fna  trnas.tsv
 ```
 
@@ -274,7 +276,9 @@ Then take a look into the summaries directory:
 
 ```bash
 cd $SCRATCH/prok/results/DRAM.Results.dir/dram.genome_summaries
-$ ls
+ls
+```
+```console
 genome_stats.tsv  metabolism_summary.xlsx  product.html  product.tsv
 ```
 The files have different information:
