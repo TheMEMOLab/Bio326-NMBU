@@ -79,6 +79,8 @@ Then let's look for the taxonomy of those particularly bins using the gtdbtk res
 ```bash
 cat results_ac2/checkm2/quality_report.tsv | awk '{if($2 > 70 && $3 < 10) print $1}'|sed 's/.f
 a//g'|fgrep -f - results_ac2/gtdbtk/gtdbtk.summary.tsv |cut -f 1,2
+```
+```console
 rumen.3 d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobrevibacter_A;s__Methanobrevibacter_A sp900313645
 rumen.6 d__Bacteria;p__Bacteroidota;c__Bacteroidia;o__Bacteroidales;f__Bacteroidaceae;g__Prevotella;s__Prevotella sp900316295
 ```
