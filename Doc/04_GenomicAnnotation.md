@@ -264,4 +264,32 @@ annotations.tsv  genbank  genes.faa  genes.fna  genes.gff  rrnas.tsv  scaffolds.
 
 Here we can find a table with annotations (annotations.tsv) as well as 3 fasta files:
 
-- genes.fna 
+- genes.fna (All the predicted coding genes as nucleotides)
+- genes.faa (All the predicted coding genes translated to proteins)
+- sacaffolds.fna (The total scaffolds/contigs of the bins)
+
+Then take a look into the summaries directory:
+
+```bash
+cd $SCRATCH/prok/results/DRAM.Results.dir/dram.genome_summaries
+$ ls
+genome_stats.tsv  metabolism_summary.xlsx  product.html  product.tsv
+```
+The files have different information:
+
+* genome_stats.tsv: Basic annotaion stats of the genomes, as # of contigs/scaffolds, taxonomy, RNAgenes etc.
+* metabolism_summary.xlsx: An excel file with all the Metabolic summary in each genome.
+* product.html: Interactive heatmaps of the metabolic summaries
+* product.tsv: Tables to reproduce the heatmaps of above
+
+Although we can display the content of the *.tsv* files obtainded by DRAM here in the terminal, the  metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these data to our personal computers and take a look. 
+
+Once in your computer, you can open the product.html, to explore the metabolic potential of your MAGs.
+
+![dramhtml](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/dramhtml.png)
+
+is there any special metabolic pathway would you like to look at? 
+
+Now is time for the funny part that is parsing the information and to interpret the biological meaning encoding in these MAGs ...
+
+### Enjoy DRAM and have fun looking through your annotated MAGs
