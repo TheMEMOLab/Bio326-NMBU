@@ -83,3 +83,9 @@ rumen.6 d__Bacteria;p__Bacteroidota;c__Bacteroidia;o__Bacteroidales;f__Bacteroid
 
 **Our bins were classified as an Archea *Metanobrevibacter* and a bacteria *Prevotella*.**
 
+We can then predict genes and annotate this by comparing with public databases. For doing this we will use DRAM...
+
+## DRAM: Distilled and Refined Annotation of Metabolism
+
+"[DRAM](https://github.com/WrightonLabCSU/DRAM) (Distilled and Refined Annotation of Metabolism) is a tool for annotating metagenomic assembled genomes and VirSorter identified viral contigs. DRAM annotates MAGs and viral contigs using KEGG (if provided by the user), UniRef90, PFAM, dbCAN, RefSeq viral, VOGDB and the MEROPS peptidase database as well as custom user databases..."
+ ![dramaanot](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/DRAM.jpg)
