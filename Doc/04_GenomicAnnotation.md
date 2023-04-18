@@ -4,7 +4,7 @@
 
 ![workflow](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/wrokflowmetagenome.png) 
 
-After binning with [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained 9 bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to asses the quality of these MAGs.
+After binning with [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained a set of bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to asses the quality of these MAGs.
 
 Metabat2 produce a set of bins as the following example:
 
