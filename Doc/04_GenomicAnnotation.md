@@ -239,3 +239,29 @@ $ sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/resu
 ```
 
 ** !NB DRAM will take around 3-8 hrs for running and requires a lot of memory **
+
+When DRAM finishes it will produce the following directory:
+
+```DRAM.Results.dir```
+
+We can then take a look:
+
+```bash
+$ cd $SCRATCH/prok/results/DRAM.Results.dir
+$ ls
+dram.annotation  dram.genome_summaries
+```
+There are two directories: 
+* dram.annotation.dir: It has all the "raw" annotations, gene sequeces, protein preditions of the MAG's
+* dram.genome_summaries.dir: It has the destilled part of the genomes with the sorted metabolic functions.
+
+Let's check the annotation directory:
+
+```
+$ ls
+annotations.tsv  genbank  genes.faa  genes.fna  genes.gff  rrnas.tsv  scaffolds.fna  trnas.tsv
+```
+
+Here we can find a table with annotations (annotations.tsv) as well as 3 fasta files:
+
+- genes.fna 
