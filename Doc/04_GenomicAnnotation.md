@@ -104,7 +104,7 @@ cp $SCRATCH/prok/results/metabat2/rumen.6.fa   bins_for_dram/
 
 Let's check these files were copied:
 
-```console
+```bash
 ls $SCRATCH/prok/results/bins_for_dram/
 ```
 ```console
@@ -263,7 +263,7 @@ There are two directories:
 
 Let's check the annotation directory:
 
-```console
+```bash
 ls
 ```
 ```console
