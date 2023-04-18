@@ -40,9 +40,9 @@ bin.26.fa
 
 We then can use the report from the ```assemblycomparator2``` to check the quality report by CheckM. We can use either the report table or directly the CheckM results. 
 
-Let's go to the ```cd results_ac2/``` folder and enter the checkM results
-
 **If you have faced difficulties to run the assemblycomparator2 pipeline, do not worry, you can get a copy of the results like this: ```cp -r $COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2 $SCRATCH/prok/results``` :-)** 
+
+Let's go to the ```cd results_ac2/``` folder and enter the checkM results:
 
 ```bash
 $ ls results_ac2/checkm2/
@@ -272,7 +272,7 @@ ls
 dram.annotation  dram.genome_summaries
 ```
 There are two directories: 
-* dram.annotation.dir: It has all the "raw" annotations, gene sequeces, protein preditions of the MAGs
+* dram.annotation.dir: It has all the "raw" annotations, gene sequences, protein preditions of the MAGs
 * dram.genome_summaries.dir: It has the distilled part of the genomes with the sorted metabolic functions.
 
 Let's check the annotation directory:
@@ -302,12 +302,12 @@ genome_stats.tsv  metabolism_summary.xlsx  product.html  product.tsv
 ```
 The files have different information:
 
-* genome_stats.tsv: Basic annotaion stats of the genomes, such as # of contigs/scaffolds, taxonomy, RNAgenes etc.
+* genome_stats.tsv: Basic annotation stats of the genomes, such as # of contigs/scaffolds, taxonomy, RNA genes etc.
 * metabolism_summary.xlsx: An excel file with all the Metabolic summary in each genome.
 * product.html: Interactive heatmaps of the metabolic summaries
 * product.tsv: Tables to reproduce the heatmaps of above
 
-Although we can display the content of the *.tsv* files obtainded by DRAM here in the terminal, the metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these to our personal computers and take a look. 
+Although we can display the content of the *.tsv* files obtained by DRAM here in the terminal, the metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these to our personal computers and take a look. 
 
 Once in your computer, you can open the product.html, to explore the metabolic potential of your MAGs.
 
