@@ -286,7 +286,7 @@ Although we can display the content of the *.tsv* files obtainded by DRAM here i
 
 Once in your computer, you can open the product.html, to explore the metabolic potential of your MAGs.
 
-![dramhtml](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/dramhtml.png)
+![dramhtml](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/visualizationDRAM.png)
 
 is there any special metabolic pathway would you like to look at? 
 
