@@ -222,3 +222,20 @@ rm -r $wd
 
 echo "I've done...Bye!"
 ```
+
+**A copy of this script is at:**
+
+```/mnt/courses/BIO326/PROK/scripts/dram.SLURM.sh```
+
+For running this script, we need to provide in the same command line 3 arguments:
+- absoulte path of our input directory ```$SCRATCH/prok/results/bins_for_dram```
+- The extension of our fasta files ```fa```
+- The output directory ```SCRATCH/prok/results/```
+
+Let's run the script ```dram.SLURM.sh```
+
+```bash
+$ sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
+```
+
+** !NB DRAM will take around 3-8 hrs for running and requires a lot of memory **
