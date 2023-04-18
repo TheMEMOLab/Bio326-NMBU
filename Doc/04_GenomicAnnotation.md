@@ -42,7 +42,7 @@ We then can use the report from the ```assemblycomparator2``` to check the quali
 
 Let's go to the ```cd results_ac2/``` folder and enter the checkM results
 
-**If you have faced difficulties to run the assemblycomparator2 pipeline, do not worry, you can copy all the results from this path: ```$COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2``` just do something like: ```cp -r $COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2 $SCRATCH/prok/results``` :-)** 
+**If you have faced difficulties to run the assemblycomparator2 pipeline, do not worry, you can get a copy of the results like this: ```cp -r $COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2 $SCRATCH/prok/results``` :-)** 
 
 ```bash
 $ ls results_ac2/checkm2/
@@ -112,7 +112,7 @@ To use DRAM we first need to create a directory and place there those bins we se
 
 mkdir $SCRATCH/prok/results/bins_for_dram
 cp $SCRATCH/prok/results/metabat2/rumen.3.fa bins_for_dram/
-cp $SCRATCH/prok/results/metabat2/rumen.6.fa   bins_for_dram/
+cp $SCRATCH/prok/results/metabat2/rumen.6.fa bins_for_dram/
 
 ```
 
@@ -256,7 +256,7 @@ Let's run the script ```dram.SLURM.sh```
 sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
 ```
 
-** !NB DRAM will take around 3-8 hrs for running and requires a lot of memory **
+**!NB DRAM will take around 3-8 hrs for running and requires a lot of memory**
 
 When DRAM finishes it will produce the following directory:
 
