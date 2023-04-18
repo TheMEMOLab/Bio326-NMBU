@@ -229,6 +229,7 @@ First, check that it works by running a simple job - mashtree:
 
 ```bash 
 
+assemblycomparator2 --unlock # Clears previously started, failed runs
 assemblycomparator2 --until mashtree
 
 ```
