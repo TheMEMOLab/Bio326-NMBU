@@ -43,10 +43,18 @@ Let's go to the ```cd results_ac2/``` folder and enter the checkM results
 
 **If you have faced difficulties to run the assemblycomparator2 pipeline, do not worry, you can copy all the results from this path: ```$COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2``` just do something like: ```cp -r $COURSES/BIO326/PROK/data/metagenomic_assembly/demo/results_ac2 $SCRATCH/prok/results``` :-)** 
 
-```console
+```bash
 $ ls results_ac2/checkm2/
+```
+```console
 checkm2.log  diamond_output  protein_files  quality_report.tsv
+```
+
+```bash
 $ more results_ac2/checkm2/quality_report.tsv
+```
+
+```console
 Name    Completeness    Contamination   Completeness_Model_Used Translation_Table_Used  Coding_Density  Contig_N50      Aver
 age_Gene_Length Genome_Size     GC_Content      Total_Coding_Sequences  Additional_Notes
 bin.1   65.29   12.04   Gradient Boost (General Model)  11      0.824   61619   223.82011834319528      1368180 0.54    1690
