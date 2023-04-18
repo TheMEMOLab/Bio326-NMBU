@@ -1,4 +1,4 @@
-# # Prokaryotic functional genome annotation
+# Prokaryotic functional genome annotation
 
 ### So far have obtained indiviual metagenome assembled genomes (MAGs) from the rummen metagenome. Let's review our workflow to see what is the next step: 
 
