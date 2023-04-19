@@ -225,21 +225,11 @@ eval "$(conda shell.bash hook)"
 ```
 
 
-First, check that it works by running a simple job - mashtree:
-
-```bash 
-
-assemblycomparator2 --unlock # Clears previously started, failed runs
-assemblycomparator2 --until mashtree
-
-```
-
-
-
 Then, launch the pipeline with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
 
 ```bash 
 
+assemblycomparator2 --unlock # Clears previously started, failed runs
 assemblycomparator2 --until assembly_stats sequence_lengths prokka busco checkm2 kraken2 gtdbtk mashtree & 
 
 ```
