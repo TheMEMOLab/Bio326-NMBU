@@ -89,8 +89,7 @@ rumen.6 72.12   1.12
 Then let's look for the taxonomy of those particular bins using the gtdbtk results:
 
 ```bash
-cat results_ac2/checkm2/quality_report.tsv | awk '{if($2 > 70 && $3 < 10) print $1}'|sed 's/.f
-a//g'|fgrep -f - results_ac2/gtdbtk/gtdbtk.summary.tsv |cut -f 1,2
+cat results_ac2/checkm2/quality_report.tsv | awk '{if($2 > 70 && $3 < 10) print $1}'|sed 's/.fa//g'|fgrep -f - results_ac2/gtdbtk/gtdbtk.summary.tsv |cut -f 1,2
 ```
 ```console
 rumen.3 d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobrevibacter_A;s__Methanobrevibacter_A sp900313645
