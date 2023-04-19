@@ -247,7 +247,7 @@ echo "I've done...Bye!"
 For running this script, we need to provide in the same command line 3 arguments:
 - absolute path of our input directory ```$SCRATCH/prok/results/bins_for_dram```
 - The extension of our fasta files ```fa```
-- The output directory ```SCRATCH/prok/results/```
+- The output directory ```$SCRATCH/prok/results/```
 
 Let's run the script ```dram.SLURM.sh```
 
