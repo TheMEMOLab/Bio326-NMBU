@@ -253,7 +253,7 @@ The "-L <N>" argument lets tree know to stop listing files after hitting a depth
 
 ---
 
-When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser. On all platforms (windows, mac, linux), it should be possible to use  the FileZilla client to download this .html file (https://filezilla-project.org/).
+When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser. On all platforms (windows, mac, linux), it should be possible to use  the FileZilla client to download this .html file (https://filezilla-project.org/). You can also use `rsync` on the command line (see here: https://orion.nmbu.no/en/Copydata).
 
 If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our demonstration report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
 
