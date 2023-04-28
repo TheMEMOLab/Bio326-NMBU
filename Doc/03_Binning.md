@@ -230,7 +230,7 @@ Then, launch the pipeline with this command: (We will start it with an ampersand
 ```bash 
 
 assemblycomparator2 --unlock # Clears previously started, failed runs
-assemblycomparator2 --until report assembly_stats sequence_lengths prokka busco checkm2 kraken2 gtdbtk mashtree & 
+assemblycomparator2 --until report assembly_stats sequence_lengths prokka busco checkm2 gtdbtk mashtree & 
 
 ```
 
