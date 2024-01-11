@@ -58,5 +58,10 @@ module load Miniconda3 && conda activate $ORION/conda/CIGENE/R_env
 Rscript MetaGVisualToolBox/scripts/CAZYheatmap.R metabolism_summary.xlsx quality_report.tsv gtdbtk.bac120.summary.tsv gtdbtk.ar53.summary.tsv CAZYHeatmap
 ```
 
+After running we got the PDF ```CAZYHeatmap.pdf```
+
+This PDF has the information of Taxonomy as columns and all the CAZy genes as rows.
+
+
 
 
