@@ -279,7 +279,7 @@ For running this script, we need to provide in the same command line 3 arguments
 Let's run the script ```dram.SLURM.sh```
 
 ```bash
-sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
+sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results 11
 ```
 
 **!NB DRAM will take around 2-8 hrs for running and requires a lot of memory**
