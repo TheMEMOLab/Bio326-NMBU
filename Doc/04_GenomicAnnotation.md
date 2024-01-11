@@ -110,8 +110,8 @@ To use DRAM we first need to create a directory and place there those bins we se
 ```bash
 
 mkdir $SCRATCH/prok/results/bins_for_dram
-cp $SCRATCH/prok/results/metabat2/rumen.3.fa $SCRATCH/prok/results/bins_for_dram
-cp $SCRATCH/prok/results/metabat2/rumen.6.fa $SCRATCH/prok/results/bins_for_dram
+cp /mnt/courses/BIO326/PROK/results/metabat2/rumen.3.fa $SCRATCH/prok/results/bins_for_dram
+cp /mnt/courses/BIO326/PROK/results/metabat2/rumen.6.fa $SCRATCH/prok/results/bins_for_dram
 
 ```
 
@@ -123,11 +123,9 @@ ls $SCRATCH/prok/results/bins_for_dram/
 ```console
 rumen.3.fa  rumen.6.fa
 ```
-
-With this we can run DRAM using the following ```sbatch``` script:
+With this, we can run DRAM using the following ```sbatch``` script:
 
 ```bash
-
 #!/bin/bash
 
 ###############SLURM SCRIPT###################################
@@ -139,12 +137,31 @@ With this we can run DRAM using the following ```sbatch``` script:
 #SBATCH --time=48:00:00
 #
 ## Other parameters:
-#SBATCH --cpus-per-task 10
+#SBATCH --cpus-per-task 16
 #SBATCH --mem=80G
-#SBATCH -p hugemem
+#SBATCH -p hugemem-avx2
 #SBATCH -o slurm-%x-%A.out
 
 ###########################################################
+
+print_usage() {
+        echo "Usage: sbatch $0 path_magsdir mags_ext path_out_dir translate_table"
+    }
+
+if [ $# -lt 1 ]
+        then
+                print_usage
+                exit 1
+elif [ $# -lt 4 ]
+    then
+        print_usage
+                exit 1
+elif [ $# -gt 4 ]
+    then
+        print_usage
+                exit 1
+    fi
+
 
 ## Set up job environment:
 
@@ -152,13 +169,16 @@ module --quiet purge  # Reset the modules to the system default
 module load Miniconda3 && eval "$(conda shell.bash hook)"
 
 ##Activate conda environments
-conda activate /mnt/users/auve/mycondaenvs/DRAM
+conda activate /net/fs-2/scale/OrionStore/Orion/conda/CIGENE/DRAM_1.5
 
 ##Declaring variables: These needs to be passed as arguments in the command line
 
 magsdir=$1 #Directory with the MAG e.g /mnt/SCRATCH/auve/DRAM_Test/BinsForDram
 ext=$2 #Extension of the MAGs e.g. .fa
 outdir=$3 #output directory e.f /mnt/SCRATCH/auve/DRAM_Test/
+transtable=$4 #The translation table to predict ORFs
+
+
 ####Do some work:########
 
 ## For debuggin
@@ -195,7 +215,7 @@ wd=$(pwd)
 
 #Copy the MAGs to the $TMPDIR
 
-echo "copying MAGs to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID.$input
+echo "copying MAGs to" $TMPDIR/$USER/tmpDir_of.$SLURM_JOB_ID
 mkdir MAGS && cd MAGS
 cp -r $magsdir/*$ext .
 cd $wd
@@ -203,24 +223,28 @@ cd $wd
 ##################DRAM##############################
 
 echo "DRAM started at"
-date
+date +%d\ %b\ %T
 
-DRAM.py annotate \
+time DRAM.py annotate \
 -i 'MAGS/*.'$ext \
 -o dram.annotation \
+--trans_table $transtable \
+--min_contig_size 500 \
 --threads $SLURM_CPUS_ON_NODE
+
 
 echo "Distilling..."
 
-DRAM.py distill \
+time DRAM.py distill \
 -i dram.annotation/annotations.tsv \
 -o dram.genome_summaries \
 --trna_path dram.annotation/trnas.tsv \
 --rrna_path dram.annotation/rrnas.tsv
 
 echo "DRAM finished at"
-date
+date +%d\ %b\ %T
 
+##Copy data to output dir
 
 mkdir DRAM.Results.dir
 mv dram.annotation DRAM.Results.dir
@@ -238,6 +262,8 @@ rm -r $wd
 ##
 
 echo "I've done...Bye!"
+date
+
 ```
 
 **A copy of this script is at:**
@@ -248,6 +274,7 @@ For running this script, we need to provide in the same command line 3 arguments
 - absolute path of our input directory ```$SCRATCH/prok/results/bins_for_dram```
 - The extension of our fasta files ```fa```
 - The output directory ```$SCRATCH/prok/results/```
+- The translation table for ORFs prediction (default 11)
 
 Let's run the script ```dram.SLURM.sh```
 
@@ -255,7 +282,7 @@ Let's run the script ```dram.SLURM.sh```
 sbatch dram.SLURM.sh $SCRATCH/prok/results/bins_for_dram fa $SCRATCH/prok/results
 ```
 
-**!NB DRAM will take around 3-8 hrs for running and requires a lot of memory**
+**!NB DRAM will take around 2-8 hrs for running and requires a lot of memory**
 
 When DRAM finishes it will produce the following directory:
 
