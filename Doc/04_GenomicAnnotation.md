@@ -2,6 +2,8 @@
 
 ### So far, we have obtained individual metagenome assembled genomes (MAGs) from the rumen metagenome. Let's review our workflow to see what is the next step: 
 
+HELO this is a test
+
 ![workflow](https://github.com/avera1988/NMBU-Bio-326/blob/main/images/wrokflowmetagenome.png) 
 
 After binning with [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/master/) we obtained a set of bins. We used [CheckM](https://ecogenomics.github.io/CheckM/) to assess the quality of these MAGs.
