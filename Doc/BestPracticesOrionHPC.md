@@ -631,8 +631,12 @@ total size is 68  speedup is 0.31
 
 Then let's sure this is copy back
 
-```console
+```bash
 ls $SCRATCH/MyInteractiveBlast.dir
+
+```
+
+```console
 amylase.Bgramini.fasta.blastp.out
 ```
 
