@@ -38,7 +38,7 @@ Type the password again and then create a new password.
 
 **!NB If is your first time using the CLI it is strongly suggested to use a simple password you don't forget!** 
 
-```bash
+```console
 New password:
 Retype new password:
 passwd: all authentication tokens updated successfully.
@@ -49,11 +49,16 @@ If this was done correctly, you will be logout and need to relogin:
 
 ```bash
 ssh bio326-2024-1@login.orion.nmbu.no
+
+```
+
+```console
 bio326-2024-1@login.orion.nmbu.no's password:
 ```
 
 Then this message will apear:
-```
+
+```console
 Last login: Tue Feb 20 14:47:50 2024 from 10.42.26.49
 
 
@@ -87,7 +92,7 @@ Press Enter to acknowledge that you read the message above and continue.
 
 After pressing enter you will see this:
 
-```
+```console
             ,        ,
             /(        )`
             \ \___   / |
@@ -124,7 +129,7 @@ rsync -aPlvh --no-owner --no-group /mnt/courses/BIO326/BestPracticesOrion/.bash*
 
 You will see something like this after:
 
-```
+```console
 [bio326-2024-1@login: ~]$
 
 ```
@@ -144,7 +149,7 @@ How can I be sure of the number of CPUs and RAM of this "login" computer node an
 
 * CPUS: Use the command nproc
 
-```Bash
+```bash
 nproc
 ```
 
@@ -156,7 +161,7 @@ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
 
 ```
 
-```
+```console
 MemTotal: 32.7794 GB
 ```
 
@@ -207,7 +212,7 @@ sinfo -l -N
 
 This will display this table:
 
-```
+```console
 Tue Feb 20 15:50:09 2024
 NODELIST   NODES    PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON
 cn-1           1         test   allocated 144    4:18:2 309453        0      1 cpu_xeon none
@@ -279,9 +284,9 @@ As you can notice there are plenty of directories in Orion, but let's focus in t
 df -h .
 ```
 
-*syntaxis: d(isk)f(ree) -h(uman redable) .(the directory I am now) *
+*syntaxis: d(isk)f(ree) -h(uman redable) .(the directory I am now)*
 
-```
+```console
 Filesystem                   Size  Used Avail Use% Mounted on
 fs-2:/scale/OrionStore/Home   90T   76T   15T  85% /net/fs-2/scale/OrionStore/Home
 ```
@@ -304,7 +309,7 @@ pwd
 ```
 *For moving here we use the variable ```$SCRATCH```. A variable is a character string to which the user assign a value. The value assigned could be a number, text, filename, device, or any other type of data. It is important you get familiarized with this and other Unix/Linux terminology. This [link](https://orion.nmbu.no/en/LinuxTutorial) can help you to navigate through these terms.
 
-```
+```console
 /mnt/SCRATCH/bio326-2024-1
 ```
 
@@ -336,7 +341,7 @@ qlogin -c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
   
 It might take a while to SLURM allocate the resources of this job. But as soon as it allocates the job a message like this will be displayed:
 
-```
+```console
 salloc: Pending job allocation 14221700
 salloc: job 14221700 queued and waiting for resources
 salloc: job 14221700 has been allocated resources
@@ -386,7 +391,7 @@ df -h .
 
 ```
 
-```
+```console
 Filesystem               Size  Used Avail Use% Mounted on
 /dev/mapper/centos-home  4.4T   33G  4.3T   1% /home
 ```
@@ -406,7 +411,7 @@ Then check we have been done this correctly:
 pwd
 ```
 
-```
+```console
 /mnt/SCRATCH/bio326-2024-1/work.dir.of.14221700
 ```
 
@@ -434,7 +439,7 @@ First take a look of the data
 ls -l $COURSES/BIO326/BestPracticesOrion/BLASTExample
 ```
 
-```
+```console
 total 2049
 -rwxrwxr-x 1 auve bio326     838 Nov  7 23:16 amylase.Bgramini.fasta
 -rwxrwxr-x 1 auve bio326 2085506 Nov  7 23:06 Bacteroides51.faa
@@ -450,7 +455,7 @@ ls
 
 ```
 
-```
+```console
 amylase.Bgramini.fasta  Bacteroides51.faa
 ```
 
@@ -463,7 +468,7 @@ less amylase.Bgramini.fasta
 
 ```
 
-```
+```console
 >WP_024997086.1 alpha-amylase [Bacteroides graminisolvens]
 MKRYKYWFLLLIPFLIVACSGSDDPVIEPPVVLKEGLNYSPTAPDADQELTITFKAGSTSALYNYVGDVY
 VHIGVIVDGSWKYVPAEWTENISKCKMTKTADNVWSVKLSPTVRQWFASGETSIQKLGIVIRNADGSKKG
@@ -486,7 +491,7 @@ blastp
 
 ```
 
-```
+```console
 bash: blastp: command not found
 ```
 
@@ -514,7 +519,7 @@ What we are doing here is being sure Conda is loaded and then export all the con
 
 If everything was OK, you should now see the ```base``` conda environment loaded and the prompt shows this:
 
-```terminal
+```console
 (base) [bio326-2024-1@cn-14: work.dir.of.14221763]$
 ```
 
@@ -526,7 +531,7 @@ conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
 
 Notice again how the prompt has changed:
 
-```terminal
+```console
 (/mnt/courses/BIO326/BestPracticesOrion/BLASTConda) [bio326-2024-1@cn-14: work.dir.of.14221763]$
 ```
 
@@ -538,7 +543,7 @@ We can then run a blast experiment:
 blastn
 ```
 
-```
+```console
 BLAST query/options error: Either a BLAST database or subject sequence(s) must be specified
 Please refer to the BLAST+ user manual.
 ```
@@ -553,7 +558,7 @@ makeblastdb -dbtype prot -in Bacteroides51.faa
 
 ```
 
-```
+```console
 Building a new DB, current time: 02/20/2024 17:27:49
 New DB name:   /home/work/bio326-2024-1/work.dir.of.14221763/Bacteroides51.faa
 New DB title:  Bacteroides51.faa
@@ -572,7 +577,7 @@ ls
 
 ```
 
-```
+```console
 amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroides51.faa.pot  Bacteroides51.faa.ptf
 Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pjs  Bacteroides51.faa.psq  Bacteroides51.faa.pto
 ```
@@ -589,7 +594,7 @@ Take a look into the results:
 less amylase.Bgramini.fasta.blastp.out
 ```
 
-```
+```console
 WP_024997086.1  D0T87_RS12665   57.772  772     301     13      8       763     28      790     0.0     908
 ```
 
@@ -615,7 +620,7 @@ mkdir $SCRATCH/MyInteractiveBlast.dir
 rsync -aPlvh --no-owner --no-group *fasta.blastp.out $SCRATCH/MyInteractiveBlast.dir/
 ```
 
-```
+```console
 sending incremental file list
 amylase.Bgramini.fasta.blastp.out
              68 100%    0.00kB/s    0:00:00 (xfr#1, to-chk=0/1)
@@ -626,7 +631,7 @@ total size is 68  speedup is 0.31
 
 Then let's sure this is copy back
 
-```bash
+```console
 ls $SCRATCH/MyInteractiveBlast.dir
 amylase.Bgramini.fasta.blastp.out
 ```
@@ -637,14 +642,14 @@ We can achive this by doing this:
 
 * First go back to the main $TMPDI/$USER
 
-```
+```bash
 cd $TMPDIR/$USER
 rm -rf work.dir.of$SLURM_JOB_ID
 ```
 
 Finally, we can logout of this node:
 
-```
+```bash
 exit
 ```
 
@@ -652,17 +657,17 @@ You can see now we return to the main **login bio326-y-x** node.
 
 ## sbatch scripts.
 
-MMost of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
+Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
 
 SLURM can use bash or computer scripting language (e.g. perl, python, etc) base script to read the instructions. The first line #!/bin/bash, called bash shebang, are reserved words that the computer needs to read and interpret in order to launch the program. The following lines, need to start with #SLURM and these are specific instructions SLURM uses to know how many resources and other parameters the job will use while is running. In our interactive job we used some of these SLURM parameters directly in the command line
 
-```
+```console
 -c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
 ```
 
 SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
 
-```
+```console
 -p --partition <partition-name>       --pty <software-name/path>
 --mem <memory>                        --gres <general-resources>
 -n --ntasks <number of tasks>         -t --time <days-hours:minutes>
@@ -769,7 +774,7 @@ Monitor the job
  squeue -u $USER
 ```
 
-```
+```console
  JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14221857  smallmem MySbatch bio326-2 PD       0:00      1 (Priority)
 ```
@@ -781,7 +786,7 @@ squeue -u $USER
 
 ```
 
-```
+```console
           JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14221857  smallmem MySbatch bio326-2  R       0:05      1 cn-6     
 ```
@@ -796,7 +801,7 @@ Let's check the output of the files:
 more slurm-MySbatchScript_14221857.*
 ```
 
-```
+```console
 ::::::::::::::
 slurm-MySbatchScript_14221857.err
 ::::::::::::::
