@@ -23,7 +23,7 @@ This will ask for your password. Type it
 
 After the first attempt of login you will get something like:
 
-```bash
+```console
 bio326-2024-1@login.orion.nmbu.no's password:
 You are required to change your password immediately (root enforced)
 Last login: Tue Feb 13 13:37:59 2024 from 10.42.16.74
