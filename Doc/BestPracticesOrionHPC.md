@@ -763,7 +763,7 @@ date
 
 ```
 
-*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by ``` cp $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/````*
+*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by* ``` cp $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/```
 
 Then submit the script by using the command ```sbatch```
 
