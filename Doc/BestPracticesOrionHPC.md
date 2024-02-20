@@ -328,6 +328,74 @@ Orion offers three primary job queues, or partitions: hugemem-avx2, RStudio, sma
 To select the correct partition queue we can use the **SLURM** command: *-p \<partition>* and choosing the appropriate partition depending the amount of memory RAM the job will use to compute.
 In general, there is a shorter job queue in smallmem than the hugemem queue. Also, be prepared to wait for your job to start if you need to use the hugemem queue.
 
+### Resources in the cluster
+
+Some times the cluster is super busy, a way we can check how many resources are available is by running the ```freecores``` command:
+
+```bash
+freecores
+```
+
+```console
+cn-10   0 of 32 cores free,  38606 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-11   0 of 64 cores free, 216727 of 257687 MB free,  0.0 PEs free (ALLOCATED)
+cn-15   0 of 32 cores free,  70346 of 257738 MB free,  0.0 PEs free (ALLOCATED)
+cn-6    0 of 32 cores free,  86734 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-9    0 of 32 cores free, 107214 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-12   4 of 32 cores free, 137930 of 257738 MB free,  4.0 PEs free (MIXED)
+cn-14   4 of 256 cores free, 241105 of 2051537 MB free,  4.0 PEs free (MIXED)
+cn-17   6 of 256 cores free, 140882 of 1031762 MB free,  6.0 PEs free (MIXED)
+cn-3    8 of 80 cores free, 783321 of 967353 MB free,  8.0 PEs free (MIXED)
+cn-5   10 of 32 cores free,  82638 of 193230 MB free, 10.0 PEs free (MIXED)
+cn-2   12 of 80 cores free, 741045 of 1031861 MB free, 12.0 PEs free (MIXED)
+cn-7   16 of 32 cores free, 129510 of 193230 MB free, 16.0 PEs free (MIXED)
+cn-8   20 of 32 cores free, 119502 of 193230 MB free, 19.8 PEs free (MIXED)
+gn-0   20 of 64 cores free,  33582 of 257710 MB free,  8.3 PEs free (MIXED)
+cn-18  26 of 56 cores free,  41612 of 386700 MB free,  6.0 PEs free (MIXED)
+cn-4   30 of 32 cores free, 152270 of 193230 MB free, 25.2 PEs free (MIXED)
+gn-2   36 of 64 cores free,  81582 of 257710 MB free, 20.3 PEs free (MIXED)
+gn-3   36 of 64 cores free,  81582 of 257710 MB free, 20.3 PEs free (MIXED)
+cn-19  46 of 56 cores free, 233100 of 386700 MB free, 33.8 PEs free (MIXED)
+gn-1   48 of 64 cores free, 155310 of 257710 MB free, 38.6 PEs free (MIXED)
+cn-16  68 of 256 cores free, 228946 of 1031762 MB free, 56.8 PEs free (MIXED)
+Total   390 of  1648 cores free,  3812 of  9808 GB free, 289.0 PEs free
+
+```
+
+Although this is useful, the information is not sorted and it is difficult to read, let's sort it a bit:
+
+```bash
+freecores |sort -V
+```
+
+```console
+Total   390 of  1648 cores free,  3812 of  9808 GB free, 289.0 PEs free
+cn-2   12 of 80 cores free, 741045 of 1031861 MB free, 12.0 PEs free (MIXED)
+cn-3    8 of 80 cores free, 783321 of 967353 MB free,  8.0 PEs free (MIXED)
+cn-4   30 of 32 cores free, 152270 of 193230 MB free, 25.2 PEs free (MIXED)
+cn-5   10 of 32 cores free,  82638 of 193230 MB free, 10.0 PEs free (MIXED)
+cn-6    0 of 32 cores free,  86734 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-7   16 of 32 cores free, 129510 of 193230 MB free, 16.0 PEs free (MIXED)
+cn-8   20 of 32 cores free, 119502 of 193230 MB free, 19.8 PEs free (MIXED)
+cn-9    0 of 32 cores free, 107214 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-10   0 of 32 cores free,  38606 of 193230 MB free,  0.0 PEs free (ALLOCATED)
+cn-11   0 of 64 cores free, 216727 of 257687 MB free,  0.0 PEs free (ALLOCATED)
+cn-12   4 of 32 cores free, 137930 of 257738 MB free,  4.0 PEs free (MIXED)
+cn-14   4 of 256 cores free, 241105 of 2051537 MB free,  4.0 PEs free (MIXED)
+cn-15   0 of 32 cores free,  70346 of 257738 MB free,  0.0 PEs free (ALLOCATED)
+cn-16  68 of 256 cores free, 228946 of 1031762 MB free, 56.8 PEs free (MIXED)
+cn-17   6 of 256 cores free, 140882 of 1031762 MB free,  6.0 PEs free (MIXED)
+cn-18  26 of 56 cores free,  41612 of 386700 MB free,  6.0 PEs free (MIXED)
+cn-19  46 of 56 cores free, 233100 of 386700 MB free, 33.8 PEs free (MIXED)
+gn-0   20 of 64 cores free,  33582 of 257710 MB free,  8.3 PEs free (MIXED)
+gn-1   48 of 64 cores free, 155310 of 257710 MB free, 38.6 PEs free (MIXED)
+gn-2   36 of 64 cores free,  81582 of 257710 MB free, 20.3 PEs free (MIXED)
+gn-3   36 of 64 cores free,  81582 of 257710 MB free, 20.3 PEs free (MIXED)
+
+```
+
+By using this we can plan our experiment and see how much resources are available at the moment.
+
 ## Running an interactive job to test programs and get used to working in the cluster
 
 The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can "book" a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
@@ -337,7 +405,7 @@ qlogin -c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
 ```
 
 *Basic syntaxis the command:
- srun \<slurm-options> \<software-name/path>*
+ qlogin \<slurm-options> \<software-name/path>*
   
 It might take a while to SLURM allocate the resources of this job. But as soon as it allocates the job a message like this will be displayed:
 
