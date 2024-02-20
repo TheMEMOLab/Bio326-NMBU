@@ -1,5 +1,5 @@
 # Basic exercises for best practices in Orion
-v3, February, 2023 Author: Arturo Vera-Ponce de Leon
+v4, February, 2024 Author: Arturo Vera-Ponce de Leon
 
 ### What is this?
 This document is intended to be a quick reference guide on the basic usage of the NMBU-Orion HPC cluster. For a complete reference please referer to the full documentation of [Orion](https://orion.nmbu.no/)
@@ -13,7 +13,7 @@ To login into Orion cluster we need two things:
 For login open a Command-line interfase (CLI) or Terminal  and type something like this. 
 
 ```bash
-$ ssh bio326-2023-19@login.orion.nmbu.no
+ssh bio326-2024-1@login.orion.nmbu.no
 ```
 *Remember to change to your username bio326-y-x*
 
@@ -24,18 +24,19 @@ This will ask for your password. Type it
 After the first attempt of login you will get something like:
 
 ```bash
-ssh bio326-2023-19@login.orion.nmbu.no
-bio326-2023-19@login.orion.nmbu.no's password:
+bio326-2024-1@login.orion.nmbu.no's password:
 You are required to change your password immediately (root enforced)
-Last login: Tue Feb 21 17:39:16 2023 from 10.42.25.161
+Last login: Tue Feb 13 13:37:59 2024 from 10.42.16.74
 WARNING: Your password has expired.
 You must change your password now and login again!
-Changing password for user bio326-2023-19.
-Changing password for bio326-2023-19.
+Changing password for user bio326-2024-1.
+Changing password for bio326-2024-1.
 (current) UNIX password:
 ```
 
-Type the password again:
+Type the password again and then create a new password.
+
+**!NB If is your first time using the CLI it is strongly suggested to use a simple password you don't forget!** 
 
 ```bash
 New password:
@@ -47,43 +48,87 @@ Connection to login.orion.nmbu.no closed.
 If this was done correctly, you will be logout and need to relogin:
 
 ```bash
-ssh bio326-2023-19@login.orion.nmbu.no
-bio326-2023-19@login.orion.nmbu.no's password:
-Last login: Tue Feb 21 17:49:52 2023 from 10.42.25.161
+ssh bio326-2024-1@login.orion.nmbu.no
+bio326-2024-1@login.orion.nmbu.no's password:
+```
+
+Then this message will apear:
+```
+Last login: Tue Feb 20 14:47:50 2024 from 10.42.26.49
+
 
 Welcome to the NMBU Orion compute cluster environment.
 
-You are logged in to a machine that can be used to access your home directory,
-edit your scripts, manage your files, and submit jobs to the cluster environment.
-Do not run any jobs on this machine, as they might be automatically terminated.
+You have successfully logged in to a machine that grants you access to your home directory, enables script editing, file management, and job submission within the cluster environment. Please refrain from running any jobs on this machine, as they may be automatically terminated..
 
-IMPORTANT:
-  - Orion introduction: https://orion.nmbu.no/
-  - Don’t use more than 150 threads/CPUs concurrently for more than one day. Please limit concurrently running array jobs to 25. Refer to Orion wiki how to do that. Orion can handle small-scale projects. Need more CPU hours? Please consider
-    applying for national infrastructure resources: https://www.sigma2.no/
-  - Please, PLEASE do compress your fastq, vcf and other non-compressed files
-    using i.e. pigz.
+
+
+
+Your home directory quota is:
+Volume          Type    ID                      Used    Quota   Limit   Grace
+Home            USR     bio326-2024-1           16K     200G    300G    none
+
 
 NEWS:
-  - 2022-07-28: Orion has been moved to a new storage system with a new data management policy. Please check Orion https://orion.nmbu.no/en/StorageChanges. We are still working out many details.
-    Please email us if you miss anything or notice any issues.
-  - Linux commands cp, rsync, scp, and mv are allowed to run for only 5 minutes in the login server. You must submit your jobs or use the interactive qlogin command to run these commands for longer than 5 minutes. You can also use filemanager.orion.nmbu.no to transfer files to your PC or arken.nmbu.no.
+- 2023-07-12: We upgraded Slurm, JupyterHub, RStudio and R to the latest version. Please email us if you miss anything or notice any issues.
 
-Apply for project storage https://tinyurl.com/OrionStorageApply
+IMPORTANT:
+- To learn more about Orion, please visit our introduction page: https://orion.nmbu.no/
+- If your project requires additional CPU hours, we recommend applying for national infrastructure resources at https://www.sigma2.no/
+- For optimal file management, please use filemanager.orion.nmbu.no and we strongly advise compressing your fastq, vcf, and other non-compressed files using tools like pigz.
+- Please always consider using the $TMPDIR storage, which is local to each compute node and offers faster read and write speeds. More information about this and other Orion file systems can be found at https://orion.nmbu.no/en/filesystems and https://orion.nmbu.no/en/storagepolicy. If you are unsure how to use $TMPDIR, please contact us.
 
-For any Orion related enquiry: orion-support@nmbu.no
-We are on Teams: https://bit.ly/orion-teams
+For any inquiries related to Orion, please contact us at orion-support@nmbu.no. You can also find us on Teams: https://bit.ly/orion-teams
 
 
-Your quota:
-Volume          Type    ID                      Used    Quota   Limit   Grace
-Home            USR     bio326-2023-19          16K     200G    300G    none
+Press Enter to acknowledge that you read the message above and continue.
+```
 
-Have a nice evening!
+
+After pressing enter you will see this:
+
+```
+            ,        ,
+            /(        )`
+            \ \___   / |
+            /- _  `-/  '
+           (/\/ \ \   /\
+           / /   | `    \
+           O O   ) /    |
+           `-^--'`<     '  Linux Version 3.10.0-1160.42.2.el7.x86_64
+          (_.)  _  )   /  Compiled #1 SMP Tue Sep 7 14:49:57 UTC 2021
+           `.___/`    /  Eight 2.19GHz Intel Intel(R) Xeon(R) Platinum 8352Y CPU @ 2.20GHz Processors, 32GB RAM
+             `-----' /  35118 Bogomips Total
+<----.     __ / __   \  Load Average 1.30, 1.21, 1.23
+<----|====O)))==) \) /====  login
+<----'    `--' `.__,' \
+             |        |
+              \       /       /\
+         ______( (_  / \______/
+       ,'  ,-----'   |
+       `--{__________)
+Hello, bio326-2024-1! Have a fantastic afternoon!
+
 -bash-4.2$
 ```
 
 **Now you are logged into the Orion login-node.**
+
+This a very basic configuration of the [promt](https://en.wikibooks.org/wiki/Guide_to_Unix/Explanations/Shell_Prompt), so let's changing to be more colorful and personalized. Just copy the following command:
+
+```bash
+
+rsync -aPlvh --no-owner --no-group /mnt/courses/BIO326/BestPracticesOrion/.bash* . && source .bash_profile
+
+```
+
+You will see something like this after:
+
+```
+[bio326-2024-1@login: ~]$
+
+```
+
 
 ### Orion main configuration 
 
@@ -100,14 +145,18 @@ How can I be sure of the number of CPUs and RAM of this "login" computer node an
 * CPUS: Use the command nproc
 
 ```Bash
--bash-4.2$ nproc
-8
+nproc
 ```
+
 
 * RAM: We need to look for the "Total memory". All this info is allocated in the meminfo file at /proc directory. So we can use the grep command to look for this into the file.
 
 ```bash
--bash-4.2$ grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
+grep MemTotal /proc/meminfo |awk '{print $1,$2/1000000 " GB"}'
+
+```
+
+```
 MemTotal: 32.7794 GB
 ```
 
@@ -153,65 +202,53 @@ If we want to know the amount of CPU, RAM and other configuration in the cluster
 For example we can display the Partition, No. of CPUs, Memmory ammount of each node (computer) in Orion using the following instructions:
 
 ```bash
--bash-4.2$ sinfo -l -N
-Tue Feb 21 17:53:54 2023
-NODELIST   NODES   PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON
-cn-1           1      orion*       mixed 144    4:18:2 309453        0      1 cpu_xeon none
-cn-1           1     hugemem       mixed 144    4:18:2 309453        0      1 cpu_xeon none
-cn-1           1       RSYNC       mixed 144    4:18:2 309453        0      1 cpu_xeon none
-cn-1           1 interactive       mixed 144    4:18:2 309453        0      1 cpu_xeon none
-cn-2           1      orion*       mixed 80     40:1:2 103186        0      1 cpu_xeon none
-cn-2           1     hugemem       mixed 80     40:1:2 103186        0      1 cpu_xeon none
-cn-2           1    smallmem       mixed 80     40:1:2 103186        0      1 cpu_xeon none
-cn-2           1 interactive       mixed 80     40:1:2 103186        0      1 cpu_xeon none
-cn-3           1      orion*       mixed 80     40:1:2 967353        0      1 cpu_xeon none
-cn-3           1     hugemem       mixed 80     40:1:2 967353        0      1 cpu_xeon none
-cn-3           1    smallmem       mixed 80     40:1:2 967353        0      1 cpu_xeon none
-cn-3           1 interactive       mixed 80     40:1:2 967353        0      1 cpu_xeon none
-cn-4           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-4           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-4           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-5           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-5           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-5           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-6           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-6           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-7           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-7           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-7           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-8           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-8           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-8           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-9           1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-9           1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-9           1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-10          1      orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-10          1    smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-10          1 interactive       mixed 32     32:1:1 193230        0      1 cpu_xeon none
-cn-11          1      orion*       mixed 64     2:16:2 257687        0      1 cpu_xeon none
-cn-11          1    smallmem       mixed 64     2:16:2 257687        0      1 cpu_xeon none
-cn-11          1 interactive       mixed 64     2:16:2 257687        0      1 cpu_xeon none
-cn-12          1      orion*       mixed 32      2:8:2 257738        0      1 cpu_xeon none
-cn-12          1    smallmem       mixed 32      2:8:2 257738        0      1 cpu_xeon none
-cn-12          1 interactive       mixed 32      2:8:2 257738        0      1 cpu_xeon none
-cn-13          1       RSYNC        idle 12      2:6:1  31917        0      1 cpu_xeon none
-cn-14          1     hugemem       mixed 256    2:64:2 205153        0      1 cpu_amd, none
-cn-14          1      orion*       mixed 256    2:64:2 205153        0      1 cpu_amd, none
-cn-14          1 interactive       mixed 256    2:64:2 205153        0      1 cpu_amd, none
-cn-15          1     hugemem   allocated 32      2:8:2 257738        0      1 cpu_xeon none
-cn-15          1      orion*   allocated 32      2:8:2 257738        0      1 cpu_xeon none
-cn-15          1 interactive   allocated 32      2:8:2 257738        0      1 cpu_xeon none
-cn-16          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-cn-16          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-cn-16          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-cn-17          1     hugemem       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-cn-17          1      orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-cn-17          1 interactive       mixed 256    2:64:2 103176        0      1 cpu_amd, none
-gn-0           1         gpu     drained 64     2:16:2 257710        0      1 cpu_amd, Job step not running
-gn-1           1         gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
-gn-2           1         gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
-gn-3           1         gpu     drained 64     2:16:2 257710        0      1 cpu_amd, Kill task failed
+sinfo -l -N
 ```
+
+This will display this table:
+
+```
+Tue Feb 20 15:50:09 2024
+NODELIST   NODES    PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON
+cn-1           1         test   allocated 144    4:18:2 309453        0      1 cpu_xeon none
+cn-2           1       orion*       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-2           1      hugemem       mixed 80     40:1:2 103186        0      1 cpu_xeon none
+cn-3           1       orion*       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-3           1      hugemem       mixed 80     40:1:2 967353        0      1 cpu_xeon none
+cn-4           1      RStudio       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-5           1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-5           1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-6           1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-6           1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-7           1      RStudio       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-8           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-8           1     smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-9           1       orion*       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-9           1     smallmem       mixed 32     32:1:1 193230        0      1 cpu_xeon none
+cn-10          1       orion*   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-10          1     smallmem   allocated 32     32:1:1 193230        0      1 cpu_xeon none
+cn-11          1       orion*   allocated 64     2:16:2 257687        0      1 cpu_xeon none
+cn-11          1 hugemem-avx2   allocated 64     2:16:2 257687        0      1 cpu_xeon none
+cn-12          1       orion*       mixed 32      2:8:2 257738        0      1 cpu_xeon none
+cn-12          1      hugemem       mixed 32      2:8:2 257738        0      1 cpu_xeon none
+cn-14          1       orion*       mixed 256    2:64:2 205153        0      1 cpu_amd, none
+cn-14          1 hugemem-avx2       mixed 256    2:64:2 205153        0      1 cpu_amd, none
+cn-15          1       orion*   allocated 32      2:8:2 257738        0      1 cpu_xeon none
+cn-15          1     smallmem   allocated 32      2:8:2 257738        0      1 cpu_xeon none
+cn-16          1       orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-16          1 hugemem-avx2       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-17          1 hugemem-avx2       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-17          1       orion*       mixed 256    2:64:2 103176        0      1 cpu_amd, none
+cn-18          1 hugemem-avx2       mixed 56     2:14:2 386700        0      1 cpu_amd, none
+cn-18          1       orion*       mixed 56     2:14:2 386700        0      1 cpu_amd, none
+cn-19          1 hugemem-avx2       mixed 56     2:14:2 386700        0      1 cpu_amd, none
+cn-19          1        test2       mixed 56     2:14:2 386700        0      1 cpu_amd, none
+gn-0           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+gn-1           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+gn-2           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+gn-3           1          gpu       mixed 64     2:16:2 257710        0      1 cpu_amd, none
+```
+
 In this case, the *State* column shows the status of the node. It means, how many resources can be allocated per node, in this example there are 4 different status: 
 
 * allocated: The node has been allocated to one or more jobs.
@@ -233,97 +270,21 @@ Summarizing, the only nodes that can accept jobs under the previous conditions a
 As an Orion user you can check the ammount of space used in different directories of the cluster. To check all the disks and mounted partitions in Orion we can run the following command:
 
 ```bash
-[bio326-21-0@login ~]$ df -h
-Filesystem                         Size  Used Avail Use% Mounted on
-devtmpfs                            16G     0   16G   0% /dev
-tmpfs                               16G     0   16G   0% /dev/shm
-tmpfs                               16G  1.2G   15G   8% /run
-tmpfs                               16G     0   16G   0% /sys/fs/cgroup
-/dev/mapper/centos_login--0-root    28G   20G  7.6G  73% /
-/dev/sda2                         1014M  287M  728M  29% /boot
-/dev/sdb                           100G  2.5G   98G   3% /work
-/dev/sda1                          200M   12M  189M   6% /boot/efi
-tmpfs                              5.0G   29M  5.0G   1% /tmp
-fs-1:/                             973M   11M  963M   2% /net/fs-1
-fs-1:/projects01                    95T   95T  686G 100% /net/fs-1/projects01
-fs-1:/home01                        76T   62T   15T  81% /net/fs-1/home01
-cn-1:/mnt/SCRATCH                   77T   76T  1.3T  99% /net/cn-1/mnt/SCRATCH
-tmpfs                              3.2G     0  3.2G   0% /run/user/1035
-fs-1:/Geno                          29T   21T  8.1T  72% /net/fs-1/Geno
-tmpfs                              3.2G     0  3.2G   0% /run/user/1018
-tmpfs                              3.2G     0  3.2G   0% /run/user/10023
-tmpfs                              3.2G     0  3.2G   0% /run/user/1004
-cn-13:/mnt/BACKUP                   71T   43T   29T  61% /net/cn-13/mnt/BACKUP
-fs-1:/results01                     95T   87T  8.3T  92% /net/fs-1/results01
-fs-1:/Transpose                     38T   38T   18G 100% /net/fs-1/Transpose
-tmpfs                              3.2G     0  3.2G   0% /run/user/10305
-tmpfs                              3.2G     0  3.2G   0% /run/user/10274
-tmpfs                              3.2G     0  3.2G   0% /run/user/50043
-tmpfs                              3.2G     0  3.2G   0% /run/user/50045
-tmpfs                              3.2G     0  3.2G   0% /run/user/50102
-tmpfs                              3.2G     0  3.2G   0% /run/user/50067
-tmpfs                              3.2G     0  3.2G   0% /run/user/10197
-tmpfs                              3.2G     0  3.2G   0% /run/user/30055
-tmpfs                              3.2G     0  3.2G   0% /run/user/50095
-tmpfs                              3.2G     0  3.2G   0% /run/user/40023
-tmpfs                              3.2G     0  3.2G   0% /run/user/1034
-cvmfs2                             4.9G  2.2G  2.7G  45% /cvmfs/singularity.galaxyproject.org
-cn-13:/mnt/SCRATCH2                148T  147T  691G 100% /net/cn-13/mnt/SCRATCH2
-fs-1:/SandveLab                     38T   36T  1.7T  96% /net/fs-1/SandveLab
-fs-1:/PEPomics01                    34T   29T  4.8T  86% /net/fs-1/PEPomics01
-tmpfs                              3.2G     0  3.2G   0% /run/user/50090
-tmpfs                              3.2G     0  3.2G   0% /run/user/30047
-tmpfs                              3.2G     0  3.2G   0% /run/user/10191
-tmpfs                              3.2G     0  3.2G   0% /run/user/50120
-tmpfs                              3.2G     0  3.2G   0% /run/user/10209
-tmpfs                              3.2G     0  3.2G   0% /run/user/10069
-tmpfs                              3.2G     0  3.2G   0% /run/user/1080
-tmpfs                              3.2G     0  3.2G   0% /run/user/50131
-tmpfs                              3.2G     0  3.2G   0% /run/user/40015
-tmpfs                              3.2G     0  3.2G   0% /run/user/10200
-tmpfs                              3.2G     0  3.2G   0% /run/user/1010
-tmpfs                              3.2G     0  3.2G   0% /run/user/10181
-fs-1:/HumGut                        19T   15T  4.8T  76% /net/fs-1/HumGut
-fs-1:/results03                     48T   44T  4.0T  92% /net/fs-1/results03
-cn-1:/mnt/SALMON-SEQDATA            37T   37T  313G 100% /net/cn-1/mnt/SALMON-SEQDATA
-fs-1:/Ngoc                         2.0T  1.2T  759G  61% /net/fs-1/Ngoc
-fs-1:/TestFile                     973G  2.7G  971G   1% /net/fs-1/TestFile
-cn-1:/mnt/labdata01                 81T   70T   11T  87% /net/cn-1/mnt/labdata01
-fs-1:/IPVProjects01                 57T   54T  3.7T  94% /net/fs-1/IPVProjects01
-cn-1:/mnt/homearchive               37T   24T   13T  66% /net/cn-1/mnt/homearchive
-fs-1:/Foreco                        12T  1.9T  9.6T  17% /net/fs-1/Foreco
-fs-1:/PreventADALL                 4.8T  2.4T  2.4T  50% /net/fs-1/PreventADALL
-fs-1:/Home_turhamar                973G  691G  283G  71% /net/fs-1/Home_turhamar
-fs-1:/Home_alme                    973G  396G  578G  41% /net/fs-1/Home_alme
-fs-1:/Home_rush                    973G  167G  807G  18% /net/fs-1/Home_rush
-//10.209.0.205/Completed_Projects  932G  583G  349G  63% /mnt/smb/GT2
-//10.209.0.10/Completed_projects   932G  585G  348G  63% /mnt/smb/GT1
-//10.209.0.203/Completed_Projects  932G  538G  395G  58% /mnt/smb/GT4
-//10.209.0.204/Completed_Projects  932G  578G  355G  62% /mnt/smb/GT3
-//10.209.0.202/Completed_Projects  932G  509G  424G  55% /mnt/smb/GT5
-cvmfs2                             4.9G  2.2G  2.7G  45% /cvmfs/cvmfs-config.galaxyproject.org
-tmpfs                              3.2G     0  3.2G   0% /run/user/1002
-tmpfs                              3.2G     0  3.2G   0% /run/user/10028
-tmpfs                              3.2G     0  3.2G   0% /run/user/10201
-tmpfs                              3.2G     0  3.2G   0% /run/user/10289
-tmpfs                              3.2G     0  3.2G   0% /run/user/1032
-tmpfs                              3.2G     0  3.2G   0% /run/user/50157
-tmpfs                              3.2G     0  3.2G   0% /run/user/1003
-tmpfs                              3.2G     0  3.2G   0% /run/user/10205
-tmpfs                              3.2G     0  3.2G   0% /run/user/50133
-tmpfs                              3.2G     0  3.2G   0% /run/user/1027
-tmpfs                              3.2G     0  3.2G   0% /run/user/4000
-tmpfs                              3.2G     0  3.2G   0% /run/user/50094
+df -h
 ```
 
 As you can notice there are plenty of directories in Orion, but let's focus in the $HOME partition:
 
 ```bash
--bash-4.2$ df -h .
-Filesystem      Size  Used Avail Use% Mounted on
-fs-1:/home01     76T   62T   15T  81% /net/fs-1/home01
+df -h .
 ```
+
 *syntaxis: d(isk)f(ree) -h(uman redable) .(the directory I am now) *
+
+```
+Filesystem                   Size  Used Avail Use% Mounted on
+fs-2:/scale/OrionStore/Home   90T   76T   15T  85% /net/fs-2/scale/OrionStore/Home
+```
 
 **All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
 
@@ -333,28 +294,33 @@ There are two dierectories designed to this:
 * $SCRATCH
 * $PROJECT
 
-As a student of this course, we are using the $SCRATCH folder to keep our raw sequencing files and final results. This directory, in contrast to the $HOME and $PROJECT, is not backed up. **Remember to make a copy of your important files into another (permanent) location!!!** All students have a directory in the $SCRATCH: /mnt/SCRATCH/bio326-22-x ; where x is the student number.
+As a student of this course, we are using the $SCRATCH folder to keep our raw sequencing files and final results. This directory, in contrast to the $HOME and $PROJECT, is not backed up. **Remember to make a copy of your important files into another (permanent) location!!!** All students have a directory in the $SCRATCH: /mnt/SCRATCH/bio326-y-x ; where y is the year and x is the student number.
 
 Let's move into that folder:
 
 ```bash
--bash-4.2$ cd $SCRATCH
--bash-4.2$ pwd
-/mnt/SCRATCH/bio326-2023-19
+cd $SCRATCH
+pwd
 ```
 *For moving here we use the variable ```$SCRATCH```. A variable is a character string to which the user assign a value. The value assigned could be a number, text, filename, device, or any other type of data. It is important you get familiarized with this and other Unix/Linux terminology. This [link](https://orion.nmbu.no/en/LinuxTutorial) can help you to navigate through these terms.
 
+```
+/mnt/SCRATCH/bio326-2024-1
+```
+
+
 ### Queues for different RAM usage:
 
-Orion offers three primary job queues, or partitions: hugemem, smallmem and gpu. You are encouraged to choose the most appropriate partition.
+Orion offers three primary job queues, or partitions: hugemem-avx2, RStudio, smallmem and gpu. You are encouraged to choose the most appropriate partition.
 
 |Partition 	|Job memory requirements| 	Available resources|
 |-----------|-----------------------|----------------------|
-|hugemem 	|> 100 GB RAM 	|2 x (1 TB RAM, 80 cores)|
-|smallmem |	1-100 GB RAM 	|7 x (192 GB RAM, 32 cores)|
+|hugemem-avx2 	|> 100 GB RAM 	|6 x (>1 TB RAM, 80 cores)|
+|RStudio  | ~100Gb RAM|2 x (~ 100 GB RAM,32 cores) |
+|smallmem |	1-100 GB RAM 	|6 x (192 GB RAM, 32 cores)|
 |gpu 	|1-100 GB RAM 	|4 x (256 GB RAM, 64 cores, 3 Quadro RTX 8000)|
 
-To select the correct partition queue we can use the **SLURM** command: *--partition=\<partition>* and choosing the appropriate partition depending the amount of memory RAM the job will use to compute.
+To select the correct partition queue we can use the **SLURM** command: *-p \<partition>* and choosing the appropriate partition depending the amount of memory RAM the job will use to compute.
 In general, there is a shorter job queue in smallmem than the hugemem queue. Also, be prepared to wait for your job to start if you need to use the hugemem queue.
 
 ## Running an interactive job to test programs and get used to working in the cluster
@@ -362,7 +328,7 @@ In general, there is a shorter job queue in smallmem than the hugemem queue. Als
 The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in Orion. This means you can "book" a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
 
 ```bash
--bash-4.2$ srun --partition=smallmem --cpus-per-task 2 --mem=2G --time=01:00:00 --pty bash -i
+qlogin -c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
 ```
 
 *Basic syntaxis the command:
@@ -370,76 +336,105 @@ The easiest way to test software and look into huge files without messing the lo
   
 It might take a while to SLURM allocate the resources of this job. But as soon as it allocates the job a message like this will be displayed:
 
-```bash
-bash-4.2$
 ```
-*NB! At the moment writing this documentation we found some issues with the ```$PS1``` variable displaying the prompt information to solve this:*
+salloc: Pending job allocation 14221700
+salloc: job 14221700 queued and waiting for resources
+salloc: job 14221700 has been allocated resources
+salloc: Granted job allocation 14221700
+```
 
-```bash
-bash-4.2$ PS1="[\u@\h \W]$ "
-[bio326-2023-19@cn-8 ~]$
-```
 
 You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node "cn-x". Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
 
 ```bash
-[bio326-2023-19@cn-8 ~]$ echo $SLURM_NODELIST
-cn-8
-[bio326-2023-19@cn-8 ~]$ echo $SLURM_CPUS_ON_NODE
-2
+echo $SLURM_NODELIST
+echo $SLURM_CPUS_ON_NODE
 ```
 
-Here we can run short parsing scripts, test software with a small datasets, etc. 
+In the interactive jobs we can run short parsing scripts, test software with a small datasets, etc. This is super helful for debuging or testing software.
 
 ### Temporary working directory, faster and more efficient Jobs
 
-Generaly any software can read (data) and write (results) from any partition of the cluster (i.e. $HOME, $SCRATCH, $PROJECT), however, I/O (reading and writing) from those locations uses a lot of network-trafic resources resulting in a high inefficenfy for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembly genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the infiniband, makes the jobs super slow. 
+Generaly any software can read (data) and write (results) from any partition of the cluster (i.e. $HOME, $SCRATCH, $PROJECT), however, I/O (reading and writing) from those locations uses a lot of network-trafic resources resulting in a high inefficenfy for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembly genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the InfiniBand (1-10 Gbps), makes the jobs super slow. 
 To avoid this we can take advantage of the **$TMPDIR** partition. This is a physical hard-drive allocated in each of the computer nodes. We can migrate the data to there for faster I/O. Often, quite some efficiency can be gained by doing this.
 
 Let's take a look, first we need to check if our **$USER** exists in that **$TMPDIR**
 
-```
-[bio326-2023-19@cn-8 ~]$ echo $TMPDIR/$USER
-/home/work/bio326-2023-19
+```bash
+echo $TMPDIR/$USER
+/home/work/bio326-2024-1
 ```
 
 This means the user **bio326-y-u** has a directory in the **$TMPDIR** (/home/work). Move to that directory:
 
 ```bash
-[bio326-2023-19@cn-8 ~]$ cd $TMPDIR/$USER
-bash: cd: /home/work/bio326-2023-19: No such file or directory
+cd $TMPDIR/$USER
 
 ```
 
 It could happen that our $USER name is not in the $TMPDIR, if that is the case we can easily create this directory and go there:
 
 ```bash
-[bio326-2023-19@cn-8 ~]$ mkdir $TMPDIR/$USER
-[bio326-2023-19@cn-8 ~]$ cd $TMPDIR/$USER
-[bio326-2023-19@cn-8 bio326-2023-19]$ pwd
-/home/work/bio326-2023-19
+ mkdir $TMPDIR/$USER
+ cd $TMPDIR/$USER
+
+```
+Let's check how much space we have available here:
+
+```bash
+df -h .
+
+```
+
+```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-home  4.4T   33G  4.3T   1% /home
 ```
 
 Now we need to create an other directory **a work directory** to copy data for executing some commands. We can use another SLURM variable, let's say the JOBID to be consistent.
 
 
 ```bash
-[bio326-2023-19@cn-8 bio326-2023-19]$ mkdir work.dir.of.$SLURM_JOB_ID
-[bio326-2023-19@cn-8 bio326-2023-19]$ ls
-work.dir.of.11818800
-[bio326-2023-19@cn-8 work.dir.of.11818800]$ cd $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
-[bio326-2023-19@cn-8 work.dir.of.11818800]$ pwd
-/home/work/bio326-2023-19/work.dir.of.11818800
+mkdir work.dir.of.$SLURM_JOB_ID
+ls
+cd work.dir.of.$SLURM_JOB_ID
+```
+
+Then check we have been done this correctly:
+
+```bash
+pwd
+```
+
+```
+/mnt/SCRATCH/bio326-2024-1/work.dir.of.14221700
 ```
 
 By using the $SLURM_JOB_ID we can further identify what job we are running.
+
+### Monitoring the job:
+
+By using the SLRUM comand ```squeue``` we can check if our interactive job is sill running:
+
+```bash
+squeue -u $USER
+```
+
+### Example of an Interactive job by running BLAST.
+
+**Problem: We want to detect the presence of a a-amylase sequence similar to Bacteroides gramini in a new Bacteroides genome (51).**
+
+**Solution: we can use BLAST tool to align the sequence to all the predicted proteins in the Bacteroides51 genome and look for an ortholg of the a-amylase.**
 
 Let's enter to that directory and then copy some fasta files from the ```$COURSES/BIO326```, this is a share directory we (teachers) will use to upload data for you. In this class we are using the files from ```$COURSES/BIO326/BestPracticesOrion/BLASTExample``` path.
 
 First take a look of the data
 
 ```bash
-[bio326-2023-19@cn-8 bio326-2023-19]$ ls -l $COURSES/BIO326/BestPracticesOrion/BLASTExample
+ls -l $COURSES/BIO326/BestPracticesOrion/BLASTExample
+```
+
+```
 total 2049
 -rwxrwxr-x 1 auve bio326     838 Nov  7 23:16 amylase.Bgramini.fasta
 -rwxrwxr-x 1 auve bio326 2085506 Nov  7 23:06 Bacteroides51.faa
@@ -450,8 +445,12 @@ total 2049
 As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $TMPDIR/$USER/work.dir.of.$SLURM_JOB_ID
 
 ```bash
-[bio326-21-0@cn-3 work.dir.of.12314866]$ cp /mnt/courses/BIO326/BestPracticesOrion/BLASTExample/*.fa* .
-[bio326-21-0@cn-3 work.dir.of.12314866]$ ls
+cp /mnt/courses/BIO326/BestPracticesOrion/BLASTExample/*.fa* .
+ls
+
+```
+
+```
 amylase.Bgramini.fasta  Bacteroides51.faa
 ```
 
@@ -460,7 +459,11 @@ amylase.Bgramini.fasta  Bacteroides51.faa
 No we can do some work on this files. Take a look of the **amylase.Bgramini.fasta** file 
 
 ```bash
-[bio326-21-0@cn-3 work.dir.of.12314866]$ more amylase.Bgramini.fasta 
+less amylase.Bgramini.fasta 
+
+```
+
+```
 >WP_024997086.1 alpha-amylase [Bacteroides graminisolvens]
 MKRYKYWFLLLIPFLIVACSGSDDPVIEPPVVLKEGLNYSPTAPDADQELTITFKAGSTSALYNYVGDVY
 VHIGVIVDGSWKYVPAEWTENISKCKMTKTADNVWSVKLSPTVRQWFASGETSIQKLGIVIRNADGSKKG
@@ -479,7 +482,11 @@ This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragil
 
 
 ```bash
-[bio326-2023-19@cn-8 work.dir.of.11818800]$ blastp
+blastp
+
+```
+
+```
 bash: blastp: command not found
 ```
 
@@ -491,70 +498,70 @@ Conda is an open source package management system and environment management sys
 
 For **BIO-326** we will use different Conda environment previously installed in Orion. However, as a Orion user you are allowed to install your own environment, please refere to the [Orion-Conda Environment](https://orion.nmbu.no/en/CondaEnvironment) for doing this.
 
-Let's check if conda works in the node
+1. Activate the Module miniconda3 to load all the conda basics
 
 ```bash
-[bio326-2023-19@cn-12 ~]$ conda --version
-conda 4.14.0
+module load Miniconda3
+```
+
+Then let's configure the interactive session with the conda global environments
+
+```bash
+eval "$(conda shell.bash hook)"
+```
+
+What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell...**NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
+
+If everything was OK, you should now see the ```base``` conda environment loaded and the prompt shows this:
+
+```terminal
+(base) [bio326-2024-1@cn-14: work.dir.of.14221763]$
 ```
 
 Now we can **activate** the conda environment:
 
 ```bash
-[bio326-2023-19@cn-12 work.dir.of.11818800]$ conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
-
-CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-To initialize your shell, run
-
-    $ conda init <SHELL_NAME>
-
-Currently supported shells are:
-  - bash
-  - fish
-  - tcsh
-  - xonsh
-  - zsh
-  - powershell
-
-See 'conda init --help' for more information and options.
-
-IMPORTANT: You may need to close and restart your shell after running 'conda init'.
+conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
 ```
 
-If this happen we need to configure the Node to be able to work with conda. The following commands help to do that:
+Notice again how the prompt has changed:
 
-```bash
-[bio326-2023-19@cn-12 work.dir.of.11818800]$ module load Miniconda3 && eval "$(conda shell.bash hook)"
-
-(base) [bio326-2023-19@cn-12 work.dir.of.11818800]$
-
-```
-What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell...**NB! Remember the aim of this course is not to be a Linux expert so do not worry if this is a bit criptic for you :-)** 
-
-Now conda is activate, we can see how our prompt has changed: ``` (base) [bio326-2023-19@cn-12 work.dir.of.11818800]$```
-
-Then we can activate the environmet for run conda in this case this is at ```$COURSES/BIO326/BestPracticesOrion/BLASTConda```
-
-```bash
-(base) [bio326-2023-19@cn-12 work.dir.of.11818800]$ conda activate $COURSES/BIO326/BestPracticesOrion/BLASTConda
-(/mnt/courses/BIO326/BestPracticesOrion/BLASTConda) [bio326-2023-19@cn-12 work.dir.of.11818800]$
+```terminal
+(/mnt/courses/BIO326/BestPracticesOrion/BLASTConda) [bio326-2024-1@cn-14: work.dir.of.14221763]$
 ```
 
 We can then run a blast experiment:
+
+- Let's check blast is now running:
+
+```bash
+blastn
+```
+
+```
+BLAST query/options error: Either a BLAST database or subject sequence(s) must be specified
+Please refer to the BLAST+ user manual.
+```
+
+Now it is running...
+
 
 * Index a database using ```makeblastdb``` and the molecule type prot:
 
 ```bash
 makeblastdb -dbtype prot -in Bacteroides51.faa
 
+```
 
-Building a new DB, current time: 02/21/2023 19:54:33
-New DB name:   /home/work/bio326-2023-19/work.dir.of.11818800/Bacteroides51.faa
+```
+Building a new DB, current time: 02/20/2024 17:27:49
+New DB name:   /home/work/bio326-2024-1/work.dir.of.14221763/Bacteroides51.faa
 New DB title:  Bacteroides51.faa
 Sequence type: Protein
 Keep MBits: T
 Maximum file size: 3000000000B
-Adding sequences from FASTA; added 4630 sequences in 0.182254 seconds.
+Adding sequences from FASTA; added 4630 sequences in 0.091763 seconds.
+
 ```
 
 Check the results by ls:
@@ -562,6 +569,10 @@ Check the results by ls:
 ```bash
 
 ls
+
+```
+
+```
 amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroides51.faa.pot  Bacteroides51.faa.ptf
 Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pjs  Bacteroides51.faa.psq  Bacteroides51.faa.pto
 ```
@@ -570,13 +581,15 @@ And now lets run the BLAST,as we want to search for protein in a protein databas
 
 ```bash
 blastp -query amylase.Bgramini.fasta -db Bacteroides51.faa -dbsize 1000000000 -max_target_seqs 1 -outfmt 6 -num_threads $SLURM_CPUS_ON_NODE -out amylase.Bgramini.fasta.blastp.out
-Warning: [blastp] Examining 5 or more matches is recommended
 ```
 
 Take a look into the results:
 
 ```bash
-more amylase.Bgramini.fasta.blastp.out
+less amylase.Bgramini.fasta.blastp.out
+```
+
+```
 WP_024997086.1  D0T87_RS12665   57.772  772     301     13      8       763     28      790     0.0     908
 ```
 
@@ -584,22 +597,37 @@ It seems the amylase of *B. fragilis* has a match wiht the D0T87_RS12665 sequenc
 
 ```bash
 grep D0T87_RS12665 Bacteroides51.faa
->D0T87_RS12665	alpha-amylase	WP_163175496.1
+
 ```
 We found the amylase!!!
 
 ### Copy results to the $SCRATCH, remove work.directory and exit the job.
 
-**NB! Remember the $TMPDIR is a temprary directory so, we need to move the results back to our $SCRATCH partition. For this we can use the following sintax:**
+**NB! Remember the $TMPDIR is a temprary directory so, we need to move the results back to our $SCRATCH partition. For this we can use the following commands:**
+
+- Create a directory in the ```$SCRATCH``` to save all the outputs
 
 ```bash
-cp *fasta.blastp.out $SCRATCH
+mkdir $SCRATCH/MyInteractiveBlast.dir
+```
+
+```bash
+rsync -aPlvh --no-owner --no-group *fasta.blastp.out $SCRATCH/MyInteractiveBlast.dir/
+```
+
+```
+sending incremental file list
+amylase.Bgramini.fasta.blastp.out
+             68 100%    0.00kB/s    0:00:00 (xfr#1, to-chk=0/1)
+
+sent 185 bytes  received 35 bytes  440.00 bytes/sec
+total size is 68  speedup is 0.31
 ```
 
 Then let's sure this is copy back
 
 ```bash
-ls $SCRATCH
+ls $SCRATCH/MyInteractiveBlast.dir
 amylase.Bgramini.fasta.blastp.out
 ```
 
@@ -610,30 +638,27 @@ We can achive this by doing this:
 * First go back to the main $TMPDI/$USER
 
 ```
-[bio326-2-0@cn-3 work.dir.of.12314866]$ cd $TMPDIR/$USER
-bio326-21-0@cn-3 bio326-21-0]$ ls
-singularity  work.dir.of.12314866
-```
-
-Now we need to remove the work.dir.of 
-
-```
-[bio326-21-0@cn-3 bio326-21-0]$ rm -rf work.dir.of.*
-[bio326-21-0@cn-3 bio326-21-0]$ ls
+cd $TMPDIR/$USER
+rm -rf work.dir.of$SLURM_JOB_ID
 ```
 
 Finally, we can logout of this node:
 
 ```
 exit
-[bio326-2023-19@login ~]$
 ```
 
 You can see now we return to the main **login bio326-y-x** node.
 
-## Submit the same BLAST job but using a SLURM script.
+## sbatch scripts.
 
-Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
+MMost of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
+
+SLURM can use bash or computer scripting language (e.g. perl, python, etc) base script to read the instructions. The first line #!/bin/bash, called bash shebang, are reserved words that the computer needs to read and interpret in order to launch the program. The following lines, need to start with #SLURM and these are specific instructions SLURM uses to know how many resources and other parameters the job will use while is running. In our interactive job we used some of these SLURM parameters directly in the command line
+
+```
+-c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
+```
 
 SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
 
@@ -646,8 +671,150 @@ SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base
 -w --nodelist <list-of-node-names>    -J --job-name <jobname>
 ```
 
-We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 10 ; means 10 CPUs).
+We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 2 ; means 2 CPUs).
 
+
+
+These parameters in a SLURM script must start with a #SBATCH string and will tell the SLURM schedule the following information. The batch script may contain options preceded with "#SBATCH" before any executable commands in the script. sbatch will stop processing further #SBATCH directives once the first non-comment non-whitespace line has been reached in the script.
+
+- Number of nodes
+- Desired number of processors or jobs
+- Type of partition/queue you want to use (optional)
+- Memory requirement (Optional)
+- Length of time you want to run the job (Each partition has a default)
+- Where to write output and error files
+- Name for your job while running on HPC
+- Email ID to get job status (Optional)
+
+
+
+### Creating a SBATCH job template
+
+To run your jobs on Orion, you should create a job script and submit it.
+
+Let's go to our $SCRATCH, create a directory names SLURMTest and there a text file using vi or nano named myfirstsbatch.SLURM.sh
+
+```bash
+cd $SCRATCH
+mkdir SLURMTest
+nano myfirstsbatch.SLURM.sh
+```
+
+Basic commands on nano:
+
+```^ = Control```
+Save as:
+
+```^O = Control + O```
+
+Exit
+
+```^x = Control + x```
+
+
+```bash
+#!/bin/bash
+
+
+#####Everything after this will be the instructions to SLURM###
+#################################################################
+## Job name:
+#SBATCH --job-name=MySbatchScript  #Name of the job
+#
+## Wall time limit:
+#SBATCH --time=00:05:00  #Run for 5 minutes
+#
+##Partition
+#SBATCH --partition=smallmem  #Partiion submitting the job
+
+## Other parameters:
+#SBATCH --cpus-per-task 2    #Number of cpus the job will use
+#SBATCH --mem=1G             #Memory RAM
+#SBATCH --nodes 1        #Number of computers
+#SBATCH --mail-user=arturo.vera.ponce.de.leon@nmbu.no  #User email
+#SBATCH --mail-type=begin      #notify by email when job starts
+#SBATCH --mail-type=end        #notify by email when job ends
+#SBATCH -o slurm-%x_%j.out    #Standar output message
+#SBATCH -e slurm-%x_%j.err    #Standar error message
+##############################################################
+
+######Everything below this are the job instructions######
+
+echo "Hello $USER this is my first JOB"
+echo "I am running on the NODE $SLURM_NODELIST"
+echo "I am running with $SLURM_CPUS_ON_NODE cpus"
+
+echo "Starting $SLURM_JOB_ID at"
+date
+
+sleep 10 && echo "I slept for 10 seconds" > 10.txt
+
+echo "Ending $SLURM_JOB_ID at"
+date
+
+```
+
+*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by ``` cp $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/````*
+
+Then submit the script by using the command ```sbatch```
+
+```bash
+sbatch myfirstsbatch.SLURM.sh
+
+```
+
+Monitor the job
+
+```bash
+ squeue -u $USER
+```
+
+```
+ JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14221857  smallmem MySbatch bio326-2 PD       0:00      1 (Priority)
+```
+This means your job is pending to be submitted (PD)
+
+
+```bash
+squeue -u $USER
+
+```
+
+```
+          JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14221857  smallmem MySbatch bio326-2  R       0:05      1 cn-6     
+```
+
+Now it is runing. And after 10 seconds it will finish and we should ended up with 3 files:
+
+slurm-MySbatchScript_14221857.err  slurm-MySbatchScript_14221857.out 10.txt
+
+Let's check the output of the files:
+
+```bash
+more slurm-MySbatchScript_14221857.*
+```
+
+```
+::::::::::::::
+slurm-MySbatchScript_14221857.err
+::::::::::::::
+::::::::::::::
+slurm-MySbatchScript_14221857.out
+::::::::::::::
+Hello bio326-2024-1 this is my first JOB
+I am running on the NODE cn-6
+I am running with 2 cpus
+Starting 14221857 at
+Tue Feb 20 18:28:27 CET 2024
+Ending 14221857 at
+Tue Feb 20 18:28:37 CET 2024
+```
+
+
+
+### Submit the same BLAST job but using a SLURM script.
 
 ```
 #!/bin/bash
