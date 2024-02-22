@@ -831,7 +831,7 @@ date
 
 ```
 
-*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by* ``` cp $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/```
+*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by* ``` rsync -aPL $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/```
 
 Then submit the script by using the command ```sbatch```
 
@@ -840,7 +840,38 @@ sbatch myfirstsbatch.SLURM.sh
 
 ```
 
-Monitor the job
+## Canceling Jobs 
+
+Some times happens that we start a job but find some bugs in the script or simply we do not want to run for any reason. In this case there is a way to **cancel** jobs.
+For this, we can use the **scancel** command following the **JOBID**
+
+For example the following job 12315677:
+
+```bash
+squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
+          12315677     orion MyFirstB bio326-2 PD       0:00      1 (Priority)
+ ```
+
+To cancel just type:
+
+```bash
+scancel 12315677
+```
+
+And then check for the status:
+
+```bash
+
+squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
+```
+
+If no slurm.out file is created and no job is showing by the squeue command, it means the job has been canceled.
+
+### Monitoring the jobs by squeue
+
+Users can check the status of the Job by the command ```squeue -u $USER``` 
 
 ```bash
  squeue -u $USER
@@ -863,7 +894,7 @@ squeue -u $USER
           14221857  smallmem MySbatch bio326-2  R       0:05      1 cn-6     
 ```
 
-Now it is runing. And after 10 seconds it will finish and we should ended up with 3 files:
+Now it is runing (R). And after 10 seconds it will finish and we should ended up with 3 files:
 
 slurm-MySbatchScript_14221857.err  slurm-MySbatchScript_14221857.out 10.txt
 
@@ -889,24 +920,81 @@ Ending 14221857 at
 Tue Feb 20 18:28:37 CET 2024
 ```
 
+This job also created a text (.txt) file names 10.txt, let's take a look:
 
+```bash
+more 10.txt
+```
 
-### Submit the same BLAST job but using a SLURM script.
+```console
+I slept for 10 seconds
+```
+
+### Debunging errors during sbatch execution:
+
+Let's run the following script that should launch a job to sleep for 20 seconds and then create a text file ```20.txt```
+
+-Copy the script to the ```$SCRATCH```
+
+```bash
+
+rsync -aPL $COURSES/BIO326/BestPracticesOrion/mysecondsbatch.SLURM.sh $SCRATCH/SLURMTest/
 
 ```
-#!/bin/bash
 
-## Job name:
-#SBATCH --job-name=Blast
-#
-## Wall time limit:
-#SBATCH --time=00:00:00
-#
-## Other parameters:
-#SBATCH --cpus-per-task 12
-#SBATCH --mem=60G
-#SBATCH --nodes 1
+And then submit the job:
+
+```bash
+sbatch mysecondsbatch.SLURM.sh
 ```
+
+```console
+Submitted batch job 14225128
+```
+
+Let's list the results:
+
+```bash
+ls -lrth
+```
+
+```console
+total 3.0K
+-rw-rw-r-- 1 bio326-2024-1 nobody 1.2K Feb 20 18:11 myfirstsbatch.SLURM.sh
+-rw-rw-r-- 1 bio326-2024-1 nobody    0 Feb 22 11:05 slurm-MySbatchScript_14225084.err
+-rw-rw-r-- 1 bio326-2024-1 nobody   23 Feb 22 11:05 10.txt
+-rw-rw-r-- 1 bio326-2024-1 nobody  195 Feb 22 11:05 slurm-MySbatchScript_14225084.out
+-rw-rw-r-- 1 bio326-2024-1 nobody 1016 Feb 22 11:22 mysecondsbatch.SLURM.sh
+-rw-rw-r-- 1 bio326-2024-1 nobody    0 Feb 22 11:23 20.txt
+-rw-rw-r-- 1 bio326-2024-1 nobody   74 Feb 22 11:23 slurm-MySbatchScript_14225128.err
+-rw-rw-r-- 1 bio326-2024-1 nobody  194 Feb 22 11:23 slurm-MySbatchScript_14225128.out
+
+```
+
+We can notice the ```20.txt``` file is empty (value 0 in the 4th colum), we can check then the ```slurm-MySbatchScript_14225128.err``` to debug:
+
+```bash
+more slurm-MySbatchScript_14225128.err
+```
+
+```console
+/var/tmp/slurmd/job14225128/slurm_script: line 32: ech: command not found
+```
+
+It looks like the error is in line 32, let's take a look of the slurm script:
+
+```bash
+less +32 -N mysecondsbatch.SLURM.sh
+```
+
+```console
+32 sleep 20 && ech "I sleept for 20 seconds" > 20.txt
+```
+
+Changing the error in tat line will correct the code. After changing, save the code and resubmit.
+
+
+## Submit a BLAST job to compare sequences but using a SLURM script.
 
 Let's use the following SLURM script to run the BLAST as we did in the interactive job.
 
@@ -1041,15 +1129,6 @@ Submitted batch job 11818971
 The job now is in the **queue** to run.
 
 
-## Monitoring the jobs by squeue
-
-A user can monitorate the status of the Job by the command ```squeue $USER``` 
-
-```bash
-squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-          11818971  smallmem MyFirstB bio326-2  R       0:01      1 cn-12
-```
 
 This will show all the jobs, quite difficult to read. So instead we can indicate only to show our user jobs by adding the flag **-u** and the **$USER** variable:
 
@@ -1065,6 +1144,8 @@ We can check into this file:
 
 ```bash
 more slurm-MyFirstBlastp_11818971
+```
+```console
 Working with this /mnt/courses/BIO326/BestPracticesOrion/BLASTConda environmet ...
 Hello bio326-2023-19
 my submit directory is:
@@ -1111,39 +1192,12 @@ Tue Feb 21 21:50:37 CET 2023
 
 As you can see it seems the Job ran smoothly and produced the result:
 
-```
+```bash
 ls /mnt/SCRATCH/bio326-2023-19/MyFirstBlastp.dir 
+```
+```console
 amylase.Bgramini.fasta.blastp.out
 ```
-
-## Canceling Jobs 
-
-Some times happens that we start a job but find some bugs in the script or simply we do not want to run for any reason. In this case there is a way to **cancel** jobs.
-For this, we can use the **scancel** command following the **JOBID**
-
-For example the following job 12315677:
-
-```bash
-squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
-          12315677     orion MyFirstB bio326-2 PD       0:00      1 (Priority)
- ```
-
-To cancel just type:
-
-```bash
-scancel 12315677
-```
-
-And then check for the status:
-
-```bash
-
-squeue -u $USER
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
-```
-
-If no slurm.out file is created and no job is showing by the squeue command, it means the job has been canceled.
 
 ## Bulletpoints
 
