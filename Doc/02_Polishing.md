@@ -1,6 +1,6 @@
 # Prokaryota dry lab: 02 Polishing
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
-#### Wednesday 12th of April 2023
+#### Wednesday 12th of April 2024
 
 
 ## A note about the problems that we had last time 
