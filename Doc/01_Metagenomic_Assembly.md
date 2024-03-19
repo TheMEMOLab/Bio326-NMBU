@@ -1,6 +1,7 @@
 # Prokaryota dry lab: 01 Metagenomic Assembly
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
-#### Wednesday 22nd of March 2023
+
+#### Wednesday April 10th 2024
 
 Hello! Welcome to the metagenomic dry lab session! Here we will take the raw basecalled reads from the nanopore sequenator and try to reconstruct the microbial genomes that they came from.
 
@@ -50,10 +51,10 @@ cp -v /mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fast
 #> ‘/mnt/courses/BIO326/PROK/data/metagenomic_assembly/raw_reads_nanopore.fastq.gz’ -> ‘./raw_reads_nanopore.fastq.gz’
 ```
 
-Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use ``zcat``. Since we will be using *less* to open this file, you should press "q" on your keyboard to return to your terminal.
+Our raw reads are stored using the fastq-format which differs from other sequence formats by encoding base quality scores for all nucleotide positions along each read. We can take a look at our actual reads file. Remember that because it is compressed with gzip (hence the .gz suffix in the filename) we will use ``zcat``. Here we're using the *less* program to show the file. Use arrowkeys, space and b to navigate around in the file. Press q to get back to your terminal.
 
 ```bash
-zcat raw_reads_nanopore.fastq.gz | less -S
+zcat raw_reads_nanopore.fastq.gz | less -SM
 #> @90082f7c-d334-40f4-bb82-ee6a84a7cfc9
 #> TCGATGAGGACGGAATATACTATTTTATCCTGGATGACGAGGGATATGATAACACTGCGGATGTGATCGCATACGTATACACCCTGACAGACGACGGCGAAGGATACATAGAGATCGGAGAGACCTATGACCTT
 #> +
@@ -84,7 +85,7 @@ zcat raw_reads_nanopore.fastq.gz | less -S
 
 If you look closely at the beginning of each line, you will observe the repeating pattern of "@, *sequence*, +, *quality*" for every four lines.
 
-You can use the arrow keys on your keyboard to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text: It mostly looks like a random garble.
+You can use the arrow keys on your keyboard to scroll horizontally, to get a very real feeling about the length of some of these reads. Remember that since every fourth line encodes the quality for each position using all basic computer characters including symbols, numbers and text, it mostly looks like a random garble.
 
 
 ## Quality control and filtering of the raw reads 🛂
@@ -145,6 +146,12 @@ filtlong --min_length 1000 --keep_percent 90 $in | gzip > $out
 
 Now submit the job with sbatch e.g. ``sbatch 01a_filter-filtlong.sh``.
 
+You can check the status and resource usage of the running job with `sacct` or `watch -d jobinfo <jobid>`.
+
+
+---
+
+
 Once finished, check your output/filtlong/ directory. There should be a compressed fastq output file. Filtlong will use ~40 minutes to finish, possibly longer if Orion is busy. If the job finish after a couple of minutes, you can suspect that something went wrong! Read the file called slurm-<jobID>.out using ``less`` or ``more`` and check if you have any error! _Hint: scroll up to see how to fix one of the possible issues._ 
 
 
@@ -157,10 +164,10 @@ tree -sh $SCRATCH/prok/results/filtlong/
 ```
 
 
-You can learn more about how to use filtlong for different scenarios by referring to the filtlong documentation at https://github.com/rrwick/Filtlong
+You can learn more about how to use filtlong for different scenarios by checking out the filtlong documentation at https://github.com/rrwick/Filtlong
 
 If you have issues running filtlong and just want to continue, you can copy the output file ("output.fastq.gz") that we already created beforehand from this directory:
-"/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong". _Unsure on how? Scroll up and get inspired by how we used ``cp`` to copy the raw fastq file. Remember to change paths and file name._
+"/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong".
 
 
 
@@ -192,6 +199,8 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 
 ```
+
+Again, you can surveill progress of the job with sacct and jobinfo. You can also look at the progress log from flyte with `less -r slurm-<jobinfo>.out`
 
 
 **Bonus points**: If you look closely at the Flye program call in the sbatch script above, you can see that we're passing the "--meta" argument. By investigating the Flye documentation (https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md), can you explain briefly what the "meta" mode does, and argue why we want to use it in this setting?

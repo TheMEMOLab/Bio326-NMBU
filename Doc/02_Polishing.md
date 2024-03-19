@@ -15,7 +15,6 @@ export LC_ALL=C; unset LANGUAGE # Fixes a bug in filtlong
 if [ -f ~/.bashrc ]; then 
   . ~/.bashrc
 fi
-export PS1=\"\\[\\e[32m\\]\\u\\[\\e[m\\]\\[\\e[33m\\]@\\[\\e[m\\]\\[\\e[34m\\]\\h\\[\\e[m\\] \\[\\e[35m\\]\\W\\[\\e[m\\] \\[\\e[33m\\]\\\\$\\[\\e[m\\] \"
 """ >> ~/.bash_profile # Sets up a bash profile for your terminal.
 exit
 
@@ -72,6 +71,8 @@ ls -lh $SCRATCH/prok/results/flye/
 #>   92 Mar 16 04:17 params.json
 ```
 
+<table><tr><td>
+
 
 If you see that your file either does not exist or does not have a size comparable to around 233M (megabytes) which is exemplified in the ls output above, you can copy the assembly file we made for you in the demo directory using the following command.
 
@@ -91,6 +92,8 @@ We also need the reads from filtlong, these you can get from here:
 mkdir -p $SCRATCH/prok/results/filtlong/
 cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/filtlong/output.fastq.gz $SCRATCH/prok/results/filtlong/
 ```
+
+</td></tr></table>
 
 Now we're ready to continue with polishing.
 
