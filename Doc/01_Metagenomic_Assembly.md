@@ -148,6 +148,8 @@ Now submit the job with sbatch e.g. ``sbatch 01a_filter-filtlong.sh``.
 
 You can check the status and resource usage of the running job with `sacct` or `watch -d jobinfo <jobid>`.
 
+**NB! You can copy this script from ```/mnt/courses/BIO326/PROK/scripts/BIO326_24/01a_filter-filtlong.sh```**
+
 
 ---
 
@@ -199,6 +201,7 @@ flye --meta --nano-hq $in --threads $SLURM_CPUS_PER_TASK --out-dir $out --iterat
 
 
 ```
+**NB! You can copy this script from ```/mnt/courses/BIO326/PROK/scripts/BIO326_24/01b_assemble-flye.sh```**
 
 Again, you can surveill progress of the job with sacct and jobinfo. You can also look at the progress log from flyte with `less -r slurm-<jobinfo>.out`
 
