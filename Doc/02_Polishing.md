@@ -128,7 +128,7 @@ If you want to know more about how to set up Racon, you can read about it here: 
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
-#SBATCH -p smallmem,hugemem
+#SBATCH -p smallmem,hugemem,hugemem-avx2
 
 
 # Activate the conda environment
@@ -159,6 +159,7 @@ racon -t $SLURM_CPUS_PER_TASK $in_reads $SCRATCH/prok/results/racon/minimap2_rou
 
 ```
 
+**NB! You can copy the script from ```/mnt/courses/BIO326/PROK/scripts/BIO326_24/02a_polish1-racon.sh```**
 
 
 <table><tr><td>
@@ -182,7 +183,7 @@ Let's first check the assembly-stats on the original Flye assembly.
 
 ```
 
-Now, wait till Racon finishes, also run assembly-stats on that one, and compare to Flye.
+Now, wait until Racon finishes, also run assembly-stats on that one, and compare to Flye.
 
 (If you want to see the Racon results before your job finishes, you can copy a premade file from "/mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/racon/racon_round2.fna")
 
@@ -225,7 +226,7 @@ If curious, you can read more about how to set up Medaka here: https://github.co
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=16G
 #SBATCH --output slurm-%j-%x.out.log
-#SBATCH -p smallmem,hugemem
+#SBATCH -p smallmem,hugemem,hugemem-avx2
 
 
 # Activate the conda environment
