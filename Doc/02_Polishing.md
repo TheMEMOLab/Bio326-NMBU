@@ -217,6 +217,8 @@ medaka_consensus -t $SLURM_CPUS_PER_TASK -d $in_assembly -i $in_reads -o $out -m
 
 ```
 
+**NB! You can copy the script from ```/mnt/courses/BIO326/PROK/scripts/BIO326_24/02b_polish2-medaka.sh```**
+
 Wait for the medaka job to finish. It could take several hours.
 
 <table><tr><td>
