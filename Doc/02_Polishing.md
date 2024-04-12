@@ -46,7 +46,7 @@ ls -lh $SCRATCH/prok/results/flye/
 ```
 
 <table><tr><td>
-
+#### (In case you didn't complete the Flye-assembly session)
 
 If you see that your file either does not exist or does not have a size comparable to around 233M (megabytes) which is exemplified in the ls output above, you can copy the assembly file we made for you in the demo directory using the following command.
 
