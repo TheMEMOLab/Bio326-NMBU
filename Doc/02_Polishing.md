@@ -3,32 +3,6 @@
 #### Friday 12th of April 2024
 
 
-## A note about the problems that we had last time 
-
-Last time we ran into some issues with filtlong because the locale settings on your user accounts were not set up correctly from the beginning. This is of course not at your fault, but we think that we solved the issue, and we just need you to run a few commands to fix it. Hopefully we will not get into more trouble.
-
-Once you are logged into orion, please copy and paste these commands:
-
-```bash
-echo """ 
-export LC_ALL=C; unset LANGUAGE # Fixes a bug in filtlong
-if [ -f ~/.bashrc ]; then 
-  . ~/.bashrc
-fi
-""" >> ~/.bash_profile # Sets up a bash profile for your terminal.
-exit
-
-```
-
-After you run these commands on orion, it should automatically log you out, and you can log in again. When you log in again, you should see your terminal having new colors:
-
-
-
-
-<img width="346" alt="Screenshot 2023-03-22 at 15 41 45" src="https://user-images.githubusercontent.com/5913696/226940379-933b380a-e6a8-4af9-873c-202c799e435b.png">
-
-
----
 
 ## Recap 
 
