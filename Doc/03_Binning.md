@@ -18,6 +18,10 @@ du -h results/medaka/consensus.fasta
 #> 224M    results/medaka/consensus.fasta
 ```
 
+<table><tr><td>
+
+#### (In case of missing data from last time)
+
 If you get a "No such file or directory" error, you can copy our premade files into your directory and continue with the binning exercise below. <ins>Be aware</ins> that this action will possibly overwrite your own files if they do indeed exist.
 
 
@@ -29,6 +33,8 @@ mkdir -p $SCRATCH/prok/results/medaka/
 cp /mnt/courses/BIO326/PROK/data/metagenomic_assembly/demo/results/medaka/consensus.fasta $SCRATCH/prok/results/medaka/
 cd $SCRATCH/prok
 ```
+
+</td></tr></table>
 
 
 
@@ -179,33 +185,28 @@ We can check the total length and number of contigs in each bin with assembly-st
 
 ## Qualitative Bin Analysis and Annotation
 
-We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here](https://github.com/cmkobel/assemblycomparator2).
+We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
 
-You can install a shortcut to run this pipeline, by calling this instruction in your terminal:
+![image](https://github.com/TheMEMOLab/Bio326-NMBU/assets/5913696/bee98c41-6d96-4985-8bea-5784cb008d8c)
+
+
+
+Assemblycomparator2 is already installed on Orion, and can be accessed by activating the following conda environment, and calling its launcher `asscom2`.
 
 ```bash
+source activate /mnt/courses/BIO326/PROK/conda_ac26
 
-echo """
-export ASSCOM2_BASE=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2
-export SNAKEMAKE_CONDA_PREFIX=/net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/conda_base
-alias assemblycomparator2='conda run \
-    --live-stream \
-    --prefix /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/ac2_starter2 \
-    snakemake \
-        --snakefile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/snakefile \
-        --profile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/profiles/slurm-nmbu-orion \
-        --configfile /net/fs-2/scale/OrionStore/Courses/BIO326/PROK/assemblycomparator2/config.yaml \
-        --scheduler greedy'
-""" >> ~/.bashrc && source ~/.bashrc
+# Check that you have the newest version.
+asscom2 --version
+#> assemblycomparator2 v2.6.1
+
 
 ```
 
 
-The pipeline is then installed and set up specifically to use the slurm/sbatch system on Orion, so there is no need to create or launch any more shell (.sh) scripts. 
+The pipeline is then ready to rock and roll. Assemblycomparator2 is configured to use the Slurm workload manager behind-the-scenes, so there is no need to create or launch any more shell (.sh) scripts. 
 
-
-
-First, enter the directory where your bins reside.
+To get going analyzing our freshly made genomic bins, first enter the directory where your bins reside like so.
 
 ```bash 
 
@@ -219,13 +220,7 @@ ls *.fa
 
 We also need to load the conda module
 
-```bash 
-module load Miniconda3
-eval "$(conda shell.bash hook)"
-```
-
-
-Then, launch the pipeline with this command: (We will start it with an ampersand (&) at the end, to fork the process and let it continue running even if you disconnect your laptop from the network.)
+Then, launch the pipeline with this command: (We will call it with an ampersand (&) at the end, to "fork" the process and let it continue running even if you disconnect your laptop from the network.)
 
 ```bash 
 
@@ -234,7 +229,11 @@ assemblycomparator2 --until report assembly_stats sequence_lengths prokka busco 
 
 ```
 
+<table><tr><td>
+#### (How to stop a "forked" process)
 (If you regret starting this command, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
+
+</td></tr></table>
 
 The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs.
 
@@ -255,5 +254,5 @@ The "-L <N>" argument lets tree know to stop listing files after hitting a depth
 
 When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser. On all platforms (windows, mac, linux), it should be possible to use  the FileZilla client to download this .html file (https://filezilla-project.org/). You can also use `rsync` on the command line (see here: https://orion.nmbu.no/en/Copydata).
 
-If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - You can download our demonstration report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
+If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - Ask for help. Or download our demonstration report from here: [report_metabat2_orion_carl.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/11211669/report_metabat2_orion_carl.html.zip)
 
