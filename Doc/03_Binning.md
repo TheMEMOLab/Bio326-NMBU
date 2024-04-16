@@ -195,11 +195,11 @@ Assemblycomparator2 is already installed on Orion, and can be accessed by activa
 
 ```bash
 source activate /mnt/courses/BIO326/PROK/conda_ac26
+#> (/mnt/courses/BIO326/PROK/conda_ac26) [bio326-2024-n@login: ~]$ 
 
 # Check that you have the newest version.
 asscom2 --version
 #> assemblycomparator2 v2.6.1
-
 
 ```
 
