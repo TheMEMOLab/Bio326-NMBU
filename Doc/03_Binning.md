@@ -1,6 +1,6 @@
 # Prokaryota dry lab: 03 Binning
 ### Based on ONT (Oxford Nanopore Technologies) long read sequencing of cow rumen samples
-#### Friday 14th of April 2023
+#### Wednesday 17th of April 2024
 
 
 
