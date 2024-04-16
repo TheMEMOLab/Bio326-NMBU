@@ -191,10 +191,10 @@ We can check the total length and number of contigs in each bin with assembly-st
 We will use a genomes-to-report pipeline named assemblycomparator2 to characterize the functional potential of our bins. You can read more about this pipeline [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
 
 ![image](https://github.com/TheMEMOLab/Bio326-NMBU/assets/5913696/bee98c41-6d96-4985-8bea-5784cb008d8c)
+_Figure showing the jobs that assemblycomparator2 computes on the bins, and in which order. This is a directed acyclic graph._
 
 
-
-Assemblycomparator2 is already installed on Orion, and can be accessed by activating the following conda environment, and calling its launcher `asscom2`.
+Assemblycomparator2 is already installed on Orion, and can be called after activating the following conda environment.
 
 ```bash
 source activate /mnt/courses/BIO326/PROK/conda_ac26
@@ -230,6 +230,7 @@ asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 gtdb
 ```
 
 <table><tr><td>
+  
 #### (How to stop a "forked" process)
 (If you regret starting the pipeline, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
 
