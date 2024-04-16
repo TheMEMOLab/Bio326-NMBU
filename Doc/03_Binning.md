@@ -185,8 +185,9 @@ We can check the total length and number of contigs in each bin with assembly-st
 #> (press q to exit)
 ```
 
+---
 
-## Qualitative Bin Analysis and Annotation
+## Assemblycomparator2 - Qualitative Bin Analysis and Annotation
 
 We will use a genomes-to-report pipeline named assemblycomparator2 to characterize the functional potential of our bins. You can read more about this pipeline [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
 
