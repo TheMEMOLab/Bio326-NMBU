@@ -134,15 +134,18 @@ cat $SCRATCH/prok/results/contig_depths/depth.tsv | column -t | less -S
 source activate /mnt/courses/BIO326/PROK/condaenv
 
 # Define paths
+
+bin_prefix="bin"
 in_assembly="$SCRATCH/prok/results/medaka/consensus.fasta"
 in_depth="$SCRATCH/prok/results/contig_depths/depth.tsv"
-out_bins="$SCRATCH/prok/results/metabat2/bin"
+out_bins="$SCRATCH/prok/results/metabat2/${bin_prefix}"
 
 # Make sure that the output directory exists
 mkdir --parents $(dirname $out_bins)
 
 
 metabat2  --numThreads $SLURM_CPUS_PER_TASK  --inFile $in_assembly  --outFile $out_bins  --abdFile $in_depth  --minClsSize 1000000
+
 
 
 ```
