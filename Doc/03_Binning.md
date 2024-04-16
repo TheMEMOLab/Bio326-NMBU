@@ -188,7 +188,7 @@ We can check the total length and number of contigs in each bin with assembly-st
 
 ## Qualitative Bin Analysis and Annotation
 
-We will use a genomes-to-report pipeline named assemblycomparator2. You can read more about it [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
+We will use a genomes-to-report pipeline named assemblycomparator2 to characterize the functional potential of our bins. You can read more about this pipeline [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
 
 ![image](https://github.com/TheMEMOLab/Bio326-NMBU/assets/5913696/bee98c41-6d96-4985-8bea-5784cb008d8c)
 
@@ -206,7 +206,6 @@ asscom2 --version
 
 ```
 
-
 The pipeline is then ready to rock and roll. Assemblycomparator2 is configured to use the Slurm workload manager behind-the-scenes, so there is no need to create or launch any more shell (.sh) scripts. 
 
 To get going analyzing our freshly made genomic bins, first enter the directory where your bins reside like so.
@@ -221,20 +220,18 @@ ls *.fa
 #> bin.N.fa
 ```
 
-We also need to load the conda module
-
 Then, launch the pipeline with this command: (We will call it with an ampersand (&) at the end, to "fork" the process and let it continue running even if you disconnect your laptop from the network.)
 
 ```bash 
 
-assemblycomparator2 --unlock # Clears previously started, failed runs
-assemblycomparator2 --until report assembly_stats sequence_lengths prokka busco checkm2 gtdbtk mashtree & 
+asscom2 --unlock # Clears previously started, failed runs
+asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 gtdbtk mashtree & 
 
 ```
 
 <table><tr><td>
 #### (How to stop a "forked" process)
-(If you regret starting this command, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
+(If you regret starting the pipeline, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
 
 </td></tr></table>
 
