@@ -228,7 +228,7 @@ Then, launch the pipeline with this command: (We will call it with an ampersand 
 ```bash 
 
 asscom2 --unlock # Clears previously started, failed runs
-asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 gtdbtk mashtree & 
+asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mashtree & 
 
 ```
 
