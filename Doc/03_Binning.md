@@ -193,7 +193,9 @@ Now, our bins are created. These bins represent individual bacterial and archaea
 
 We will use a genomes-to-report pipeline named Assemblycomparator2 to characterize the functional potential of our bins. You can read more about this pipeline [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
 
-Assemblycomparator2 is based on [Snakemake](https://snakemake.github.io/). <a href="https://github.com/cmkobel/assemblycomparator2/blob/master/readme-demos.md"><img height="192" alt="report document logo" align="right" src="https://github.com/cmkobel/assemblycomparator2/assets/5913696/e5f9b72c-2137-4850-8779-a5528d8ccbaf"></a>
+<img width="150" alt="snakemake logo" align="right" src="https://github.com/cmkobel/assemblycomparator2/assets/5913696/7188e748-9d37-43ae-a5d5-100e9560df1f">
+
+Assemblycomparator2 is based on [Snakemake](https://snakemake.github.io/). 
 
 ![image](https://github.com/TheMEMOLab/Bio326-NMBU/assets/5913696/bee98c41-6d96-4985-8bea-5784cb008d8c)
 _Figure showing the jobs that assemblycomparator2 computes on the bins, and in which order. This is a directed acyclic graph._
