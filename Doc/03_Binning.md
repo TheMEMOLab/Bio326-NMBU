@@ -63,7 +63,7 @@ So, here we will first calculate the depth of each contig.
 #SBATCH --cpus-per-task 8
 #SBATCH --mem=24G
 #SBATCH --output slurm-%j-%x.out.log
-#SBATCH -p smallmem,hugemem
+#SBATCH -p smallmem,hugemem,hugemem-avx2
 
 # Activate the conda environment
 source activate /mnt/courses/BIO326/PROK/condaenv
@@ -127,7 +127,7 @@ cat $SCRATCH/prok/results/contig_depths/depth.tsv | column -t | less -S
 #SBATCH --cpus-per-task 4
 #SBATCH --mem=8G
 #SBATCH --output slurm-%j-%x.out.log
-#SBATCH -p smallmem,hugemem
+#SBATCH -p smallmem,hugemem,hugemem-avx2
 
 
 # Activate the conda environment
@@ -228,7 +228,7 @@ Then, launch the pipeline with this command: (We will call it with an ampersand 
 ```bash 
 
 asscom2 --unlock # Clears previously started, failed runs
-asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mashtree & 
+asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mashtree kegg_pathway & 
 
 ```
 
