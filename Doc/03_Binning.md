@@ -235,7 +235,7 @@ asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mash
 <table><tr><td>
   
 #### (How to stop a "forked" process)
-(If you regret starting the pipeline, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline)
+If you regret starting the pipeline, you can -in the same terminal window- press "fg" on your keyboard and then hit enter, followed by ctrl+c once to stop the process. "fg" brings the forked process to the foreground, and ctrl+c interrupts the pipeline
 
 </td></tr></table>
 
