@@ -189,6 +189,8 @@ We can check the total length and number of contigs in each bin with assembly-st
 
 ## Qualitative Bin Analysis and Annotation
 
+<img width="411" alt="Screenshot 2024-04-17 at 11 35 43" src="https://github.com/TheMEMOLab/Bio326-NMBU/assets/5913696/934e109f-047a-4fd5-b12f-f2da8e1a82ab">
+
 Now, our bins are created. These bins represent individual bacterial and archaeal genomes of the the microbiome in the rumen material that we have sequenced. 
 
 We will use a genomes-to-report pipeline named Assemblycomparator2 to characterize the functional potential of our bins. You can read more about this pipeline [here]([https://github.com/cmkobel/assemblycomparator2](https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#what-analyses-does-it-do)).
