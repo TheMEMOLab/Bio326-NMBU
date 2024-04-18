@@ -204,7 +204,7 @@ _Figure showing the jobs that assemblycomparator2 computes on the bins, and in w
 Assemblycomparator2 is already installed on Orion, and can be called after activating the following conda environment.
 
 ```bash
-source activate /mnt/courses/BIO326/PROK/conda_ac26
+source activate /mnt/courses/BIO326/PROK/conda_ac26b
 #> (/mnt/courses/BIO326/PROK/conda_ac26) [bio326-2024-n@login: ~]$ 
 
 # Check that you have the newest version.
@@ -232,7 +232,7 @@ Then, launch the pipeline with this command: (We will call it with an ampersand 
 ```bash 
 
 asscom2 --unlock # Clears previously started, failed runs
-asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mashtree dbcan & 
+asscom2 --until report assembly_stats sequence_lengths prokka busco checkm2 mashtree dbcan gtdbtk kegg_pathway & 
 
 ```
 
