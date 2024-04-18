@@ -209,7 +209,7 @@ source activate /mnt/courses/BIO326/PROK/conda_ac26b
 
 # Check that you have the newest version.
 asscom2 --version
-#> assemblycomparator2 v2.6.1
+#> assemblycomparator2 v2.6.2
 
 ```
 
