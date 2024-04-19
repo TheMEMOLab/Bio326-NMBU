@@ -105,7 +105,7 @@ To use DRAM we first need to create a directory and place there those bins we se
 
 mkdir $SCRATCH/prok/results/bins_for_dram
 #Moving reads
-cat /mnt/SCRATCH/bio326-2024-1/prok/results/metabat2/results_ac2/checkm2/quality_report.tsv | awk '{if(
+cat $SCRATCH/prok/results/metabat2/results_ac2/checkm2/quality_report.tsv | awk '{if(
 $2 >= 80 && $3 < 10) print $1}'|while read -r line ;do cp /mnt/SCRATCH/bio326-2024-1/prok/results/metabat2/$line.fa /mnt/SCRATCH/bio326-2024-1/prok/results/bins_for_dram/ ;done
 
 ```
