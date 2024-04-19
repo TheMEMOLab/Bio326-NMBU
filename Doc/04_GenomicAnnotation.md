@@ -92,19 +92,6 @@ bin.6   87.84   2.07
 ```
 **We can see here that only 2 bins meet the condition of > 80 % completeness and < 10 % contamination.**
 
-
-Then let's look for the taxonomy of those particular bins using the gtdbtk results:
-
-```bash
-cat results_ac2/checkm2/quality_report.tsv | awk '{if($2 > 70 && $3 < 10) print $1}'|sed 's/.fa//g'|fgrep -f - results_ac2/gtdbtk/gtdbtk.summary.tsv |cut -f 1,2
-```
-```console
-rumen.3 d__Archaea;p__Methanobacteriota;c__Methanobacteria;o__Methanobacteriales;f__Methanobacteriaceae;g__Methanobrevibacter_A;s__Methanobrevibacter_A sp900313645
-rumen.6 d__Bacteria;p__Bacteroidota;c__Bacteroidia;o__Bacteroidales;f__Bacteroidaceae;g__Prevotella;s__Prevotella sp900316295
-```
-
-**Our bins were classified as an archaeon *Methanobrevibacter* and a bacterium *Prevotella*.**
-
 We can then predict genes and annotate this by comparing with public databases. For doing this we will use DRAM...
 
 ## DRAM: Distilled and Refined Annotation of Metabolism
@@ -388,13 +375,4 @@ Let's take a look in for example the Methane metabolism:
 
 ![METHANE](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/KEGGMapper2.PNG)
 
-What other metabolic pathways you can detec
-
-## Taxonomy: Who is there??
-
-Now that we have the functional annotation we can add also information of the taxonomy. 
-For doing this we can use the [GTDBTk](https://github.com/Ecogenomics/GTDBTk?tab=readme-ov-file) tool. GTDB-Tk is a software toolkit for assigning objective taxonomic classifications to bacterial and archaeal genomes based on the Genome Database Taxonomy (GTDB).
-
-
-
-### Enjoy DRAM and have fun looking through your annotated MAGs
+What other metabolic pathways you can detec?
