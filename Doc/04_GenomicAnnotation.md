@@ -375,4 +375,4 @@ Let's take a look in for example the Methane metabolism:
 
 ![METHANE](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/KEGGMapper2.PNG)
 
-What other metabolic pathways you can detec?
+What other metabolic pathways you can detect?
