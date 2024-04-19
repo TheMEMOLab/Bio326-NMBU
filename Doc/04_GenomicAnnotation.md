@@ -9,7 +9,7 @@ After binning with [MetaBat2](https://bitbucket.org/berkeleylab/metabat/src/mast
 Let's take a look at the Metabat2 bins:
 
 ```bash
-ls -1 /mnt/SCRATCH/bio326-2024-1/prok/results/metabat2/|grep .fa|sort -V
+ls -1 $SCRATCH/prok/results/metabat2/|grep .fa|sort -V
 bin.1.fa
 bin.2.fa
 bin.3.fa
@@ -52,7 +52,7 @@ We then can use the report from the ```assemblycomparator2``` to check the quali
 Let's go to the ```cd results_ac2/``` folder and enter the checkM results:
 
 ```bash
-cd /mnt/SCRATCH/bio326-2024-1/prok/results/metabat2/results_ac2
+cd $SCRATCH/prok/results/metabat2/results_ac2
 ls checkm2/
 ```
 ```console
@@ -106,7 +106,7 @@ To use DRAM we first need to create a directory and place there those bins we se
 mkdir $SCRATCH/prok/results/bins_for_dram
 #Moving reads
 cat $SCRATCH/prok/results/metabat2/results_ac2/checkm2/quality_report.tsv | awk '{if(
-$2 >= 80 && $3 < 10) print $1}'|while read -r line ;do cp /mnt/SCRATCH/bio326-2024-1/prok/results/metabat2/$line.fa /mnt/SCRATCH/bio326-2024-1/prok/results/bins_for_dram/ ;done
+$2 >= 80 && $3 < 10) print $1}'|while read -r line ;do cp $SCRATCH/prok/results/metabat2/$line.fa $SCRATCH/prok/results/bins_for_dram/ ;done
 
 ```
 
@@ -345,7 +345,7 @@ We can use the KEGG id to map and infer metabolic functions using the [KEGG](htt
 Let's extract the KO numbers for the bin21...
 
 ```bash
-cd /mnt/SCRATCH/bio326-2024-1/prok/results/DRAM.Results.dir/dram.annotation
+cd $SCRATCH/prok/results/DRAM.Results.dir/dram.annotation
 cat annotations.tsv |cut -f 1,9|grep bin.21|awk '{if($2 ~ /^K/) print $1"\t"$2}' > bin21.
 ko.txt
 head bin21.ko.txt
