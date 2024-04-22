@@ -260,6 +260,17 @@ The "-L <N>" argument lets tree know to stop listing files after hitting a depth
 
 ---
 
+### In case of missing report
+
+If you see that the GTDB results in "results_ac2/gtdbtk/gtdbtk.summary.tsv" are present, but that there is no report, or that the report does not contain the GTDB results, you can rerun the pipeline like so, just to update the report
+
+```bash
+asscom2 --unlock
+asscom2 --until report
+```
+
+--- 
+
 When all of the jobs in the pipeline have finished, an report document will reside in "results_ac2/report_metabat2.html". You should download this file to your computer and open it with a web browser. On all platforms (windows, mac, linux), it should be possible to use  the FileZilla client to download this .html file (https://filezilla-project.org/). You can also use `rsync` on the command line (see here: https://orion.nmbu.no/en/Copydata).
 
 If you're having trouble with the pipeline report document - Maybe it won't download or isn't created in the first place - Ask for help. Or download our demonstration report from here: [report_ac2_student_complete.html.zip](https://github.com/TheMEMOLab/Bio326-NMBU/files/15030004/report_ac2_student_complete.html.zip)
