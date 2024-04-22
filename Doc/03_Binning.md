@@ -266,7 +266,7 @@ If you see that the GTDB results in "results_ac2/gtdbtk/gtdbtk.summary.tsv" are 
 
 ```bash
 asscom2 --unlock
-asscom2 --until report
+asscom2 --until report &
 ```
 
 --- 
