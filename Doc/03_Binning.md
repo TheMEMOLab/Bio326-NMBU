@@ -243,7 +243,8 @@ If you regret starting the pipeline, you can -in the same terminal window- press
 
 </td></tr></table>
 
-The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs.
+The "--until" argument lets the pipeline know to only run the specified analyses. In this case we're running the ones that are relevant for comparing bins or MAGs. You can read more about how to use Assemblycomparator2 here https://github.com/cmkobel/assemblycomparator2?tab=readme-ov-file#usage-examples
+
 
 You will se a lot of output in your terminal. This is because the pipeline runs all independent analysis jobs at the same time. Some jobs run for each bin, and others run a comparison across all bins in a single job. It will likely take several hours for the complete pipeline to finish, but some of the faster jobs (like sequence_lengths and busco) might finish after just 20 minutes. 
 
