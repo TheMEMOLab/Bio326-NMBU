@@ -345,8 +345,7 @@ Let's extract the KO numbers for the bin21...
 
 ```bash
 cd $SCRATCH/prok/results/DRAM.Results.dir/dram.annotation
-cat annotations.tsv |cut -f 1,9|grep bin.21|awk '{if($2 ~ /^K/) print $1"\t"$2}' > bin21.
-ko.txt
+cat annotations.tsv |cut -f 1,9|grep bin.21|awk '{if($2 ~ /^K/) print $1"\t"$2}' > bin21.ko.txt
 head bin21.ko.txt
 ```
 ```console
