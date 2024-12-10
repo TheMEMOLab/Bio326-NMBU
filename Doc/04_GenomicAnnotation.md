@@ -327,7 +327,7 @@ The files have different information:
 * product.html: Interactive heatmaps of the metabolic summaries
 * product.tsv: Tables to reproduce the heatmaps of above
 
-Although we can display the content of the *.tsv* files obtained by DRAM here in the terminal, the metabolism_summary.xlsx and product.html files are visually friendly, so it is recommendable to export these to our personal computers and take a look. 
+Although we can display the content of the *.tsv* files obtained by DRAM here in the terminal, the metabolism_summary.xlsx and product.html files are visually friendly, so it is recommended to export these to our personal computers and take a look. 
 
 Once in your computer, you can open the product.html, to explore the metabolic potential of your MAGs.
 
