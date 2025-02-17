@@ -129,7 +129,7 @@ freecores|sort -V
 | $PROJECTS |	Shared disk space for research projects	| YES |	On demand	Project period |
 | $LOCALSCRATCH |	Local to compute node	| NO | Varies (4.5 – 16 T)	| Until a job is completed |
 
->[!IWARNING]
+>[!Warning]
 > Although all users have access to the $HOME, please DO NOT USE THE $HOME FOR STORAGE any FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and configuration files.
 
 ### Where can I storage large files? 
