@@ -160,6 +160,21 @@ SAGA offers different ques to run, users must select the queue that fits the mos
 All details of these queues can be found [here](https://documentation.sigma2.no/jobs/choosing_job_types.html)
 
 
+## Running an interactive job to test programs and get used to working in the cluster
 
+The easiest way to test software and look into huge files without messing the login node and other users, is by running an **interactive** job in SAGA. This means you can "book" a compute node and type your commands directly in that node. Let's run an interactive job by the following commands:
+
+```bash
+srun \
+--account=nn9987k \
+--partition=devel \
+--gres=localscratch:100G \
+--cpus-per-task 4 \
+--nodes 1 \
+--mem=10G \
+--time=02:00:00 \
+--pty bash \
+-i
+```
 
 
