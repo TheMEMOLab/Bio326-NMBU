@@ -6,7 +6,7 @@ This workshop was doing by help of [Sigma2-NIRS](https://documentation.sigma2.no
 
 This document is intended to be a quick reference guide on the basic usage of the FRAM Sigma2 HPC cluster. For a complete reference please referer to the full documentation of [SAGA](https://documentation.sigma2.no/hpc_machines/saga.html).
 
-## Login into FRAM
+## Login into SAGA
 
 For login open a Command-line interfase (CLI) or Terminal  and type something like this. 
 
@@ -57,8 +57,6 @@ Let's take a look into this figure:
 
 ![Cluster](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/cluster.png)
 
->[!Warning]
-> **NEVER RUN A JOB IN THE LOGIN NODE!!! THE LOGIN NODE IS ONLY FOR LOOKING AND MANAGING FILES, INSTALL SOFTWARE AND WRITE SCRIPTS** 
 
 **All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
 
@@ -104,3 +102,13 @@ Main components
 * 8 login and service nodes with 256 cores in total
 
 * 6.5 PB high metadata performance BeeGFS scratch file system
+
+## Running jobs in SAGA
+
+The HPC clusters are resources that are shared between many users, and to ensure fair use everyone must do their computations by submitting jobs through a queue system (batch system) that will execute the applications on the available resources. In our case Slurm is used as workload manager and job scheduler.
+
+When you log in to a cluster, you are logged in to a login node shared by all users. The login nodes are meant for logging in, copying files, editing, compiling, running short tests (no more than a couple of minutes), submitting jobs, checking job status, etc. If you are unsure about the basic interaction with Unix-like systems, here is a good resource to start with. Jobs started via Slurm run on the compute nodes.
+
+>[!Warning]
+> **NEVER RUN A JOB IN THE LOGIN NODE!!! THE LOGIN NODE IS ONLY FOR LOOKING AND MANAGING FILES, INSTALL SOFTWARE AND WRITE SCRIPTS** 
+
