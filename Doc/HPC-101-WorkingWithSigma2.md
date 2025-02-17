@@ -155,7 +155,7 @@ pwd
 
 SAGA offers different ques to run, users must select the queue that fits the most to their needs:
 
-[!queue](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/Capture.PNG)
+![queue](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/Capture.PNG)
 
 All details of these queues can be found [here](https://documentation.sigma2.no/jobs/choosing_job_types.html)
 
