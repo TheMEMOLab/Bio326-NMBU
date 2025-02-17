@@ -60,25 +60,6 @@ Let's take a look into this figure:
 
 **All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
 
-### Where can I storage large files? 
-
->[!Important]
-> During the BIN420 Course all data, scripts, results and so must be written in
-```
-/cluster/projects/nn9987k
-```
-
-Let's go there and create a folder where you can work:
-
-
-```bash
-cd /cluster/projects/nn9987k
-mkdir $USER
-tree /cluster/projects/nn9987k/$USER
-cd $USER
-pwd
-```
-
 ## SAGA HPC nodes:
 
 **Technical details**
@@ -111,4 +92,64 @@ When you log in to a cluster, you are logged in to a login node shared by all us
 
 >[!Warning]
 > **NEVER RUN A JOB IN THE LOGIN NODE!!! THE LOGIN NODE IS ONLY FOR LOOKING AND MANAGING FILES, INSTALL SOFTWARE AND WRITE SCRIPTS** 
+
+There are two ways for doing this:
+* Interactive Job (via SLURM)
+* Schedule a Job (via SLURM)
+
+### What is SLURM? 
+
+[Slurm](https://slurm.schedmd.com/) is an open source and highly scalable cluster management and job scheduling system for large and small Linux clusters. As a cluster workload manager, Slurm has three key functions.
+
+- First, it allocates access to resources (compute nodes) to users for some duration of time so they can perform work
+- Second, it provides a framework for starting, executing, and monitoring work (normally a parallel job) on the set of allocated nodes
+- Finally, it arbitrates contention for resources by managing a queue of pending work (from Slurm overview)
+It is important to know that:
+
+**All Slurm commands start with letter “s" (e.g sbatch, scancel, srun, etc...)**
+
+**Resource allocation depends on your fairshare i.e. priority in the queue, so remember not to be "greedy" when you submit a job!!!**
+
+### SAGA Resources and information through SLURM.
+
+If we want to know the amount of CPU, RAM and other configuration in the cluster, we can use a set of tools (commands) SLURM provide to find available resources in SAGA.
+
+For example we can display the amount of CPUs and RAM available in each node by:
+
+```bash
+freecores|sort -V
+```
+
+## File system in SAGA:
+
+| Environment | Space Purpose | Backedup | Default Quota |Life span |
+| ----------- | ------------- | -------- | ------------- | -------- |
+| $HOME	| Personal user home space that is best for small files |	YES	|20G |	Active users |
+| $USERWORK |	Temporary working directory for data analyses | 	YES	|NA|	28 days |
+| $PROJECTS |	Shared disk space for research projects	| YES |	On demand	Project period |
+| $LOCALSCRATCH |	Local to compute node	| NO | Varies (4.5 – 16 T)	| Until a job is completed |
+
+>[!IWARNING]
+> Although all users have access to the $HOME, please DO NOT USE THE $HOME FOR STORAGE any FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and configuration files.
+
+### Where can I storage large files? 
+
+>[!Important]
+> During the BIO326 Course all data, scripts, results and so must be written in
+```
+/cluster/projects/nn9987k
+```
+
+Let's go there and create a folder where you can work:
+
+
+```bash
+cd /cluster/projects/nn9987k
+mkdir $USER
+tree /cluster/projects/nn9987k/$USER
+cd $USER
+pwd
+```
+
+
 
