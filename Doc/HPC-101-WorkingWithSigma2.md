@@ -16,8 +16,8 @@ ssh auve@saga.sigma2.no
 > [!Important]
 > Rember to change your user name
 
-This will ask for your password, the one you got from Sigma2 by text. Type it
-*Even you don't see anything the password is typed*
+This will ask for your password, the one you got from Sigma2 by text. Type it.  
+*Even you don't see anything the password is typed.*
 
 After the first attempt of login you will get something like:
 
@@ -49,16 +49,16 @@ Last login: Wed Feb 12 14:25:51 2025 from 128.39.239.134
 ```
 ### SAGA main configuration 
 
-**The supercomputer is named after the goddess in norse mythology associated with wisdom. Saga is also a term for the Icelandic epic prose literature. The supercomputer, placed at NTNU in Trondheim is designed to run both sequential and parallel workloads. It was made available to users right before the start of the 2019.2 period (October 2019).
+The supercomputer is named after the goddess in Norse mythology associated with wisdom. Saga is also a term for the Icelandic epic prose literature. The supercomputer, placed at NTNU in Trondheim is designed to run both sequential and parallel workloads. It was made available to users right before the start of the 2019.2 period (October 2019).
 
-Saga is provided by Hewlett Packard Enterprise and has a computational capacity of approximately 140 million CPU hours a year.**
+Saga is provided by Hewlett Packard Enterprise and has a computational capacity of approximately 140 million CPU hours a year.
 
 Let's take a look into this figure: 
 
 ![Cluster](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/cluster.png)
 
 
-**All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
+**All users have access to the $HOME, so please DO NOT USE THE $HOME FOR STORAGE OF LARGE FILES (e.g. fastq, sam, databases). The $HOME directory is intended to allocate small software executables and SLURM scripts**
 
 ## SAGA HPC nodes:
 
@@ -91,7 +91,7 @@ The HPC clusters are resources that are shared between many users, and to ensure
 When you log in to a cluster, you are logged in to a login node shared by all users. The login nodes are meant for logging in, copying files, editing, compiling, running short tests (no more than a couple of minutes), submitting jobs, checking job status, etc. If you are unsure about the basic interaction with Unix-like systems, here is a good resource to start with. Jobs started via Slurm run on the compute nodes.
 
 >[!Warning]
-> **NEVER RUN A JOB IN THE LOGIN NODE!!! THE LOGIN NODE IS ONLY FOR LOOKING AND MANAGING FILES, INSTALL SOFTWARE AND WRITE SCRIPTS** 
+> **NEVER RUN A JOB IN THE LOGIN NODE!!! THE LOGIN NODE IS ONLY FOR LOOKING AND MANAGING FILES, INSTALLING SOFTWARE AND WRITE SCRIPTS** 
 
 There are two ways for doing this:
 * Interactive Job (via SLURM)
@@ -106,13 +106,13 @@ There are two ways for doing this:
 - Finally, it arbitrates contention for resources by managing a queue of pending work (from Slurm overview)
 It is important to know that:
 
-**All Slurm commands start with letter “s" (e.g sbatch, scancel, srun, etc...)**
+**All Slurm commands start with letter “s" (e.g. sbatch, scancel, srun, etc...)**
 
 **Resource allocation depends on your fairshare i.e. priority in the queue, so remember not to be "greedy" when you submit a job!!!**
 
 ### SAGA Resources and information through SLURM.
 
-If we want to know the amount of CPU, RAM and other configuration in the cluster, we can use a set of tools (commands) SLURM provide to find available resources in SAGA.
+If we want to know the amount of CPU, RAM and other configuration in the cluster, we can use a set of tools (commands) SLURM provides to find available resources in SAGA.
 
 For example we can display the amount of CPUs and RAM available in each node by:
 
@@ -187,7 +187,7 @@ Check the prompt now:
 ```
 (BASICS)[auve@c2-41: ~]$
 ```
-You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node ```c2-41```. Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
+You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node ```c2-41```. Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node you are working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" followed by the name of the variable:
 
 ```bash
 echo $SLURM_NODELIST
@@ -196,15 +196,15 @@ echo $SLURM_CPUS_ON_NODE
 
 In the interactive jobs we can run short parsing scripts, test software with a small datasets, etc. This is super helpful for debugging, testing software, moving data, etc.
 
-### Temporary working directory $LOCALSCRATCH, faster and more efficient Jobs
+### Temporary working directory $LOCALSCRATCH, faster and more efficient jobs
 
-Generally any software can read (data) and write (results) from any partition of the cluster user has access to (i.e. $HOME, /cluster/projects/, etc), however, I/O (reading and writing) from those locations uses network-traffic resources resulting in a high inefficiency for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembly genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the BeeGFS (1-10 Gbps), makes the jobs super slow. 
+Generally any software can read (data) and write (results) from any partition of the cluster user has access to (i.e. $HOME, /cluster/projects/, etc), however, I/O (reading and writing) from those locations uses network-traffic resources resulting in a high inefficiency for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembling genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the BeeGFS (1-10 Gbps), makes the jobs super slow. 
 To avoid this we can take advantage of the **$LOCALSCRATCH**. This is a physical hard-drive allocated in each of the computer nodes. We can migrate the data to there for faster I/O. Often, quite some efficiency can be gained by doing this.
 
 >[!Note]
->The ammount of space required in the ```/localscratch``` directory is reqeusted by the flag ```--gres=localscratch:<amount of memory Gb>```
+>The amount of space required in the ```/localscratch``` directory is requested by the flag ```--gres=localscratch:<amount of memory Gb>```
 
-Let's move to that directory and check if the ammount of space requested matches with the size of the disk:
+Let's move to that directory and check if the amount of space requested matches with the size of the disk:
 
 ```bash
 cd $LOCALSCRATCH
@@ -225,7 +225,7 @@ squeue -u $USER
 
 ### Example of an Interactive job by running BLAST.
 
-**Problem: We want to detect the presence of a a-amylase sequence similar to Bacteroides gramini in a new Bacteroides genome (51).**
+**Problem: We want to detect the presence of an a-amylase sequence similar to Bacteroides gramini in a new Bacteroides genome (51).**
 
 **Solution: we can use BLAST tool to align the sequence to all the predicted proteins in the Bacteroides51 genome and look for an ortholog of the a-amylase.**
 
@@ -245,9 +245,9 @@ tree /cluster/projects/nn9987k/BIO326-2025/HPC101/
 
 2 directories, 2 files
 ```
-*Tip: Having more than one terminal open helps+ to faster look into multiple directories*
+*Tip: Having more than one terminal open helps to look into multiple directories faster*
 
-As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $LOCALSCRATCH
+As you can see there are multiple files here. Let's copy the two fasta files **.faa and .fasta** into the $LOCALSCRATCH
 
 
 ```
@@ -292,13 +292,13 @@ blastp
 bash: blastp: command not found
 ```
 
-It seems blastp is not installed as a default software in Orion.
+It seems blastp is not installed as a default software in SAGA.
 
 ### Conda envrionment:
 
 Conda is an open source package management system and environment management system that runs on Windows, macOS, and Linux. Conda quickly installs, runs and updates packages and their dependencies. Conda easily creates, saves, loads and switches between environments on your local computer. It was created for Python programs, but it can package and distribute software for any language. You can read more about conda [here](https://docs.conda.io/en/latest/).
 
-or **BIO-326** we will use different Conda environment previously installed in SAGA.
+For **BIO-326** we will use different Conda environments previously installed in SAGA.
 
 1. Activate the Module Anaconda to load all the conda basics
 
@@ -312,7 +312,8 @@ Then let's configure the interactive session with the conda global environments
 eval "$(conda shell.bash hook)"
 ```
 
-What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell...**NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
+What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell.  
+**NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
 
 If everything was OK, you should now see the ```base``` conda environment loaded and the prompt shows this:
 
@@ -331,7 +332,7 @@ conda activate /cluster/projects/nn9987k/.share/conda_environments/BLAST/
 ```
 
 >[!Note]
->The promt will change everytime we activate different conda environments.
+>The prompt will change every time we activate different conda environments.
 
 We can then run a blast experiment:
 
@@ -380,7 +381,7 @@ amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroide
 Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pjs  Bacteroides51.faa.psq  Bacteroides51.faa.pto
 ```
 
-And now lets run the BLAST,as we want to search for protein in a protein database the command we need to use is BLASTP:
+And now lets run the BLAST. As we want to search for protein in a protein database the command we need to use is BLASTP:
 
 ```bash
 blastp -query amylase.Bgramini.fasta -db Bacteroides51.faa -dbsize 1000000000 -max_target_seqs 1 -outfmt 6 -num_threads $SLURM_CPUS_ON_NODE -out amylase.Bgramini.fasta.blastp.out
@@ -396,7 +397,7 @@ less amylase.Bgramini.fasta.blastp.out
 WP_024997086.1  D0T87_RS12665   57.772  772     301     13      8       763     28      790     0.0     908
 ```
 
-It seems the amylase of *B. fragilis* has a match wiht the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
+It seems the amylase of *B. fragilis* has a match with the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
 
 ```bash
 grep D0T87_RS12665 Bacteroides51.faa
