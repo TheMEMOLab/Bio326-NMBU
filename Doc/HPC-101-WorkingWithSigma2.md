@@ -168,7 +168,7 @@ The easiest way to test software and look into huge files without messing the lo
 srun \
 --account=nn9987k \
 --partition=devel \
---gres=localscratch:100G \
+--gres=localscratch:10G \
 --cpus-per-task 4 \
 --nodes 1 \
 --mem=10G \
