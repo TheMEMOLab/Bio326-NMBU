@@ -1,14 +1,14 @@
-# Wroking with SAGA Cluster Sigma2-NIRS
+# Working with SAGA Cluster Sigma2-NIRS
 
 This workshop was doing by help of [Sigma2-NIRS](https://documentation.sigma2.no/index.html).
 
 ### What is this?
 
-This document is intended to be a quick reference guide on the basic usage of the FRAM Sigma2 HPC cluster. For a complete reference please referer to the full documentation of [SAGA](https://documentation.sigma2.no/hpc_machines/saga.html).
+This document is intended to be a quick reference guide on the basic usage of the SAGA Sigma2 HPC cluster. For a complete reference please refer to the full documentation of [SAGA](https://documentation.sigma2.no/hpc_machines/saga.html).
 
 ## Login into SAGA
 
-For login open a Command-line interfase (CLI) or Terminal  and type something like this. 
+For login open a Command-line interface (CLI) or Terminal  and type something like this. 
 
 ```bash
 ssh auve@saga.sigma2.no
@@ -167,7 +167,7 @@ The easiest way to test software and look into huge files without messing the lo
 ```bash
 srun \
 --account=nn9987k \
---partition=devel \
+--partition=normal \
 --gres=localscratch:10G \
 --cpus-per-task 4 \
 --nodes 1 \
@@ -176,5 +176,31 @@ srun \
 --pty bash \
 -i
 ```
+After you will see something like this:
 
+```
+srun: job 14011180 queued and waiting for resources
+srun: job 14011180 has been allocated resources
+```
+Check the prompt now:
+
+```
+(BASICS)[auve@c2-41: ~]$
+```
+You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node ```c2-41```. Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node I am working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" follows by the name of the variable:
+
+```bash
+echo $SLURM_NODELIST
+echo $SLURM_CPUS_ON_NODE
+```
+
+In the interactive jobs we can run short parsing scripts, test software with a small datasets, etc. This is super helpful for debugging, testing software, moving data, etc.
+
+### Temporary working directory $LOCALSCRATCH, faster and more efficient Jobs
+
+Generally any software can read (data) and write (results) from any partition of the cluster user has access to (i.e. $HOME, /cluster/projects/, etc), however, I/O (reading and writing) from those locations uses network-traffic resources resulting in a high inefficiency for heavy jobs (e.g mapping reads to large genomes/metagenomes or assembly genomes). Also if multiple users are running jobs in the same way the traffic in the network, even using the BeeGFS (1-10 Gbps), makes the jobs super slow. 
+To avoid this we can take advantage of the **$LOCALSCRATCH**. This is a physical hard-drive allocated in each of the computer nodes. We can migrate the data to there for faster I/O. Often, quite some efficiency can be gained by doing this.
+
+>[!Note]
+>The ammount of space required in the /localscratch directory is reqeusted by the flag ```--gres=localscratch:<amount of memory Gb>
 
