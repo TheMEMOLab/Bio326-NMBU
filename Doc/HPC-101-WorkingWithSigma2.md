@@ -202,5 +202,204 @@ Generally any software can read (data) and write (results) from any partition of
 To avoid this we can take advantage of the **$LOCALSCRATCH**. This is a physical hard-drive allocated in each of the computer nodes. We can migrate the data to there for faster I/O. Often, quite some efficiency can be gained by doing this.
 
 >[!Note]
->The ammount of space required in the /localscratch directory is reqeusted by the flag ```--gres=localscratch:<amount of memory Gb>
+>The ammount of space required in the ```/localscratch``` directory is reqeusted by the flag ```--gres=localscratch:<amount of memory Gb>```
 
+Let's move to that directory and check if the ammount of space requested matches with the size of the disk:
+
+```bash
+cd $LOCALSCRATCH
+df -h .
+```
+
+```
+Filesystem                       Size  Used Avail Use% Mounted on
+/dev/mapper/xcatvg-localscratch   10G     0   10G   0% /localscratch
+```
+### Monitoring the job:
+
+By using the SLRUM comand ```squeue``` we can check if our interactive job is sill running:
+
+```bash
+squeue -u $USER
+```
+
+### Example of an Interactive job by running BLAST.
+
+**Problem: We want to detect the presence of a a-amylase sequence similar to Bacteroides gramini in a new Bacteroides genome (51).**
+
+**Solution: we can use BLAST tool to align the sequence to all the predicted proteins in the Bacteroides51 genome and look for an ortholog of the a-amylase.**
+
+Let's enter to that directory and then copy some fasta files from the ```/cluster/projects/nn9987k/BIO326-2025/```, this is a share directory we (teachers) will use to upload data for you. In this class we are using the files from ```/cluster/projects/nn9987k/BIO326-2025/HPC101/BLASTExample``` path.
+
+First take a look of the data
+
+```bash
+tree /cluster/projects/nn9987k/BIO326-2025/HPC101/
+```
+
+```
+/cluster/projects/nn9987k/BIO326-2025/HPC101/
+└── BLASTExample
+    ├── amylase.Bgramini.fasta
+    └── Bacteroides51.faa
+
+2 directories, 2 files
+```
+*Tip: Having more than one terminal open helps+ to faster look into multiple directories*
+
+As you can see there are multiple files here, lets copy the two fasta files **.faa and .fasta** into the $LOCALSCRATCH
+
+
+```
+cp /cluster/projects/nn9987k/BIO326-2025/HPC101/BLASTExample/*.* $LOCALSCRATCH
+cd $LOCALSCRATCH/
+ls
+```
+
+```
+amylase.Bgramini.fasta  Bacteroides51.faa
+```
+
+```bash
+less amylase.Bgramini.fasta 
+
+```
+
+```console
+>WP_024997086.1 alpha-amylase [Bacteroides graminisolvens]
+MKRYKYWFLLLIPFLIVACSGSDDPVIEPPVVLKEGLNYSPTAPDADQELTITFKAGSTSALYNYVGDVY
+VHIGVIVDGSWKYVPAEWTENISKCKMTKTADNVWSVKLSPTVRQWFASGETSIQKLGIVIRNADGSKKG
+LTDDAFVSVTDSKYKPFTPAAIKYATLPAGVKEGINIVNSSTVTLVLYDKDKSGNHKDYAHVIGDFNSWK
+LTNDDKSQMNRDDAAGCWWITLSGLTGTKEYAFQYYVGTAAEGATRLADAYSRKILDPDNDSYISSTTYN
+EDKTYPQGAEGIVSVFKTEPDTYTWKNTAFKMKDKDDLVIYEMLLRDFTASGDLNGAKAKLSYLKSLGVN
+AIELMPVQEFDGNDSWGYNPCFFFALDKAYGTDKMYKEFIDACHGEGIAVIFDVVYNHATGSHPFAKLYW
+NSATNKTSAQNPWFNVDAPHPYSVFHDFNHESPLVRAFVKRNLEFLLKEYKIDGFRFDLTKGFTQKSSTE
+STASAYDATRIAILKDYNSTVKTVNPSAMMILEHFCDNAEEKELANDGMYLWRNMNYAYCESAMGLPGNS
+DFSGLYDTSMPMGSLVGFMESHDEERMSFKQIAYGNYTFKTSLADRMKQLKVNTAFFLTVPGPKMIWQFG
+ELGYDYSIEENGRTGKKPVKWEYYDDASRKALYDTYAKLMTLRNANTELFDTSALFSWQVKGNTNWLNGR
+FLTLEGGGKKLVVAGNFTNQAGSYTVTFPHTGTWYNYMTGESVSVSATNQTISIPAHEFKLFVDFQSN
+```
+
+This is the sequence of an enzyme (a-amylase) of the bacteria Bacteroides fragilis, I would like to know if an homologue of this sequence is present in the set of sequences of **Bacteroides51.faa** (Bacteroides sp. from cockroaches). The easiest way is by doing a BLAST search. But is BLAST already installed?
+
+
+```bash
+blastp
+
+```
+
+```console
+bash: blastp: command not found
+```
+
+It seems blastp is not installed as a default software in Orion.
+
+### Conda envrionment:
+
+Conda is an open source package management system and environment management system that runs on Windows, macOS, and Linux. Conda quickly installs, runs and updates packages and their dependencies. Conda easily creates, saves, loads and switches between environments on your local computer. It was created for Python programs, but it can package and distribute software for any language. You can read more about conda [here](https://docs.conda.io/en/latest/).
+
+or **BIO-326** we will use different Conda environment previously installed in SAGA.
+
+1. Activate the Module Anaconda to load all the conda basics
+
+```bash
+module load Anaconda3/2022.10
+```
+
+Then let's configure the interactive session with the conda global environments
+
+```bash
+eval "$(conda shell.bash hook)"
+```
+
+What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell...**NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
+
+If everything was OK, you should now see the ```base``` conda environment loaded and the prompt shows this:
+
+```console
+(base)[auve@c2-33: 14014597]$
+```
+
+Now we can **activate** the conda environment:
+
+```bash
+conda activate /cluster/projects/nn9987k/.share/conda_environments/BLAST/
+```
+
+```
+(BLAST)[auve@c2-33: 14014597]$ 
+```
+
+>[!Note]
+>The promt will change everytime we activate different conda environments.
+
+We can then run a blast experiment:
+
+- Let's check blast is now running:
+
+```bash
+blastn
+```
+
+```console
+BLAST query/options error: Either a BLAST database or subject sequence(s) must be specified
+Please refer to the BLAST+ user manual.
+```
+
+Now it is running...
+
+
+* Index a database using ```makeblastdb``` and the molecule type prot:
+
+```bash
+makeblastdb -dbtype prot -in Bacteroides51.faa
+
+```
+
+```console
+Building a new DB, current time: 02/20/2024 17:27:49
+New DB name:   /home/work/bio326-2024-1/work.dir.of.14221763/Bacteroides51.faa
+New DB title:  Bacteroides51.faa
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 3000000000B
+Adding sequences from FASTA; added 4630 sequences in 0.091763 seconds.
+
+```
+
+Check the results by ls:
+
+```bash
+
+ls
+
+```
+
+```console
+amylase.Bgramini.fasta  Bacteroides51.faa.pdb  Bacteroides51.faa.pin  Bacteroides51.faa.pot  Bacteroides51.faa.ptf
+Bacteroides51.faa       Bacteroides51.faa.phr  Bacteroides51.faa.pjs  Bacteroides51.faa.psq  Bacteroides51.faa.pto
+```
+
+And now lets run the BLAST,as we want to search for protein in a protein database the command we need to use is BLASTP:
+
+```bash
+blastp -query amylase.Bgramini.fasta -db Bacteroides51.faa -dbsize 1000000000 -max_target_seqs 1 -outfmt 6 -num_threads $SLURM_CPUS_ON_NODE -out amylase.Bgramini.fasta.blastp.out
+```
+
+Take a look into the results:
+
+```bash
+less amylase.Bgramini.fasta.blastp.out
+```
+
+```console
+WP_024997086.1  D0T87_RS12665   57.772  772     301     13      8       763     28      790     0.0     908
+```
+
+It seems the amylase of *B. fragilis* has a match wiht the D0T87_RS12665 sequence of Bacteroides51. We can corroborate this by looking into the fasta file annotation header by doing something like this:
+
+```bash
+grep D0T87_RS12665 Bacteroides51.faa
+
+```
+We found the amylase!!!
