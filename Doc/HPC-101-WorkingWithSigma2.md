@@ -417,14 +417,14 @@ SLURM can use bash or computer scripting language (e.g. perl, python, etc) base 
 
 SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
 
-```console
+>
 -p --partition <partition-name>       --pty <software-name/path>
 --mem <memory>                        --gres <general-resources>
 -n --ntasks <number of tasks>         -t --time <days-hours:minutes>
 -N --nodes <number-of-nodes>          -A --account <account>
 -c --cpus-per-task <number-of-cpus>   -L --licenses <license>
 -w --nodelist <list-of-node-names>    -J --job-name <jobname>
-```
+>
 
 We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 2 ; means 2 CPUs).
 
@@ -511,6 +511,8 @@ Users can check the status of the Job by the command ```squeue -u $USER```
 ```bash
 squeue -u $USER
 ```
+
+
 >
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14027935    normal MySbatch     auve  R       0:01      1 c5-45
