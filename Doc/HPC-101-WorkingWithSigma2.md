@@ -489,4 +489,42 @@ date
 
 ```
 
-*You can copy this script from /mnt/courses/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh by* ``` rsync -aPL $COURSES/BIO326/BestPracticesOrion/myfirstsbatch.SLURM.sh $SCRATCH/SLURMTest/```
+>[!Note]
+>A copy of this script is storage in ```/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/myfirstsbatch.SLURM.sh```
+
+We can then submit the job by:
+
+1) go to the ```/cluster/projects/nn9987k/$USER``` folder"
+
+```bash
+cd /cluster/projects/nn9987k/$USER
+```
+2) Use the command sbatch to launch the job:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/myfirstsbatch.SLURM.sh
+```
+## Monitoring the jobs by squeue
+
+Users can check the status of the Job by the command ```squeue -u $USER``` 
+
+```bash
+squeue -u $USER
+```
+```
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          14027935    normal MySbatch     auve  R       0:01      1 c5-45
+```
+
+
+Now it is runing (R). 
+
+When the job starts it produces an out and and err file ```slurm-JOBNAME-$JOB_ID.out  slurm-JOBNAME-$JOB_ID.err``` These are all the log files and possible errors.
+
+And after 10 seconds it will finish and we should ended up with 3 files.
+
+```console
+slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
+```
+Let's check the output of the files:
+
