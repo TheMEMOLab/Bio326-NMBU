@@ -327,7 +327,7 @@ Now we can **activate** the conda environment:
 conda activate /cluster/projects/nn9987k/.share/conda_environments/BLAST/
 ```
 
-```
+```console
 (BLAST)[auve@c2-33: 14014597]$ 
 ```
 
@@ -522,10 +522,10 @@ squeue -u $USER
 ```
 
 
->
+```console
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14027935    normal MySbatch     auve  R       0:01      1 c5-45
-
+```
 
 
 Now it is runing (R). 
@@ -534,7 +534,7 @@ When the job starts it produces an out and and err file ```slurm-JOBNAME-$JOB_ID
 
 And after 10 seconds it will finish and we should ended up with 3 files.
 
-```
+```console
 slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
 ```
 
