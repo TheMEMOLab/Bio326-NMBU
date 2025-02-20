@@ -794,4 +794,4 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/blast.SLRUM.sh
 * Use sbatch command to submit your "final" jobs scripts.
 
 ## Welcome to the world of HPC environment:
-[!Dali](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DaliHPC.png)
+![Dali](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DaliHPC.png)
