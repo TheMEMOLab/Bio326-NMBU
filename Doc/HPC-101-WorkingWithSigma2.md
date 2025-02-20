@@ -523,8 +523,8 @@ When the job starts it produces an out and and err file ```slurm-JOBNAME-$JOB_ID
 
 And after 10 seconds it will finish and we should ended up with 3 files.
 
-```console
-slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
-```
+>
+>slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
+
 Let's check the output of the files:
 
