@@ -1,7 +1,7 @@
 # Bio326-NMBU
 BIO326 Genome sequencing; tools and analysis.
 
-[Orion HPC Best Practices](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/BestPracticesOrionHPC.md)
+[HPC-101 Best Practices](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/HPC-101-WorkingWithSigma2.md)
 
 Scripts for the 2024 Prokaryote sessions:
 
