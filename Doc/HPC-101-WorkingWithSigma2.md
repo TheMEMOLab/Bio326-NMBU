@@ -403,3 +403,124 @@ grep D0T87_RS12665 Bacteroides51.faa
 
 ```
 We found the amylase!!!
+
+>[!Important]
+> As the **$LOCALSCRATCH** is only a temporary folder we should copy the results to our ```/cluster/projects/nn9987k/$USER``` folder:
+
+We can achive this by doing this:
+
+```bash
+rsync -aLhv amylase.Bgramini.fasta.blastp.out /cluster/projects/nn9987k/$USER/results/
+```
+
+Check the file is transferred:
+
+```bash
+tree /cluster/projects/nn9987k/$USER/
+
+```
+
+```
+/cluster/projects/nn9987k/auve/
+└── results
+    └── amylase.Bgramini.fasta.blastp.out
+
+2 directories, 1 file
+
+```
+
+Finally, we can logout of this node and finish the job:
+
+```bash
+exit
+```
+
+## sbatch scripts.
+
+Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
+
+SLURM can use bash or anyother computer scripting language (e.g. perl, python, etc) to read the instructions. The first line #!/bin/bash, called bash shebang, are reserved words that the computer needs to read and interpret in order to launch the program. The following lines, need to start with #SLURM and these are specific instructions SLURM uses to know how many resources and other parameters the job will use while is running. In our interactive job we used some of these SLURM parameters directly in the command line:
+
+```
+--account=nn9987k \
+--partition=normal \
+--gres=localscratch:10G \
+--cpus-per-task 4 \
+--nodes 1 \
+--mem=10G \
+--time=02:00:00 \
+--pty bash \
+```
+SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
+
+```console
+-p --partition <partition-name>       --pty <software-name/path>
+--mem <memory>                        --gres <general-resources>
+-n --ntasks <number of tasks>         -t --time <days-hours:minutes>
+-N --nodes <number-of-nodes>          -A --account <account>
+-c --cpus-per-task <number-of-cpus>   -L --licenses <license>
+-w --nodelist <list-of-node-names>    -J --job-name <jobname>
+```
+
+We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 2 ; means 2 CPUs).
+
+
+
+These parameters in a SLURM script must start with a #SBATCH string and will tell the SLURM schedule the following information. The batch script may contain options preceded with "#SBATCH" before any executable commands in the script. sbatch will stop processing further #SBATCH directives once the first non-comment non-whitespace line has been reached in the script.
+
+- Number of nodes
+- Desired number of processors or jobs
+- Type of partition/queue you want to use (optional)
+- Memory requirement (Optional)
+- Length of time you want to run the job (Each partition has a default)
+- Where to write output and error files
+- Name for your job while running on HPC
+- Email ID to get job status (Optional)
+
+
+
+### Creating a SBATCH job template.
+
+Let's take a look of the basics of a SLRUM template:
+
+```bash
+#!/bin/bash
+
+
+#####Everything after this will be the instructions to SLURM###
+#################################################################
+## Job name:
+#SBATCH --acount=9987k #Project account mandatory
+##
+#SBATCH --job-name=MySbatchScript  #Name of the job
+###
+## Wall time limit:
+#SBATCH --time=00:05:00  #Run for 5 minutes
+###
+##Partition
+#SBATCH --partition=normal  #Partiion submitting the job
+
+## Other parameters:
+#SBATCH --cpus-per-task 2    #Number of cpus the job will use
+#SBATCH --mem=1G             #Memory RAM
+#SBATCH --nodes 1        #Number of computers
+#SBATCH -o slurm-%x_%j.out    #Standar output message
+#SBATCH -e slurm-%x_%j.err    #Standar error message
+##############################################################
+
+######Everything below this are the job instructions######
+
+echo "Hello $USER this is my first JOB"
+echo "I am running on the NODE $SLURM_NODELIST"
+echo "I am running with $SLURM_CPUS_ON_NODE cpus"
+
+echo "Starting $SLURM_JOB_ID at"
+date
+
+sleep 10 && echo "I slept for 10 seconds" > 10.txt
+
+echo "Ending $SLURM_JOB_ID at"
+date
+
+```
+
