@@ -511,10 +511,10 @@ Users can check the status of the Job by the command ```squeue -u $USER```
 ```bash
 squeue -u $USER
 ```
-```
+>
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
           14027935    normal MySbatch     auve  R       0:01      1 c5-45
-```
+>
 
 
 Now it is runing (R). 
