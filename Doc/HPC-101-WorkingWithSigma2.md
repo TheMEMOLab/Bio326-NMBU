@@ -405,6 +405,15 @@ grep D0T87_RS12665 Bacteroides51.faa
 ```
 We found the amylase!!!
 
+>[!Important]
+> Remember to copy the results to the ```/cluster/projects/nn9987k/$USER```
+
+```bash
+
+rsync -aLhv amylase.Bgramini.fasta.blastp.out /cluster/projects/nn9987k/$USER/results/
+
+```
+
 # sbatch scripts.
 
 Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
@@ -417,14 +426,14 @@ SLURM can use bash or computer scripting language (e.g. perl, python, etc) base 
 
 SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
 
->
+```console
 -p --partition <partition-name>       --pty <software-name/path>
 --mem <memory>                        --gres <general-resources>
 -n --ntasks <number of tasks>         -t --time <days-hours:minutes>
 -N --nodes <number-of-nodes>          -A --account <account>
 -c --cpus-per-task <number-of-cpus>   -L --licenses <license>
 -w --nodelist <list-of-node-names>    -J --job-name <jobname>
->
+```
 
 We can indicate these options by using the ```#SBATCH``` word following by any of these flag (e.g -c 2 ; means 2 CPUs).
 
@@ -525,8 +534,264 @@ When the job starts it produces an out and and err file ```slurm-JOBNAME-$JOB_ID
 
 And after 10 seconds it will finish and we should ended up with 3 files.
 
->
->slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
+```
+slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
+```
 
 Let's check the output of the files:
 
+```bash
+more slurm-MySbatchScript_14027935.*
+```
+
+```console
+::::::::::::::
+/cluster/projects/nn9987k/auve/slurm-MySbatchScript_14027935.err
+::::::::::::::
+::::::::::::::
+/cluster/projects/nn9987k/auve/slurm-MySbatchScript_14027935.out
+::::::::::::::
+Starting job 14027935 on c5-45 on saga at Thu Feb 20 19:35:52 CET 2025
+
+Hello auve this is my first JOB
+I am running on the NODE c5-45
+I am running with 2 cpus
+Starting 14027935 at
+Thu Feb 20 07:35:52 PM CET 2025
+Ending 14027935 at
+Thu Feb 20 07:36:02 PM CET 2025
+
+Job 14027935 consumed 0.0 billing hours from project nn9987k.
+
+Submitted 2025-02-20T19:35:51; waited 1.0 seconds in the queue after becoming eligible to run.
+
+Requested wallclock time: 5.0 minutes
+Elapsed wallclock time:   10.0 seconds
+
+Job exited normally.
+
+Task and CPU statistics:
+ID              CPUs  Tasks  CPU util                Start  Elapsed  Exit status
+14027935           2            0.0 %  2025-02-20T19:35:52   10.0 s  0
+14027935.batch     2      1     0.1 %  2025-02-20T19:35:52   10.0 s  0
+
+Used CPU time:   0.0 CPU seconds
+Unused CPU time: 20.0 CPU seconds
+
+Memory statistics, in MiB:
+ID               Alloc   Usage
+14027935        1024.0
+14027935.batch  1024.0     0.0
+
+Job 14027935 completed at Thu Feb 20 19:36:02 CET 2025
+```
+
+This job also created a text (.txt) file names 10.txt, let's take a look:
+
+```bash
+more 10.txt
+```
+
+```console
+I slept for 10 seconds
+```
+
+### Debunging errors during sbatch execution:
+
+Let's run the following script ```/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/mysecondbath.SLURM.sh ``` that launches a job to sleep for 20 seconds and then create a text file ```20.txt```
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/mysecondbath.SLURM.sh
+```
+Let's list the results:
+
+```bash
+ls -lrth
+```
+
+```console
+total 3.0K
+-rw-rw-r-- 1 auve nn9987k    0 Feb 20 19:35 slurm-MySbatchScript_14027935.err
+-rw-rw-r-- 1 auve auve    1017 Feb 20 19:36 slurm-MySbatchScript_14027935.out
+-rw-rw-r-- 1 auve nn9987k   23 Feb 20 19:36 10.txt
+-rw-rw-r-- 1 auve nn9987k   76 Feb 20 19:55 slurm-MySbatchScript_14027942.err
+-rw-rw-r-- 1 auve nn9987k    0 Feb 20 19:55 20.txt
+-rw-rw-r-- 1 auve auve    1017 Feb 20 19:55 slurm-MySbatchScript_14027942.out
+```
+
+We can notice the ```20.txt``` file is empty (value 0 in the 4th colum), we can check then the ```slurm-MySbatchScript_$JOBID.err``` to debug:
+
+```bash
+more slurm-MySbatchScript_14027942.err
+```
+
+```console
+/var/tmp/slurmd/job14225128/slurm_script: line 32: ech: command not found
+```
+
+It looks like the error is in line 32, let's take a look of the slurm script:
+
+```bash
+less +32 -N /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/mysecondbath.SLURM.sh
+```
+
+```console
+32 sleep 20 && ech "I sleept for 20 seconds" > 20.txt
+```
+
+Changing the error in that line will correct the code. Let's make a copy and then change that line. 
+
+```bash
+cp /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/mysecondbath.SLURM.sh /cluster/projects/nn9987k/$USER
+sed -i.back '32s/ech/echo/' mysecondbath.SLURM.sh
+
+```
+
+After changing, save the script, look for the line to be corrected and if it is correct resubmit as follow:
+
+```bash
+less +32 -N mysecondbath.SLURM.sh
+```
+
+```console
+32 sleep 20 && echo "I sleept for 20 seconds" > 20.txt
+```
+
+Now the command ```echo``` is well spelled let's resubmit:
+
+```bash
+sbatch mysecondbath.SLURM.sh
+```
+
+Now the ```20.txt``` file is written and has info on it:
+
+```bash
+less 20.txt
+```
+
+```console
+I sleept for 20 seconds
+20.txt (END)
+```
+
+### Running BLAST as a SLRUM sbatch job.
+
+Now that we know how to create a SLRUM sbatch job we can apply the same to submit the BLAST example. The following template will do the job:
+
+```bash
+#!/bin/bash
+
+
+#####Everything after this will be the instructions to SLURM###
+#################################################################
+## Job name:
+#SBATCH --job-name=BLASTP  #Name of the job
+#
+###Account
+#SBATCH --account=nn9987k #Particular account for each project
+## Wall time limit:
+#SBATCH --time=00:10:00  #Run for 10 minutes
+#
+##Partition
+#SBATCH --partition=normal  #Partiion submitting the job
+
+## Other parameters:
+#SBATCH --cpus-per-task 4    #Number of cpus the job will use
+#SBATCH --mem=10G             #Memory RAM
+#SBATCH --nodes 1        #Number of computers
+#SBATCH -o slurm-%x_%j.out    #Standar output message
+#SBATCH -e slurm-%x_%j.err    #Standar error message
+##############################################################
+
+######Everything below this are the job instructions######
+
+
+##Activate conda environments
+
+module --quiet purge  # Reset the modules to the system default
+module load Anaconda3/2022.10
+
+
+##Activate conda environments
+
+export PS1=\$
+source ${EBROOTANACONDA3}/etc/profile.d/conda.sh
+conda deactivate &>/dev/null
+conda activate /cluster/projects/nn9987k/.share/conda_environments/BLAST
+echo "I am workung with this" $CONDA_PREFIX
+
+####Do some work:########
+
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID\_$SLURM_ARRAY_TASK_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I am working with this enviroment loaded"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cp /cluster/projects/nn9987k/BIO326-2025/HPC101/BLASTExample/*.* $LOCALSCRATCH
+cd $LOCALSCRATCH/
+ls
+
+#Index a database using makeblastdb and the molecule type prot:
+
+echo "Indexing database..."
+makeblastdb -dbtype prot -in Bacteroides51.faa
+
+#run the BLAST. As we want to search for protein in a protein database the command we need to use is BLASTP:
+
+echo "Running blast"
+
+blastp \
+-query amylase.Bgramini.fasta \
+-db Bacteroides51.faa \
+-dbsize 1000000000 \
+-max_target_seqs 1 \
+-outfmt 6 \
+-num_threads $SLURM_CPUS_ON_NODE \
+-out amylase.Bgramini.fasta.blastp.sbatch.out
+
+#Remember to copy the results to the ```/cluster/projects/nn9987k/$USER```
+
+echo "Copy results..."
+
+rsync -aLhv amylase.Bgramini.fasta.blastp.sbatch.out /cluster/projects/nn9987k/$USER/results/
+
+##Done
+
+echo "Done Bye :-)"
+
+date
+
+```
+
+We can submit the script by:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/blast.SLRUM.sh
+```
+
+>[!Note]
+> Discuss about the results, does this work?
+
+## Remarks
+
+* Do not use the login node to run process (e.g. BLAST, SPADES, HMMER) **Do not get naked in the lobby**.
+* Do not use the $HOME partition for storag.
+* Always use the /cluster/projects/ to work.
+* Use interactive jobs for testing and debugging.
+* Use the $LOCALSCRATCH for faster computation.
+* Monitoring your jobs by squeue.
+* Use sbatch command to submit your "final" jobs scripts.
+
+## Welcome to the world of HPC environment:
+[!Dali](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DaliHPC.png)
