@@ -783,6 +783,138 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/blast.SLRUM.sh
 >[!Note]
 > Discuss about the results, does this work?
 
+## SFTP Guide: Transferring Files to and from the Server
+
+This guide will show you how to use SFTP (Secure File Transfer Protocol) to upload and download files between your local computer and the remote server `login.saga.sigma2.no`. We will use the common project directory: `/cluster/project/nn9987k/$USER`.
+
+## 1. Connecting to the Server
+
+To establish an SFTP connection, use the following command:
+
+```bash
+sftp -P 12 <your_username>@login.saga.sigma2.no
+```
+
+Replace `<your_username>` with your actual username.
+
+Once connected, you will see an `sftp>` prompt, indicating that you can start transferring files.
+
+## 2. Uploading Files to the Server
+
+### a) Upload a Single File
+
+To upload a file from your local computer to the common project directory:
+
+```bash
+put /path/to/local/file /cluster/project/nn9987k/$USER/
+```
+
+Example:
+
+```bash
+put mydata.txt /cluster/project/nn9987k/$USER/
+```
+
+### b) Upload Multiple Files
+
+You can also upload multiple files at once:
+
+```bash
+mput file1.txt file2.txt /cluster/project/nn9987k/$USER/
+```
+
+### c) Upload a Directory
+
+To upload a directory and its contents, use:
+
+```bash
+put -r /path/to/local/directory /cluster/project/nn9987k/$USER/
+```
+
+## 3. Downloading Files from the Server
+
+### a) Download a Single File
+
+To download a file from the server to your local machine:
+
+```bash
+get /cluster/project/nn9987k/$USER/filename /path/to/local/destination/
+```
+
+Example:
+
+```bash
+get /cluster/project/nn9987k/$USER/mydata.txt ./
+```
+
+(This will save the file in the current local directory.)
+
+### b) Download Multiple Files
+
+To download multiple files:
+
+```bash
+mget /cluster/project/nn9987k/$USER/file1.txt /cluster/project/nn9987k/$USER/file2.txt .
+```
+
+### c) Download a Directory
+
+To download an entire directory:
+
+```bash
+get -r /cluster/project/nn9987k/$USER/myfolder ./
+```
+
+## 4. Checking and Navigating Directories
+
+### a) List Files
+
+To see the files in the current remote directory:
+
+```bash
+ls
+```
+
+### b) Change Directory
+
+To move into another directory on the server:
+
+```bash
+cd /cluster/project/nn9987k/$USER/
+```
+
+To check which directory you are currently in:
+
+```bash
+pwd
+```
+
+## 5. Exiting SFTP
+
+When you are done, type:
+
+```bash
+bye
+```
+
+or
+
+```bash
+exit
+```
+
+This will close the SFTP session.
+
+## Additional Tips
+
+- Use `lcd` to change the local directory before downloading files:
+  ```bash
+  lcd /path/to/local/destination/
+  ```
+- Use `!` to run local commands without exiting SFTP (e.g., `!pwd` to check your local directory).
+
+This guide covers the basics of using SFTP to transfer files between your computer and the remote server. Happy coding!
+
 ## Remarks
 
 * Do not use the login node to run process (e.g. BLAST, SPADES, HMMER) **Do not get naked in the lobby**.
