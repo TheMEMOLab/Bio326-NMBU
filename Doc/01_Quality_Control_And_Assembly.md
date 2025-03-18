@@ -44,12 +44,20 @@ ln -s /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/D01T6_T.fq.gz /cluster
 
 ### Cleanning reads: Running Chopper and NanoPlot.
 
+First, as we want to have some results let's work interactivelly with the computer.
+>[!Warning]
+> Remember do not get naked in the lobby. The following script will help us to ask for a computer:
+
+```bash
+/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/srun.prarameters.Nonode.Account.sh 8 20G normal 120G nn9987k 02:00:00
+```
+
 Let's review a bit on sequencing data concepts:
 
 The FastQ files and the Phred score:
 
 ![FQ](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/fastqC.png)
-
+![ASCII](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ASCII.png)
 
 
 Now that we have all the data we can use a combination of tools to perform a QC and cleanning the reads.
