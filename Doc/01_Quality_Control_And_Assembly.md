@@ -129,7 +129,7 @@ Now let's Run NanoPlot ond the rawReads and Chopper at the same time.
 module load parallel/20240322-GCCcore-13.2.0
 ```
 
-- Then run both NanoPlot and Chopper at the same time using half of the cpus for one task and other half for the second one:
+- Then run both NanoPlot and Chopper at the same time using 9 of the cpus for one task and one for the second one:
 
 ```
 parallel --jobs 2 ::: \
