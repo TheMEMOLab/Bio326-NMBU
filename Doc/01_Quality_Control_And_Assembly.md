@@ -184,7 +184,7 @@ R is intalled as conda environment so let's call Miniconda3 and R_env
 
 ```bash
 conda deactivate
-conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
+conda activate /cluster/projects/nn9987k/.share/conda_environments/R_radian
 ```
 
 
