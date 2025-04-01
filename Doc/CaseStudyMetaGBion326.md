@@ -205,7 +205,8 @@ plot_list <- map(metrics, function(metric) {
     theme_minimal() +
     labs(title = metric, x = metric, y = "Sample") +
     theme(axis.text.y = element_text(size = 10))   # Adjust text size if needed
-})
+}) %>%
+  set_names(gsub(" ","", metrics))
 ```
 
 Check the results, by displaying the Mean read length and the N50
