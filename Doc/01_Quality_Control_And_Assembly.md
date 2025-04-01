@@ -42,9 +42,9 @@ ln -s /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/D01T6_T.fq.gz /cluster
 ```
 
 
-### Cleanning reads: Running Chopper and NanoPlot.
+### Cleaning reads: Running Chopper and NanoPlot.
 
-First, as we want to have some results let's work interactivelly with the computer.
+First, as we want to have some results let's work interactively with the computer.
 >[!Warning]
 > Remember do not get naked in the lobby. The following script will help us to ask for a computer:
 
@@ -75,7 +75,7 @@ Use the [Chopper](https://github.com/wdecoster/chopper) tool to clean the reads 
 module load Miniconda3/23.10.0-1
 
 
-##Activate conda environments
+## Activate conda environments
 
 eval "$(conda shell.bash hook)"
 conda activate /cluster/projects/nn9987k/.share/conda_environments/NANOPAKQC/
@@ -118,7 +118,7 @@ HFHGIGLJJMJJHVIJPDEEDFKLKLML{{QKKOPJJIPKRML{SNKHJ{HGLFFGFFAAKHNIJIPK
 >[!Tip]
 >To exit press the letter Q in your keyboard
 
-Now let's Run NanoPlot ond the rawReads and Chopper at the same time.
+Now let's run NanoPlot on the rawReads and Chopper at the same time.
 
 >[!Tip]
 >Let's use multiple CPUs and GNU parallel to run multiple task at the same time. You can read more on parallel [here](https://bioinformaticsworkbook.org/Appendix/GNUparallel/GNU_parallel_examples.html#gsc.tab=0)
@@ -180,7 +180,7 @@ STDEV read length:                 2,930.4
 cp D01T6_T.Nanoplot.dir/NanoStats.txt $LOCALSCRATCH/D01T6_T_Raw.txt && cp D01T6_T.chopper.Nanoplot.dir/NanoStats.txt $LOCALSCRATCH/D01T6_T_choper.txt
 
 ```
-R is intalled as conda environment so let's call Miniconda3 and R_env
+R is installed as conda environment so let's call Miniconda3 and R_env
 
 ```bash
 conda deactivate
