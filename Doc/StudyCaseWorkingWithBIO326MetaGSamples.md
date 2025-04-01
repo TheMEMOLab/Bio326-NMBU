@@ -364,7 +364,7 @@ https://arken.nmbu.no/~auve/BIO326/kraken2Reports.zip
 > ``` wget https://arken.nmbu.no/~auve/BIO326/kraken2Reports.zip ```
 
 Decompress the Zip file and let's move to R and RStudio.
-[!Tip]
+>[!Tip]
 > If you have access to the terminal you unzip the file by:
 > ``` unzip https://arken.nmbu.no/~auve/BIO326/kraken2Reports.zip ```
 
