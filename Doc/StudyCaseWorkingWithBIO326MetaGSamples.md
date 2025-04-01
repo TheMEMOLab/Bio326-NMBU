@@ -1,4 +1,4 @@
-# Studycase: Working wiht BIO326 metagenomic samples.
+# Case-Study: Working wiht BIO326 metagenomic samples.
 
 ## The effect of DNA extraction methods on ONT sequence quality.
 
