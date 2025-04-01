@@ -99,6 +99,8 @@ Let's work with these files. Download the files from
 
 https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip
 
+
+
 >[!Tip]
 > If you have access to the terminal you can download the file by:
 > ``` wget https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip ```
