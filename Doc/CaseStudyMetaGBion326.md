@@ -106,7 +106,7 @@ https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip
 > ``` wget https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip ```
 
 Decompress the Zip file and let's move to R and RStudio.
-[!Tip]
+>[!Tip]
 > If you have access to the terminal you unzip the file by:
 > ``` unzip bio326NanoStats.Prok.dir.zip ```
 
