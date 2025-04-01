@@ -526,4 +526,4 @@ ggsave(QCK2HM,
        height=20
 )
 ```
-[!PLOT](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
+![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
