@@ -295,7 +295,7 @@ ReadLengthVP <- ReadLengthVP +
 
 N50VP <- N50VP +
   theme_minimal() +
-  scale_fill_brewer(palette =  "Set3") +
+  scale_fill_brewer(palette =  "Dark2") +
   theme(legend.position = "none")
   
 ReadLengthVP + N50VP
@@ -304,7 +304,7 @@ ReadLengthVP + N50VP
 Saving the plot:
 
 ```R
-MergeQCPlot <- ReadLengthVP + N50VP
+MergedQCPlot <- ReadLengthVP + N50VP
 
 ggsave(MergedQCPlot,file="MergedPlot.QualityScores.pdf")
 ```
