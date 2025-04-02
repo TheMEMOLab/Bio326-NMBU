@@ -311,7 +311,7 @@ ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
 
 ## Taxonomy classification using Kraken2
 
-What is Kraken2, according to [Wood and Salzberg, GEnome Biology 2014](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-3-r46): "*Kraken is an ultrafast and highly accurate program for assigning taxonomic labels to metagenomic DNA sequences. Previous programs designed for this task have been relatively slow and computationally expensive, forcing researchers to use faster abundance estimation programs, which only classify small subsets of metagenomic data. Using exact alignment of k-mers, Kraken achieves classification accuracy comparable to the fastest BLAST program.*"
+What is Kraken2? According to [Wood and Salzberg, GEnome Biology 2014](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-3-r46): "*Kraken is an ultrafast and highly accurate program for assigning taxonomic labels to metagenomic DNA sequences. Previous programs designed for this task have been relatively slow and computationally expensive, forcing researchers to use faster abundance estimation programs, which only classify small subsets of metagenomic data. Using exact alignment of k-mers, Kraken achieves classification accuracy comparable to the fastest BLAST program.*"
 
 ![K2ALG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/k2algo.JPG)
 
