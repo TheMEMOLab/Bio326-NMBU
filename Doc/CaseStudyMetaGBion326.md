@@ -429,7 +429,7 @@ We can normalize the abundances to log2 to really apreciate the changes and crea
 ```R
 MtrixForPH <- AbundanceTable %>%
   mutate(across(where(is.numeric), ~ log2(.x + 1))) %>%
-  column_to_rownames("SpeciesName")
+  column_to_rownames("SpeciesName") %>%
   as.matrix()
 ```
 
