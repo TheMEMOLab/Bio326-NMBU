@@ -306,7 +306,7 @@ Saving the plot:
 ```R
 MergeQCPlot <- ReadLengthVP + N50VP
 
-ggsave(MergedQCPlot,file="MergedPlot.QualityScores.pdf")
+ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
 ```
 
 ## Taxonomy classification using Kraken2
