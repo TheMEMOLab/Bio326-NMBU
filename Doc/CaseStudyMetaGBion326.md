@@ -1095,3 +1095,8 @@ Plot saved as AssemblyStats.pdf
 ```
 
 ![AssemblyStats](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/AssStats.JPG)
+
+**What can we say about these results?**
+
+> [!Important]
+> Remember to finish your interactive session by ```exit```
