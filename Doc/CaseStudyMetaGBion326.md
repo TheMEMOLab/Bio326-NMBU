@@ -528,3 +528,570 @@ ggsave(QCK2HM,
 )
 ```
 ![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
+
+# Working with Bio326 Metagenomes 
+
+Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
+
+## 1. Cleanning the reads with Chopper:
+
+As we have 12 fastq files:
+
+```bash
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/FastPrep_1.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/FastPrep_2.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/FastPrep_3.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/FastPrep_4.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_1.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_2.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_3.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_4.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_SRE_1.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_SRE_2.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_SRE_3.fastq.gz
+/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/Vortex_SRE_4.fastq.gz
+```
+We should clean this for this, instead of running sbatch 12 times we can use a useful feature of the HPC that is parallelization by [Array jobs](https://documentation.sigma2.no/jobs/job_scripts/array_jobs.html).
+
+
+<details>
+<summary>The following template /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/1_chopper.SLURM.sh </summary>
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=Chopper
+#
+## Wall time limit:
+#SBATCH --time=02:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 12
+#SBATCH --mem=10G
+#SBATCH --gres=localscratch:20G
+#SBATCH --partition=normal,bigmem,hugemem
+#SBATCH --output=slurm-%x_%A_%a.out
+#########################################	
+
+
+
+#Variables
+RSYNC='rsync -aPLhv --no-perms --no-owner --no-group'
+arraylist=$1
+INDIR=$2
+OUTDIR=$3
+
+##Main script
+
+#####Array list######
+
+LIST=$arraylist
+input=$(head -n $SLURM_ARRAY_TASK_ID $LIST | tail -n 1)
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Anaconda3/2022.10
+
+
+##Activate conda environments
+
+export PS1=\$
+source ${EBROOTANACONDA3}/etc/profile.d/conda.sh
+conda deactivate &>/dev/null
+conda activate /cluster/projects/nn9987k/.share/conda_environments/NANOPAKQC/
+echo "I am workung with this" $CONDA_PREFIX
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID_\_$SLURM_ARRAY_TASK_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying files to" $LOCALSCRATCH
+
+echo "Copy fq file"
+
+time $RSYNC $INDIR/$input.*.gz ./$input.fq.gz
+
+###
+
+echo "Decompress ..."
+
+time gzip -d $input.fq.gz
+
+###
+echo "Starting QC cleanning with chooper ..."
+date +%d\ %b\ %T
+
+time cat $input.fq | chopper \
+--threads $SLURM_CPUS_ON_NODE \
+-q 10 \
+-l 1000  > $input.chopper.fq
+
+echo "Compressing"
+
+pigz -p $SLURM_CPUS_ON_NODE $input.chopper.fq
+
+
+
+###
+echo "Moving files to $OUTDIR"
+
+###Creating a directory in $OUDIR for results
+
+time $RSYNC $input.chopper.fq.gz $OUTDIR/
+
+#######
+echo "I've done"
+date
+
+```
+</details>
+
+To run this we need to add the Terminal some arguments: 
+    - A list
+    - Iniput dir
+    -Output dir
+
+And we can run as follow:
+
+```bash
+cd /cluster/projects/nn9987k/$USER/
+ls -1 /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/|sed 's/.fastq.gz//g' > SampleList.txt
+sbatch -a 1-12 /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/1_chopper.SLURM.sh /cluster/projects/nn9987k/BIO326-2025/metaG/SampleList.txt /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/  /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25
+```
+
+This will produce a directory With the following files:
+
+```
+FastPrep_1.chopper.fq.gz  FastPrep_3.chopper.fq.gz  Vortex_1.chopper.fq.gz  Vortex_3.chopper.fq.gz  Vortex_SRE_1.chopper.fq.gz  Vortex_SRE_3.chopper.fq.gz
+FastPrep_2.chopper.fq.gz  FastPrep_4.chopper.fq.gz  Vortex_2.chopper.fq.gz  Vortex_4.chopper.fq.gz  Vortex_SRE_2.chopper.fq.gz  Vortex_SRE_4.chopper.fq.gz
+```
+
+## 2. Co-Assembly reads with MetaFlye
+
+To extend the ONT reads we will use the [Flye]() assembler with the ```--meta``` flag:
+
+<details>
+<summary>This template /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/2_flye.SLURM.chr.sh</summary>
+
+The arguments are:
+
+    - Input Name
+    - Iniput dir
+    -Output dir
+
+
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=MetaFly
+#
+## Wall time limit:
+#SBATCH --time=04:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 14
+#SBATCH --mem=20G
+#SBATCH --gres=localscratch:250G
+#SBATCH --partition=normal,bigmem,hugemem
+#SBATCH --output=slurm-%x_%j.out
+#########################################	
+
+###Basic usage help for this script#######
+
+print_usage() {
+        echo "Usage: sbatch $0 input indir outputdir"
+}
+
+if [ $# -lt 3 ]
+        then
+                print_usage
+                exit 1
+        fi
+
+
+###############Main SCRIPT####################
+
+##Variables###
+
+input=$1
+INDIR=$2
+outdir=$3
+RSYNC='rsync -a Lhv --no-perms --no-owner --no-group'
+
+
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Anaconda3/2022.10
+
+##Activate conda environments
+
+export PS1=\$
+source ${EBROOTANACONDA3}/etc/profile.d/conda.sh
+conda deactivate &>/dev/null
+
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning
+
+echo "I'm working with this CONDAENV"
+echo $CONDA_PREFIX
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying Reads to" $LOCALSCRATCH
+
+zcat $INDIR/*.gz|pigz -p $SLURM_CPUS_ON_NODE > $input.fq.gz
+
+####Assembly#######################
+
+echo "Starting assembly by Flye...."
+date +%d\ %b\ %T
+
+time flye \
+--nano-raw $input.*gz \
+--meta \
+--out-dir $input.flye.outdir \
+-t $SLURM_CPUS_ON_NODE
+
+echo "Final results are in: "$outdir
+
+$RSYNC $input.flye.outdir $outdir/
+
+####removing tmp dir. Remember to do this for not filling the HDD in the node!!!!###
+
+echo "I've done at"
+date
+
+
+```
+
+</details>
+
+To run we can do something like:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/2_flye.SLURM.chr.sh MetaAssBIO326_25 /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25 && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25
+```
+## 3. Polishing.
+
+A basic model of how polishing works is that the polisher stacks all relevant reads on top of the genome and decides for each position whether the present nucleotide letter is the best representative for that position, or not. There are several sources of variation that make draft assemblies polishable. The main sources are multi-strain variation from closely related species as well as incorporation of sequencing errors during the sequencing process. Ideally, assemblers would be perfect, and we wouldn't have to perform polishing. But because of some noise or artefacts that are present in our data, we might make our genomes more truthful to their biological origin by performing these polishing steps.
+
+Genome polishing is reminiscent of generating a consensus genome. Consensus genome creation is a term used in reference mapping. This is why you may incidentally see the term consensus being used in the tools that we're gonna run.
+
+[medaka](https://github.com/nanoporetech/medaka) is a tool to create consensus sequences and variant calls from nanopore sequencing data. This task is performed using neural networks applied a pileup of individual sequencing reads against a reference sequence, mostly commonly either a draft assembly or a database reference sequence. It provides state-of-the-art results outperforming sequence-graph based methods and signal-based methods, whilst also being faster.
+
+**Features**
+
+    -Requires only basecalled data. (.fasta or .fastq)
+    -Improved accuracy over graph-based methods (e.g. Racon).
+    -50X faster than Nanopolish (and can run on GPUs).
+    -Includes extras for implementing and training bespoke correction networks.
+    -Works on Linux and MacOS.
+    -Open source (Oxford Nanopore Technologies PLC. Public License Version 1.0)
+
+### Running Medaka.
+
+Medaka needs two parameters to run:
+
+- Fasta file of the assembly.
+- Fastq files used for the assembly.
+
+
+details>
+
+<summary> The following SLURM script /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh runs MEDAKA </summary>
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=MedakaPolishingGPU
+#
+## Wall time limit:
+#SBATCH --time=04:00:00
+###Account
+#SBATCH --account=nn10039k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 14
+#SBATCH --mem=50G
+#SBATCH --gres=localscratch:200G
+#SBATCH --partition=accel,a100
+#SBATCH --output=slurm-%x_%j.out
+#########################################
+
+#Variables
+RSYNC='rsync -aLhv --no-perms --no-owner --no-group'
+input=$1
+READIR=$2
+ASSDIR=$3
+OUTDIR=$4
+
+##Main script
+
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+echo "SLURM partition assigned: $SLURM_JOB_PARTITION"
+
+# Auto-detect the partition and load the correct module environment
+if [[ "$SLURM_JOB_PARTITION" == "a100" ]]; then
+    echo "Running on A100 partition - Swapping to Zen2Env"
+    module --force swap StdEnv Zen2Env
+else
+    echo "Running on Accel (P100) partition - Using default Intel environment"
+fi
+
+
+##Activate conda environments
+module load Anaconda3/2022.10
+export PS1=\$
+source ${EBROOTANACONDA3}/etc/profile.d/conda.sh
+conda deactivate &>/dev/null
+
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MEDAKA
+echo "I am workung with this" $CONDA_PREFIX
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying files to" $LOCALSCRATCH
+
+echo "Copy fq file"
+
+time zcat $READIR/*.gz |pigz -p $SLURM_CPUS_ON_NODE > $input.fq.gz
+
+echo "Copy assembly"
+
+time $RSYNC $ASSDIR/assembly.fasta ./$input.assembly.fasta
+
+##MEdaking
+
+echo "Starting Medaka..."
+date +%d\ %b\ %T
+
+time medaka_consensus \
+-i $input.fq.gz \
+-d $input.assembly.fasta \
+-o $input.medaka.dir \
+-t $SLURM_CPUS_ON_NODE
+
+echo "Cleaning and changing names..."
+
+cd $input.medaka.dir
+echo "I am on:"
+pwd
+mv consensus.fasta $input.toto
+
+###Cleaning
+
+ls -1|grep -v toto|\
+while read -r line; 
+    do
+    rm -r $line;
+done
+
+mv $input.toto $input.medaka.consensus.fasta
+
+##moving resutls
+
+echo "Rsync results to $OUTDIR"
+cd $LOCALSCRATCH
+$RSYNC $input.medaka.dir $OUTDIR/
+
+###
+echo "I've done"
+date
+
+```
+
+</details>
+
+We can submit it by:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh FlyAssemblyBIO326_25Polished /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished
+```
+
+## Comparing Assemblies before and after polishing:
+
+> [!Important]
+> As we will start working with files let's ask for an interactive session in SAGA:
+
+```bash
+c
+```
+
+Now we are logged into a computing node.
+
+Display the content of the Flye assembly folder:
+
+```bash
+ls /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir
+```
+
+```
+00-assembly  10-consensus  20-repeat  30-contigger  40-polishing  assembly.fasta  assembly_graph.gfa  assembly_graph.gv  assembly_info.txt  flye.log  params.json
+``
+
+And the ones in MEDAKA:
+
+```bash
+
+ls /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir
+
+```
+
+```
+FlyAssemblyBIO326_25Polished.medaka.consensus.fasta
+```
+
+As we can see these are fasta files, let's corroborate these are fasta files:
+
+1) Let's assign this into a variables to easy manipulate files:
+
+```bash
+FLYE="/cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta"
+MEDAKA="/cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta"
+```
+
+To check we can use ```less```
+
+```bash
+less -S $MEDAKA
+less -S $FLYE
+
+```
+
+We can use ```assembly-stats``` tool to check for the main stats in the assembly:
+
+```bash
+module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
+assembly-stats $FLYE $MEDAKA
+```
+
+```
+stats for /cluster/projects/nn9987k/BIO326-2025/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta
+sum = 63963185, n = 2515, ave = 25432.68, largest = 1763124
+N50 = 44610, n = 256
+N60 = 31296, n = 431
+N70 = 22114, n = 673
+N80 = 15765, n = 1014
+N90 = 10695, n = 1504
+N100 = 508, n = 2515
+N_count = 0
+Gaps = 0
+-------------------------------------------------------------------------------
+stats for /cluster/projects/nn9987k/BIO326-2025/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta
+sum = 63718690, n = 2515, ave = 25335.46, largest = 1763100
+N50 = 44616, n = 255
+N60 = 31117, n = 429
+N70 = 22045, n = 672
+N80 = 15701, n = 1012
+N90 = 10639, n = 1503
+N100 = 508, n = 2515
+N_count = 0
+Gaps = 0
+```
+
+These results are good but not very comparable ```assembly-stats``` can perform an output as a table using the ```-t``` flag:
+
+```
+assembly-stats -t $FLYE $MEDAKA
+
+```
+
+We can save this into a file:
+
+```bash
+assembly-stats -t $FLYE $MEDAKA > /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
+cat !$
+```
+
+```
+cat /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
+filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
+/cluster/projects/nn9987k/BIO326-2025/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta    63963185        2515    25432.68        1763124 5080       0       44610   256     22114   673     10695   1504
+/cluster/projects/nn9987k/BIO326-2025/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta  63718690  2515     25335.46        1763100 508     0       0       44616   255     22045   672     10639   1503
+```
+
+We can plot this result table:
+
+```bash
+conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
+cd /cluster/projects/nn9987k/$USER/metaG/results/
+Rscript /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/assemblyStats.r  /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
+```
+
+This producess the plot:
+
+```
+Plot saved as AssemblyStats.pdf
+```
+
+![AssemblyStats](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/AssStats.JPG)
