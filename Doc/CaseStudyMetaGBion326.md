@@ -841,7 +841,7 @@ Medaka needs two parameters to run:
 - Fastq files used for the assembly.
 
 
-details>
+<details>
 
 <summary> The following SLURM script /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh runs MEDAKA </summary>
 
