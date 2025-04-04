@@ -982,7 +982,7 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh
 > As we will start working with files let's ask for an interactive session in SAGA:
 
 ```bash
-c
+/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/srun.prarameters.Nonode.Account.sh 4 10G normal,bigmem,hugemem 20G nn9987k 02:00:00
 ```
 
 Now we are logged into a computing node.
