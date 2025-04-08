@@ -1596,7 +1596,7 @@ Then using ```evince``` command to open the Primary_clustering_dendrogram.pdf fi
 evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures/Primary_clustering_dendrogram.pdf
 ```
 
-![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.jpg)
+![METAG]https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.png)
 
 What we can discuss about these results?
 
