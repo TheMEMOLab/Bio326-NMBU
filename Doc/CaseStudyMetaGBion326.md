@@ -1348,7 +1348,7 @@ echo -e "Metabat2\t$MB\nMaxBin2\t$MX"
 
 ```
 >[!Important]
->The number of Bins in each run (user) can change due to lack of seed set parameter in MaxBin2.
+>The number of Bins in each run (user) can change if there is no seed set up.
 
 ## 5. Dereplication 
 
@@ -1560,14 +1560,13 @@ less  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25
 This is a huge table, so let's just extract the fields we need the GenomeID (1), taxonomy (2), completeness (12) and contamination (13), and ask to retrieve only those that are > 70 % complete and < 5 % contaminated:
 
 ```bash
- cat /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
+ cat /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 5) print $1,$2,$12,$13}'
 ```
 
 ```
 MetaBiningBIO326_25Polished.MaxBin.out.001.fasta o__Clostridiales (UID1226) 98.57 0.00
 MetaBiningBIO326_25Polished.MaxBin.out.002.fasta k__Bacteria (UID2372) 99.06 2.83
 MetaBiningBIO326_25Polished.MaxBin.out.003.fasta g__Prevotella (UID2722) 97.81 4.26
-MetaBiningBIO326_25Polished.MaxBin.out.004.fasta k__Bacteria (UID2372) 97.80 6.60
 MetaBiningBIO326_25Polished.MaxBin.out.006.fasta f__Lachnospiraceae (UID1255) 81.90 4.02
 MetaBiningBIO326_25Polished.Metabat2.1.fasta o__Clostridiales (UID1226) 95.38 0.00
 MetaBiningBIO326_25Polished.Metabat2.11.fasta k__Bacteria (UID2372) 99.06 0.94
@@ -1576,7 +1575,7 @@ MetaBiningBIO326_25Polished.Metabat2.27.fasta g__Prevotella (UID2722) 95.32 0.76
 MetaBiningBIO326_25Polished.Metabat2.8.fasta f__Lachnospiraceae (UID1255) 90.21 3.85
 ```
 
-Here we have 10 genomes, but dRep says only 5. Well check the ANI clustering analysis:
+Here we have more than 5 (n=9) genomes, but dRep says only 5. Well check the ANI clustering analysis:
 
 - CheckM save all the clustering analysis as dendrograms and NMDS plots in the ```figures``` folder as PDF. 
 
