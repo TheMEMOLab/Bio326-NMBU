@@ -1348,7 +1348,7 @@ echo -e "Metabat2\t$MB\nMaxBin2\t$MX"
 
 ```
 >[!Important]
->The number of Bins in each run (user) can change if there is no seed set up.
+>The number of Bins in each run (user) can change due to the binning algorithm and lack of seed setting options in MaxBin2.
 
 ## 5. Dereplication 
 
