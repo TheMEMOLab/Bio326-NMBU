@@ -1347,6 +1347,8 @@ MX=$(ls -1|grep MaxBin|grep -v -E "log|marker|nocl|summ|too"|wc -l)
 echo -e "Metabat2\t$MB\nMaxBin2\t$MX"
 
 ```
+>[! Important]
+> The number of Bins in each run (user) can change due to lack of seed set parameter in MaxBin2.
 
 ## 5. Dereplication 
 
@@ -1598,5 +1600,5 @@ evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_2
 
 ![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.png)
 
-What we can discuss about these results?
+#### How many dereplicated MAGs could we obtain if we change the parameters to 50 % Completeness 10 % Contamination?
 
