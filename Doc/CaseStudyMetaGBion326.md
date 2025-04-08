@@ -1100,3 +1100,503 @@ Plot saved as AssemblyStats.pdf
 
 > [!Important]
 > Remember to finish your interactive session by ```exit```
+
+## 4. Binning.
+
+So far we created an assembly containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced from the cow rumen.
+
+Presently, the assembly consists of thousands of contigs, each coming from a single species. By grouping together the contigs from each species present in our sample, we can create what is referred to as a MAG, short for Metagenome Assembled Genome.
+
+Popular binning algorithms like the ones used in Metabat2 utilize contig depth as a tell tale to link the individual contigs together that come from the same species. This is done by mapping the original reads onto the assembly and then counting the read depth of each contig. The smart thing here is that contigs coming from the same species will have similar depth. Another vital contig statistic that binners use is the GC-content. Each species has its own intrinsic GC-content, and by grouping contigs further on GC-content -in this case by counting the tetranucleotide frequency- we might get good representatives for distinct species in our sample. If our bins live up to our requirements, we can refer to them as MAGs.
+
+![Bining](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Binning.png)
+
+
+>[!Note]
+> In this course we will use 2 binning algorithms [Metabat2](https://bitbucket.org/berkeleylab/metabat/src) and  [Maxbin2](https://sourceforge.net/projects/maxbin2/)
+
+Both algorithms relay in extracting the sequencing depth from the assemlby using a table like this:
+
+```
+contigName      contigLen       totalAvgDepth   MetaBiningBIO326_25Polished.assembly.sorted     MetaBiningBIO326_25Polished.assembly.sorted-var
+contig_1784     16061   0       0       0
+contig_2114     83571   3.45343 3.45343 2.98818
+contig_2646     14442   2.83193 2.83193 0.380264
+contig_1102     3538    2.63017 2.63017 0.516515
+```
+
+### Running Binning tools:
+
+Where you need the length of each contig and the deepth sequenced in each experiment. To do this we will map all the reads to the MEDAKA polished assembly using ```minimap2``` and then we will use the ```jgi_summarize_bam_contig_depths``` script to get the depth file.
+
+<details>
+
+<summary>This SLURM script has all the instructions</summary>
+
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=Binning
+#
+## Wall time limit:
+#SBATCH --time=48:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 16
+#SBATCH --mem=50G
+#SBATCH --gres=localscratch:200G
+#SBATCH --output=slurm-%x_%j.out
+#########################################	
+
+#Variables
+RSYNC='rsync -aPLhv --no-perms --no-owner --no-group'
+input=$1
+READIR=$2
+ASSDIR=$3
+OUTDIR=$4
+
+##Activate conda environments ## Arturo
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3/23.10.0-1
+
+
+##Activate conda environments
+
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
+echo "I am workung with this" $CONDA_PREFIX
+
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying files to" $LOCALSCRATCH
+
+##createing a directory for Metabat
+mkdir $input.Binning.dir
+cd $input.Binning.dir
+
+echo "Copy fq file"
+
+time $RSYNC $READIR/$input.chopper.fq.gz .
+
+echo "Copy assembly"
+
+time $RSYNC $ASSDIR/$input.medaka.dir/$input.medaka.consensus.fasta ./$input.assembly.fasta
+
+##Align
+
+echo "Start minimap2 "
+date +%d\ %b\ %T
+
+time minimap2 \
+-ax map-ont \
+-t $SLURM_CPUS_ON_NODE \
+$input.assembly.fasta \
+$input.chopper.fq.gz > $input.assembly.sam
+
+#Get the bam and the files
+
+echo "Samtools view.."
+ 
+time samtools view \
+-@ $SLURM_CPUS_ON_NODE \
+-bS $input.assembly.sam > $input.assembly.bam
+
+rm -r $input.assembly.sam
+rm -r $input.chopper.fq.gz
+
+echo "samtools sort"
+
+time samtools sort \
+-@ $SLURM_CPUS_ON_NODE $input.assembly.bam > $input.assembly.sorted.bam
+
+rm -r $input.assembly.bam
+
+###Binning
+
+echo "Calculating depth..."
+
+time jgi_summarize_bam_contig_depths \
+        --outputDepth $input.depth.txt \
+        $input.assembly.sorted.bam
+
+echo "Modifying $input.depth.txt to a MaxBin2 format:"
+
+cut -f1,3 $input.depth.txt | tail -n+2 > $input.depth_maxbin.txt  
+
+##Using Parallel to run metaba2 and Maxbin2 at the same time with 8 CPUs each...
+
+cpu=$(($SLURM_CPUS_ON_NODE/2))
+echo "Running parallel with $cpu cpus"
+
+time parallel -j2 ::: "metabat2 \
+        -i $input.assembly.fasta \
+        -a $input.depth.txt \
+        -m 1500 \
+        --seed 100 \
+        -t $cpu \
+        --unbinned \
+        -o $input.Metabat2" \
+        "run_MaxBin.pl \
+        -contig $input.assembly.fasta \
+        -out $input.MaxBin.out \
+        -abund $input.depth_maxbin.txt \
+        -thread $cpu"
+
+#Changing suffix fa to fasta useful for further analysis
+
+for i in *.fa;
+        do
+        a=$(basename $i .fa);
+        mv $i $a.fasta;
+done
+
+#Remove the original assemlby
+
+rm $input.assembly.fasta
+
+###
+echo "Moving Binnig files to $OUTDIR"
+
+cd $LOCALSCRATCH
+
+time $RSYNC $input.Binning.dir $OUTDIR/
+
+#######
+echo "I've done"
+date
+
+```
+
+</details>
+
+The script needs 4 arguments:
+- input=$1  Name of the sample
+- READIR=$2 Directory of the Choppered reads 
+- ASSDIR=$3 Medaka directory
+- OUTDIR=$4 Output directry
+
+Let's run it:
+
+```bash
+ sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/4_Binning.SLURM.sh MetaBiningBIO326_25Polished /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir  /cluster/projects/nn9987k/$USER/metaG/results/MetaBiningBIO326_25Polished && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/MetaBiningBIO326_25Polished
+```
+
+After running for 20 min you will end up with a folder like:
+
+```bash
+cd /cluster/projects/nn9987k/auve/metaG/results/MetaBiningBIO326_25Polished/MetaBiningBIO326_25Polished.Binning.dir
+ls
+```
+
+```
+MetaBiningBIO326_25Polished.assembly.sorted.bam   MetaBiningBIO326_25Polished.MaxBin.out.019.fasta                  MetaBiningBIO326_25Polished.Metabat2.23.fasta
+MetaBiningBIO326_25Polished.depth_maxbin.txt      MetaBiningBIO326_25Polished.MaxBin.out.log                        MetaBiningBIO326_25Polished.Metabat2.24.fasta
+MetaBiningBIO326_25Polished.depth.txt             MetaBiningBIO326_25Polished.MaxBin.out.marker                     MetaBiningBIO326_25Polished.Metabat2.25.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.001.fasta  MetaBiningBIO326_25Polished.MaxBin.out.marker_of_each_bin.tar.gz  MetaBiningBIO326_25Polished.Metabat2.26.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.002.fasta  MetaBiningBIO326_25Polished.MaxBin.out.noclass                    MetaBiningBIO326_25Polished.Metabat2.27.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.003.fasta  MetaBiningBIO326_25Polished.MaxBin.out.summary                    MetaBiningBIO326_25Polished.Metabat2.28.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.004.fasta  MetaBiningBIO326_25Polished.MaxBin.out.tooshort                   MetaBiningBIO326_25Polished.Metabat2.29.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.005.fasta  MetaBiningBIO326_25Polished.Metabat2.10.fasta                     MetaBiningBIO326_25Polished.Metabat2.2.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.006.fasta  MetaBiningBIO326_25Polished.Metabat2.11.fasta                     MetaBiningBIO326_25Polished.Metabat2.30.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.007.fasta  MetaBiningBIO326_25Polished.Metabat2.12.fasta                     MetaBiningBIO326_25Polished.Metabat2.31.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.008.fasta  MetaBiningBIO326_25Polished.Metabat2.13.fasta                     MetaBiningBIO326_25Polished.Metabat2.3.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.009.fasta  MetaBiningBIO326_25Polished.Metabat2.14.fasta                     MetaBiningBIO326_25Polished.Metabat2.4.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.010.fasta  MetaBiningBIO326_25Polished.Metabat2.15.fasta                     MetaBiningBIO326_25Polished.Metabat2.5.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.011.fasta  MetaBiningBIO326_25Polished.Metabat2.16.fasta                     MetaBiningBIO326_25Polished.Metabat2.6.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.012.fasta  MetaBiningBIO326_25Polished.Metabat2.17.fasta                     MetaBiningBIO326_25Polished.Metabat2.7.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.013.fasta  MetaBiningBIO326_25Polished.Metabat2.18.fasta                     MetaBiningBIO326_25Polished.Metabat2.8.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.014.fasta  MetaBiningBIO326_25Polished.Metabat2.19.fasta                     MetaBiningBIO326_25Polished.Metabat2.9.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.015.fasta  MetaBiningBIO326_25Polished.Metabat2.1.fasta                      MetaBiningBIO326_25Polished.Metabat2.lowDepth.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.016.fasta  MetaBiningBIO326_25Polished.Metabat2.20.fasta                     MetaBiningBIO326_25Polished.Metabat2.tooShort.fasta
+MetaBiningBIO326_25Polished.MaxBin.out.017.fasta  MetaBiningBIO326_25Polished.Metabat2.21.fasta                     MetaBiningBIO326_25Polished.Metabat2.unbinned.fasta
+```
+
+Let's count how many bins did we recover from MaxBin and howmany from Metabat2:
+
+```bash
+MB=$(ls -1|grep Metabat2|grep -v -E "lowDept|tooShort|unbin"|wc -l)
+MX=$(ls -1|grep MaxBin|grep -v -E "log|marker|nocl|summ|too"|wc -l)
+
+echo -e "Metabat2\t$MB\nMaxBin2\t$MX"
+
+```
+
+## 5. Dereplication 
+
+As we use 2 different binning strategies and we could be dealing with recoveing same organissm recovered in duplicated MAGs.
+
+We will use then [dREP](https://drep.readthedocs.io/en/latest/index.html#) tool to dereplicate and get the best bin for each binning tool.
+
+<details>
+
+<summary> We can use this SLURM template: </summary>
+
+```bash
+
+#!/bin/bash
+
+###################################
+## Job name:
+#SBATCH --job-name=dRep
+#
+## Wall time limit:
+#SBATCH --time=24:00:00
+###Account
+#SBATCH --account=nn9864k
+## Other parameters:
+#SBATCH --cpus-per-task 16
+#SBATCH --mem=120G
+#SBATCH --gres=localscratch:150G
+#SBATCH --partition=bigmem
+#SBATCH --out slurm-%x_%j.out
+#######################################
+
+
+## Set up job environment:
+#set -o errexit  # Exit the script on any error
+#set -o nounset  # Treat any unset variables as an error
+
+###Variables###
+input=$1 #input string
+indir=$2 #Input directory
+ext=$3 #extension of fasta file e.g fasta
+comp=$4 #completeness score 
+con=$5 #Contamination score
+outdir=$6 #output directory
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3/23.10.0-1
+
+##Activate conda environments
+
+export PS1=\$
+eval "$(/cluster/software/Miniconda3/23.10.0-1/bin/conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/DEREPLICATION
+echo "I am workung with this" $CONDA_PREFIX
+
+####Do some work:########
+
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "I am working with this enviroment loaded"
+echo $CONDA_PREFIX
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+workdir=$(pwd)
+echo "My working directory is" $workdir
+echo "copying MAGs files ..."
+time rsync -aL $indir/*.$ext .
+
+##Check for complete contigs and unbined files and remove it from the list
+
+unbin=$(ls -1 | grep "unbin")
+contigs=$(ls -1 | grep "contigs.fasta")
+lowDepth=$(ls -1 | grep "lowDepth.fasta")
+tooshort=$(ls -1 | grep "tooShort.fasta")
+
+# Array of file variables
+files=("$contigs" "$unbin" "$lowDepth" "$tooshort")
+
+# Loop through files and check existence
+for file in "${files[@]}"; do
+    if [[ -f "$file" ]]; then
+        echo "File $file found, removing it..."
+        rm "$file"
+    fi
+done
+
+###
+
+echo "Number of genomes to drep:"
+ls -1|wc -l
+
+mkdir $input.MAGs
+mv *.$ext $input.MAGs/
+
+#####dREP dereplicate pipeline################
+echo "start dREP at"
+date +%d\ %b\ %T
+
+time dRep \
+	dereplicate \
+	$input.DREP.$comp.$con.out \
+	-g $input.MAGs/*.$ext \
+	-p $SLURM_CPUS_ON_NODE \
+	-comp $comp \
+	-con $con
+
+##Copy files to the $SLURM_SUBMIT_DIR
+cd $workdir
+
+time rsync -aP $input.DREP.$comp.$con.out $outdir
+
+echo "results are in: " $outdir/$input.DREP.$comp.$con.out
+
+###
+echo "I've done at"
+date
+
+```
+
+</details>
+
+The script requires  of parameters:
+
+```
+input=$1 #input string
+indir=$2 #Input directory
+ext=$3 #extension of fasta file e.g fasta
+comp=$4 #completeness score 
+con=$5 #Contamination score
+outdir=$6 #output directory
+```
+
+To run:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/5_drep.SLURM.sh DEREP_BIO326_25 /cluster/projects/nn9987k/$USER/metaG/results/MetaBiningBIO326_25Polished/MetaBiningBIO326_25Polished.Binning.dir fasta 70 5 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION
+```
+
+After running we should end with a file structure like this:
+
+```bash
+tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
+```
+
+```/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
+├── data
+│   ├── checkM
+│   ├── Clustering_files
+│   ├── fastANI_files
+│   ├── MASH_files
+│   └── prodigal
+├── data_tables
+├── dereplicated_genomes
+├── figures
+└── log
+
+11 directories
+
+```
+let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % contamination.
+
+```bash
+
+tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
+
+```
+
+```
+/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
+├── MetaBiningBIO326_25Polished.MaxBin.out.001.fasta
+├── MetaBiningBIO326_25Polished.Metabat2.11.fasta
+├── MetaBiningBIO326_25Polished.Metabat2.14.fasta
+├── MetaBiningBIO326_25Polished.Metabat2.27.fasta
+└── MetaBiningBIO326_25Polished.Metabat2.8.fasta
+
+0 directories, 5 files
+```
+
+We can go deeper and check how the DREPLICATION selected these Five genomes. First, let's check the CHECKM results:
+
+```bash
+ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir
+
+```
+
+```
+bins  Chdb.tsv  checkm.log  lineage.ms  results.tsv  storage
+```
+
+we can take a look on the results by ```less results.tsv```
+
+```bash
+less  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv
+```
+
+This is a huge table, so let's just extract the fields we need the GenomeID (1), taxonomy (2), completeness (12) and contamination (13), and ask to retrieve only those that are > 70 % complete and < 5 % contaminated:
+
+```bash
+ cat /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
+```
+
+```
+MetaBiningBIO326_25Polished.MaxBin.out.001.fasta o__Clostridiales (UID1226) 98.57 0.00
+MetaBiningBIO326_25Polished.MaxBin.out.002.fasta k__Bacteria (UID2372) 99.06 2.83
+MetaBiningBIO326_25Polished.MaxBin.out.003.fasta g__Prevotella (UID2722) 97.81 4.26
+MetaBiningBIO326_25Polished.MaxBin.out.004.fasta k__Bacteria (UID2372) 97.80 6.60
+MetaBiningBIO326_25Polished.MaxBin.out.006.fasta f__Lachnospiraceae (UID1255) 81.90 4.02
+MetaBiningBIO326_25Polished.Metabat2.1.fasta o__Clostridiales (UID1226) 95.38 0.00
+MetaBiningBIO326_25Polished.Metabat2.11.fasta k__Bacteria (UID2372) 99.06 0.94
+MetaBiningBIO326_25Polished.Metabat2.14.fasta k__Bacteria (UID2372) 96.86 0.94
+MetaBiningBIO326_25Polished.Metabat2.27.fasta g__Prevotella (UID2722) 95.32 0.76
+MetaBiningBIO326_25Polished.Metabat2.8.fasta f__Lachnospiraceae (UID1255) 90.21 3.85
+```
+
+Here we have 10 genomes, but dRep says only 5. Well check the ANI clustering analysis:
+
+- CheckM save all the clustering analysis as dendrograms and NMDS plots in the ```figures``` folder as PDF. 
+
+>[!Tip]
+> We can open PDF directly in SAGA using the ```evince``` command. However, for this the X11 Display should be on in your computers. You can read more how to enable this in VS-code here [VS-CODE X Server](https://x410.dev/cookbook/enabling-ssh-x11-forwarding-in-visual-studio-code-for-remote-development/)
+
+```bash
+ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures
+```
+
+```
+Clustering_scatterplots.pdf  Primary_clustering_dendrogram.pdf     Secondary_clustering_MDS.pdf
+Cluster_scoring.pdf          Secondary_clustering_dendrograms.pdf  Winning_genomes.pdf
+```
+
+Then using ```evince``` command to open the Primary_clustering_dendrogram.pdf file
+
+```bash
+evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures/Primary_clustering_dendrogram.pdf
+```
+
+![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.jpg)
+
+What we can discuss about these results?
+
