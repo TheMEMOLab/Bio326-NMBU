@@ -1347,8 +1347,8 @@ MX=$(ls -1|grep MaxBin|grep -v -E "log|marker|nocl|summ|too"|wc -l)
 echo -e "Metabat2\t$MB\nMaxBin2\t$MX"
 
 ```
->[! Important]
-> The number of Bins in each run (user) can change due to lack of seed set parameter in MaxBin2.
+>[!Important]
+>The number of Bins in each run (user) can change due to lack of seed set parameter in MaxBin2.
 
 ## 5. Dereplication 
 
