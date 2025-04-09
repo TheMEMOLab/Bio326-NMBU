@@ -32,6 +32,10 @@ We can use the information from the Lysis method, Group and Barcode and merge th
 
 ```bash
 less barcodes.tsv
+```
+<details>
+
+```
 
 Vortex_SRE_1    barcode01
 FastPrep_1      barcode02
@@ -48,6 +52,7 @@ Vortex_4        barcode12
 Vortex_SRE_4    barcode13
 
 ```
+</details>
 
 and use a loop:
 
@@ -58,6 +63,10 @@ Then we will end with something like:
 
 ```bash
 ls -1 rawdata/
+```
+<details>
+
+```
 FastPrep_1.fastq.gz
 FastPrep_2.fastq.gz
 FastPrep_3.fastq.gz
@@ -71,6 +80,7 @@ Vortex_SRE_2.fastq.gz
 Vortex_SRE_3.fastq.gz
 Vortex_SRE_4.fastq.gz
 ```
+</details>
 
 Then using the usefull NanoPlot:
 
@@ -79,6 +89,8 @@ Then using the usefull NanoPlot:
 ```
 
 And as we have been working we can collect the NanoStats.txt
+
+<details>
 
 ```
 FastPrep_1.NanoStats.txt
@@ -95,6 +107,8 @@ Vortex_SRE_3.NanoStats.txt
 Vortex_SRE_4.NanoStats.txt
 ```
 
+</details>
+
 Let's work with these files. Download the files from 
 
 https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip
@@ -109,6 +123,8 @@ Decompress the Zip file and let's move to R and RStudio.
 >[!Tip]
 > If you have access to the terminal you unzip the file by:
 > ``` unzip bio326NanoStats.Prok.dir.zip ```
+
+<details>
 
 ```bash
 Archive:  bio326NanoStats.Prok.dir.zip
@@ -127,6 +143,7 @@ Archive:  bio326NanoStats.Prok.dir.zip
   inflating: bio326NanoStats.Prok.dir/Vortex_SRE_3.NanoStats.txt
 ```
 
+</details>
 
 
 ### Using RStiudio to load these files:
@@ -324,6 +341,10 @@ It will produce a report like this:
 
 ```bash
 head -11 FastPrep_1.fastq.kraken2.report.tsv
+```
+
+<details>
+```
  89.13  77005   77005   U       0       unclassified
  10.87  9389    15      R       1       root
  10.84  9369    148     R1      131567    cellular organisms
@@ -337,11 +358,16 @@ head -11 FastPrep_1.fastq.kraken2.report.tsv
   0.32  279     279     S       2709410                   Chordicoccus furentiruminis
 ```
 
+</details>
+
 We can parse this report and only keep the organisms with > 0.1 % of reads classified:
 
 ```bash
 head  FastPrep_1.kraken2.species.tsv
-  0.32  2709410 Chordicoccus_furentiruminis
+ 
+```
+<details>
+ 0.32  2709410 Chordicoccus_furentiruminis
   0.69  2487118 Intestinibaculum_porci
   0.66  907     Megasphaera_elsdenii
   0.12  1064535 Megasphaera_elsdenii_DSM_20460
@@ -351,7 +377,8 @@ head  FastPrep_1.kraken2.species.tsv
   0.26  2913614 Prevotella_communis
   0.41  839     Xylanibacter_ruminicola
   0.15  264731  Xylanibacter_ruminicola_23
-```
+</details>
+
 
 ## Comparing changes in the microbial composition in the different treatments (FastPrep, Vortex, Vortex + SRE)
 
@@ -372,14 +399,22 @@ Decompress the Zip file and let's move to R and RStudio.
 Let's check this directory:
 
 ```bash
-s kraken2Reports|head -4
+ls kraken2Reports|head -4
+
+```
+
+<details>
+```
 FastPrep_1.fastq.kraken2.nonames.out
 FastPrep_1.fastq.kraken2.report.tsv
 FastPrep_1.kraken2.species.tsv
 FastPrep_2.fastq.kraken2.nonames.out
 ```
+</details>
+
 
 We have the results, now let's load the kraken2.species.tsv filtered results into a table object in R:
+
 
 ```R
 setwd("kraken2Reports")
@@ -682,10 +717,14 @@ sbatch -a 1-12 /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/1_chopper.SLU
 
 This will produce a directory With the following files:
 
+<details>
+
 ```
 FastPrep_1.chopper.fq.gz  FastPrep_3.chopper.fq.gz  Vortex_1.chopper.fq.gz  Vortex_3.chopper.fq.gz  Vortex_SRE_1.chopper.fq.gz  Vortex_SRE_3.chopper.fq.gz
 FastPrep_2.chopper.fq.gz  FastPrep_4.chopper.fq.gz  Vortex_2.chopper.fq.gz  Vortex_4.chopper.fq.gz  Vortex_SRE_2.chopper.fq.gz  Vortex_SRE_4.chopper.fq.gz
 ```
+
+</details>
 
 ## 2. Co-Assembly reads with MetaFlye
 
@@ -1087,6 +1126,7 @@ Popular binning algorithms like the ones used in Metabat2 utilize contig depth a
 
 Both algorithms relay in extracting the sequencing depth from the assemlby using a table like this:
 
+<details>
 ```
 contigName      contigLen       totalAvgDepth   MetaBiningBIO326_25Polished.assembly.sorted     MetaBiningBIO326_25Polished.assembly.sorted-var
 contig_1784     16061   0       0       0
@@ -1094,6 +1134,7 @@ contig_2114     83571   3.45343 3.45343 2.98818
 contig_2646     14442   2.83193 2.83193 0.380264
 contig_1102     3538    2.63017 2.63017 0.516515
 ```
+</details>
 
 ### Running Binning tools:
 
@@ -1284,7 +1325,7 @@ After running for 20 min you will end up with a folder like:
 cd /cluster/projects/nn9987k/auve/metaG/results/MetaBiningBIO326_25Polished/MetaBiningBIO326_25Polished.Binning.dir
 ls
 ```
-
+<details>
 ```
 MetaBiningBIO326_25Polished.assembly.sorted.bam   MetaBiningBIO326_25Polished.MaxBin.out.019.fasta                  MetaBiningBIO326_25Polished.Metabat2.23.fasta
 MetaBiningBIO326_25Polished.depth_maxbin.txt      MetaBiningBIO326_25Polished.MaxBin.out.log                        MetaBiningBIO326_25Polished.Metabat2.24.fasta
@@ -1307,6 +1348,7 @@ MetaBiningBIO326_25Polished.MaxBin.out.015.fasta  MetaBiningBIO326_25Polished.Me
 MetaBiningBIO326_25Polished.MaxBin.out.016.fasta  MetaBiningBIO326_25Polished.Metabat2.20.fasta                     MetaBiningBIO326_25Polished.Metabat2.tooShort.fasta
 MetaBiningBIO326_25Polished.MaxBin.out.017.fasta  MetaBiningBIO326_25Polished.Metabat2.21.fasta                     MetaBiningBIO326_25Polished.Metabat2.unbinned.fasta
 ```
+</details>
 
 Let's count how many bins did we recover from MaxBin and howmany from Metabat2:
 
@@ -1475,7 +1517,7 @@ After running we should end with a file structure like this:
 ```bash
 tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ```
-
+<details>
 ```/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ├── data
 │   ├── checkM
@@ -1491,6 +1533,8 @@ tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BI
 11 directories
 
 ```
+</details>
+
 let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % contamination.
 
 ```bash
@@ -1498,7 +1542,7 @@ let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % c
 tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 
 ```
-
+<details>
 ```
 /cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 ├── MetaBiningBIO326_25Polished.MaxBin.out.001.fasta
@@ -1510,6 +1554,8 @@ tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25
 0 directories, 5 files
 ```
 
+</details>
+
 We can go deeper and check how the DREPLICATION selected these Five genomes. First, let's check the CHECKM results:
 
 ```bash
@@ -1517,9 +1563,12 @@ ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.D
 
 ```
 
+<details>
+
 ```
 bins  Chdb.tsv  checkm.log  lineage.ms  results.tsv  storage
 ```
+</details>
 
 we can take a look on the results by ```less results.tsv```
 
@@ -1532,7 +1581,7 @@ This is a huge table, so let's just extract the fields we need the GenomeID (1),
 ```bash
  cat /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 5) print $1,$2,$12,$13}'
 ```
-
+<details>
 ```
 MetaBiningBIO326_25Polished.MaxBin.out.001.fasta o__Clostridiales (UID1226) 98.57 0.00
 MetaBiningBIO326_25Polished.MaxBin.out.002.fasta k__Bacteria (UID2372) 99.06 2.83
@@ -1544,6 +1593,8 @@ MetaBiningBIO326_25Polished.Metabat2.14.fasta k__Bacteria (UID2372) 96.86 0.94
 MetaBiningBIO326_25Polished.Metabat2.27.fasta g__Prevotella (UID2722) 95.32 0.76
 MetaBiningBIO326_25Polished.Metabat2.8.fasta f__Lachnospiraceae (UID1255) 90.21 3.85
 ```
+</details>
+
 
 Here we have more than 5 (n=9) genomes, but dRep says only 5. Well check the ANI clustering analysis:
 
@@ -1556,10 +1607,12 @@ Here we have more than 5 (n=9) genomes, but dRep says only 5. Well check the ANI
 ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures
 ```
 
+<details>
 ```
 Clustering_scatterplots.pdf  Primary_clustering_dendrogram.pdf     Secondary_clustering_MDS.pdf
 Cluster_scoring.pdf          Secondary_clustering_dendrograms.pdf  Winning_genomes.pdf
 ```
+</details>
 
 Then using ```evince``` command to open the Primary_clustering_dendrogram.pdf file
 
