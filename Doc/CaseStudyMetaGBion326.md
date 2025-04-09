@@ -1031,29 +1031,6 @@ conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembl
 assembly-stats $FLYE $MEDAKA
 ```
 
-```
-stats for /cluster/projects/nn9987k/BIO326-2025/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta
-sum = 63963185, n = 2515, ave = 25432.68, largest = 1763124
-N50 = 44610, n = 256
-N60 = 31296, n = 431
-N70 = 22114, n = 673
-N80 = 15765, n = 1014
-N90 = 10695, n = 1504
-N100 = 508, n = 2515
-N_count = 0
-Gaps = 0
--------------------------------------------------------------------------------
-stats for /cluster/projects/nn9987k/BIO326-2025/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta
-sum = 63718690, n = 2515, ave = 25335.46, largest = 1763100
-N50 = 44616, n = 255
-N60 = 31117, n = 429
-N70 = 22045, n = 672
-N80 = 15701, n = 1012
-N90 = 10639, n = 1503
-N100 = 508, n = 2515
-N_count = 0
-Gaps = 0
-```
 
 These results are good but not very comparable ```assembly-stats``` can perform an output as a table using the ```-t``` flag:
 
@@ -1071,9 +1048,6 @@ cat !$
 
 ```
 cat /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
-filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
-/cluster/projects/nn9987k/BIO326-2025/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta    63963185        2515    25432.68        1763124 5080       0       44610   256     22114   673     10695   1504
-/cluster/projects/nn9987k/BIO326-2025/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta  63718690  2515     25335.46        1763100 508     0       0       44616   255     22045   672     10639   1503
 ```
 
 We can plot this result table:
