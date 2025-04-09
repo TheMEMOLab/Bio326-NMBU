@@ -993,10 +993,6 @@ Display the content of the Flye assembly folder:
 ls /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir
 ```
 
-```
-00-assembly  10-consensus  20-repeat  30-contigger  40-polishing  assembly.fasta  assembly_graph.gfa  assembly_graph.gv  assembly_info.txt  flye.log  params.json
-``
-
 And the ones in MEDAKA:
 
 ```bash
