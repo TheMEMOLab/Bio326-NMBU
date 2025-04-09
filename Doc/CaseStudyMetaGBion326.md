@@ -1518,6 +1518,7 @@ After running we should end with a file structure like this:
 tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ```
 <details>
+
 ```/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ├── data
 │   ├── checkM
@@ -1535,6 +1536,7 @@ tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BI
 ```
 </details>
 
+
 let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % contamination.
 
 ```bash
@@ -1542,7 +1544,9 @@ let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % c
 tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 
 ```
-<details>
+
+<>
+
 ```
 /cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 ├── MetaBiningBIO326_25Polished.MaxBin.out.001.fasta
@@ -1554,7 +1558,7 @@ tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25
 0 directories, 5 files
 ```
 
-</details>
+</>
 
 We can go deeper and check how the DREPLICATION selected these Five genomes. First, let's check the CHECKM results:
 
