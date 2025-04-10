@@ -1633,3 +1633,192 @@ evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_2
 
 #### How many dereplicated MAGs could we obtain if we change the parameters to 50 % Completeness 10 % Contamination?
 
+## Taxonomy and functional annotation (Who are there and what can they do?)
+
+### Running DRAM: Distilled and Refined Annotation of Metabolism
+
+"[DRAM](https://github.com/WrightonLabCSU/DRAM) (Distilled and Refined Annotation of Metabolism) is a tool for annotating metagenomic assembled genomes and VirSorter identified viral contigs. DRAM annotates MAGs and viral contigs using KEGG (if provided by the user), UniRef90, PFAM, dbCAN, RefSeq viral, VOGDB and the MEROPS peptidase database as well as custom user databases..."
+
+
+
+<img src="https://github.com/avera1988/NMBU-Bio-326/blob/main/images/DRAM.jpg" height="400">
+
+
+
+
+<details>
+
+<summary>This is the DRAM SLURM template:</summary>
+
+```bash
+
+#!/bin/bash
+#########################################################################
+#	SLURM scrip for running DRAM annotator on SAGA cluster using all MAGs
+#########################################################################
+
+###############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=DRAM
+#
+## Wall time limit:
+#SBATCH --time=90:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 16
+#SBATCH --mem=80G
+#SBATCH --gres=localscratch:50G
+#SBATCH --partition=bigmem
+#SBATCH --out slurm-%x-%A.out
+
+###########################################################
+
+##########Variables
+
+dir=$1 ##directory with fasta files
+ext=$2 #Extension of the fasta files e.g. fasta
+OUTDIR=$3 #Outputdirectory
+RSYNC='rsync -aLhv --no-perms --no-owner --no-group'
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3/23.10.0-1
+
+
+##Activate conda environments
+
+eval "$(conda shell.bash hook)"
+
+conda activate /cluster/projects/nn9987k/.share/conda_environments/DRAM/ 
+
+####Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+echo "copying files to" $LOCALSCRATCH
+
+#Copy the MAGs to the $LOCALSCRATCH for local computation
+
+echo "copying MAGs to" $LOCALSCRATCH
+
+time $RSYNC $dir/ ./MAGs
+
+
+##################DRAM##############################
+
+echo "DRAM for annotation at"
+date +%d\ %b\ %T
+
+time DRAM.py annotate \
+-i MAGs'/*.'$ext \
+-o dram.annotation.dir \
+--min_contig_size 500 \
+--threads $SLURM_CPUS_ON_NODE
+
+echo "Distilling ..."
+date +%d\ %b\ %T  
+
+time DRAM.py distill \
+-i dram.annotation.dir/annotations.tsv \
+-o dram.genome_summaries.dir \
+--trna_path dram.annotation.dir/trnas.tsv \
+--rrna_path dram.annotation.dir/rrnas.tsv
+echo "DRAM finished at"
+date +%d\ %b\ %T
+
+##Generate a master directory to keep all the results together 
+
+mkdir DRAM.Results.dir
+mv dram.annotation.dir DRAM.Results.dir
+mv dram.genome_summaries.dir DRAM.Results.dir
+
+###########Moving results to $SLURM_SUBMIT_DIR partition or anywhere the main script was submitted############
+
+echo "moving results to" $OUTDIR/
+
+cd $LOCALSCRATCH
+
+time $RSYNC DRAM.Results.dir $OUTDIR/
+
+echo "DRAM results are in: " $OUTDIR/DRAM.Results.dir
+
+
+```
+
+</details>
+
+DRAM scipt requires the following arguments:
+
+dir=$1 ##directory with fasta files
+ext=$2 #Extension of the fasta files e.g. fasta
+OUTDIR=$3 #Outputdirectory
+
+Use the following sbatch line to run:
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6a_DRAM.SLURM.sh\
+/cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes \
+fasta \
+/cluster/projects/nn9987k/$USER/metaG/results/DRAM && \
+mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/DRAM
+```
+
+[!Note]
+> DRAM requires a lot of time (~4-6hrs) and resources (~80-500Gb RAM) to run, so plan accordingly for submitting the job.
+
+After finish you will end up with something like:
+
+```bash
+tree /cluster/projects/nn9987k/$USER/metaG/results/DRAM
+```
+
+<>
+
+```
+/cluster/projects/nn9987k/auve/metaG/results/DRAM
+└── DRAM.Results.dir
+    ├── dram.annotation.dir
+    │   ├── annotate.log
+    │   ├── annotations.tsv
+    │   ├── genbank
+    │   │   ├── MetaBiningBIO326_25Polished.MaxBin.out.001.gbk
+    │   │   ├── MetaBiningBIO326_25Polished.Metabat2.21.gbk
+    │   │   ├── MetaBiningBIO326_25Polished.Metabat2.27.gbk
+    │   │   ├── MetaBiningBIO326_25Polished.Metabat2.32.gbk
+    │   │   └── MetaBiningBIO326_25Polished.Metabat2.5.gbk
+    │   ├── genes.faa
+    │   ├── genes.fna
+    │   ├── genes.gff
+    │   ├── rrnas.tsv
+    │   ├── scaffolds.fna
+    │   └── trnas.tsv
+    └── dram.genome_summaries.dir
+        ├── distill.log
+        ├── genome_stats.tsv
+        ├── metabolism_summary.xlsx
+        ├── product.html
+        └── product.tsv
+
+4 directories, 18 files
+```
+
+</>
