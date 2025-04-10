@@ -243,6 +243,10 @@ As we can see the Bar plot is not the best plot to display and compare these res
 >[!Tip]
 > Let's use a violin plot:
 
+<details>
+
+<summary> R code </summary>
+
 ```R
 ReadLengthVP <- stats_wide %>% 
   select(Sample,`Mean read length`)%>%
@@ -270,8 +274,12 @@ N50VP <- stats_wide %>%
 
 ReadLengthVP + N50VP
 ```
+</details>
 
 We can use some statistics like ANOVA and t-test to check if there is differences in the groups. The library ggpubr allows us to calculate these kind of statistics and visualize on the ggplot2 object:
+<details>
+
+<summary>R code</summary>
 
 ```R
 library(ggpubr)
@@ -299,8 +307,13 @@ N50VP <- N50VP +
 
 ReadLengthVP + N50VP
 ```
+</details>
 
 And modify some Color and astetics of the plot:
+
+<details>
+
+<summary>R code</summary>
 
 ```R
 ReadLengthVP <- ReadLengthVP +
@@ -315,14 +328,20 @@ N50VP <- N50VP +
   
 ReadLengthVP + N50VP
 ```
+</details>
 
 Saving the plot:
+
+<details>
+<summary>R code</summary>
 
 ```R
 MergedQCPlot <- ReadLengthVP + N50VP
 
 ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
+
 ```
+</details>
 
 ## Taxonomy classification using Kraken2
 
@@ -412,7 +431,8 @@ FastPrep_2.fastq.kraken2.nonames.out
 
 
 We have the results, now let's load the kraken2.species.tsv filtered results into a table object in R:
-
+<details>
+<summary>R code</summary>
 
 ```R
 setwd("kraken2Reports")
@@ -430,13 +450,24 @@ Tables <- map(files, ~ read_tsv(.,
 
 ```
 
+</details>
+
 Transform each table: keep only Species Name and Percentage of reads
+
+<details>
+<summary>R code</summary>
+
 ```R
 Tables2Abundance <- map(Tables, ~ select(., SpeciesName, Percentage) %>%
                           mutate(Percentage = as.numeric(Percentage)))
 ```
 
+</details>
+
 This is still an object of class list we can reduce into a dataframe:
+
+<details>
+<summary>R code</summary>
 
 ```R
 AbundanceTable <- reduce(Tables2Abundance, full_join, by = "SpeciesName") %>%
@@ -444,9 +475,13 @@ AbundanceTable <- reduce(Tables2Abundance, full_join, by = "SpeciesName") %>%
   mutate(across(-SpeciesName, ~ replace_na(.x, 0)))
 ```
 
+</details>
+
 Now we can use a hierarchical clustering to compare the samples. One of the most useful tool we can use is a heatmap.
 
 Let's use the library pheatmap (prety heatmaps) to do this:
+<details>
+<summary>R code</summary>
 
 ```R
 library(pheatmap)
@@ -455,9 +490,14 @@ AbundanceTable %>%
 pheatmap()
 ```
 
+</details>
+
 This is not that prety...
 
 We can normalize the abundances to log2 to really apreciate the changes and create a matrix for the heatmap
+
+<details>
+<summary>R code</summary>
 
 ```R
 MtrixForPH <- AbundanceTable %>%
@@ -466,19 +506,33 @@ MtrixForPH <- AbundanceTable %>%
   as.matrix()
 ```
 
+
 And then create the heatmap:
+
+<details>
+<summary>R code</summary>
 
 ```R
 pheatmap(MtrixForPH)
 ```
 
+</details>
+
 We want to compare the treatments so the clustering in the rows (species) is not that necesary:
+
+<details>
+<summary>R code</summary>
 
 ```R
 pheatmap(MtrixForPH, cluster_row=F, cellwidth = 16)
 ```
 
+</details>
+
 Finally let's have a more "cool" color than the default:
+
+<details>
+<summary>R code</summary>
 
 ```R
 library(viridis)
@@ -489,7 +543,12 @@ cellwidth = 16,
 color=Color)
 ```
 
+</details>
+
 We can even add a new object and define some colors for the Methods of DNA extraction
+
+<details>
+<summary>R code</summary>
 
 ```R
 ColAnnot <- AbundanceTable %>%
@@ -507,8 +566,12 @@ pheatmap(MtrixForPH,
          color=Color,
          annotation_col = ColAnnot)
 ```
+</details>
 
 Now we can use the same Color palete to the Violinplots by creating a list
+
+<details>
+<summary>R code</summary>
 
 ```R
 AnnotColor <- list(Method=AbundanceTable %>%
@@ -523,7 +586,12 @@ AnnotColor <- list(Method=AbundanceTable %>%
                      deframe())
 ```
 
+</details>
+
 And produce our Kraken2 heatmap:
+
+<details>
+<summary>R code</summary>
 
 ```R
 KrakenPH <- pheatmap(MtrixForPH, 
@@ -534,16 +602,26 @@ KrakenPH <- pheatmap(MtrixForPH,
          annotation_colors = AnnotColor)
 ```
 
+</details>
+
 We can then combine this plot wiht the Violin plots we previous produce:
 
 First we need to convert the pheatmap object into a ggplot2 object. The library ggplotify is very helpful:
+
+<details>
+<summary>R code</summary>
 
 ```R
 library(ggplotify)
 KrakenPH <- as.ggplot(KrakenPH)
 ```
 
+</details>
+
 And then combine everything using gridExtra:
+
+<details>
+<summary>R code</summary>
 
 ```R
 library(gridExtra)
@@ -551,8 +629,12 @@ library(gridExtra)
 QCK2HM <- grid.arrange(arrangeGrob(ReadLengthVP,N50VP),KrakenPH,ncol=2)
 ```
 
+</details>
+
 Save into a PDF for nice report:
 
+<details>
+<summary>R code</summary>
 ```R
 ggsave(QCK2HM,
        file="ViolinAndHeatmap.pdf",
@@ -560,6 +642,9 @@ ggsave(QCK2HM,
        height=20
 )
 ```
+
+</details>
+
 ![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
 
 # Working with Bio326 Metagenomes 
