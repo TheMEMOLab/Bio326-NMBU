@@ -33,6 +33,7 @@ We can use the information from the Lysis method, Group and Barcode and merge th
 ```bash
 less barcodes.tsv
 ```
+
 <details>
 
 ```
@@ -52,6 +53,7 @@ Vortex_4        barcode12
 Vortex_SRE_4    barcode13
 
 ```
+
 </details>
 
 and use a loop:
@@ -361,6 +363,7 @@ head -11 FastPrep_1.fastq.kraken2.report.tsv
 ```
 
 <details>
+
 ```
  89.13  77005   77005   U       0       unclassified
  10.87  9389    15      R       1       root
@@ -384,6 +387,8 @@ head  FastPrep_1.kraken2.species.tsv
  
 ```
 <details>
+
+```
  0.32  2709410 Chordicoccus_furentiruminis
   0.69  2487118 Intestinibaculum_porci
   0.66  907     Megasphaera_elsdenii
@@ -394,6 +399,8 @@ head  FastPrep_1.kraken2.species.tsv
   0.26  2913614 Prevotella_communis
   0.41  839     Xylanibacter_ruminicola
   0.15  264731  Xylanibacter_ruminicola_23
+```
+
 </details>
 
 
@@ -2095,3 +2102,23 @@ tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
 ```
 
 </details>
+
+
+The main important result is the html report, that is here:
+
+```
+cd /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/ CompareM.out.dir/
+ls
+```
+
+<details>
+
+```
+assembly-stats  benchmarks  checkm2  gtdbtk  metadata.tsv  report_14391991.html  samples  tables  versions.txt
+```
+
+</details>
+
+>[!Note]
+> Let's copy the report ot our local PC and take a look.
+
