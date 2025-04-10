@@ -2122,3 +2122,9 @@ assembly-stats  benchmarks  checkm2  gtdbtk  metadata.tsv  report_14391991.html 
 >[!Note]
 > Let's copy the report ot our local PC and take a look.
 
+
+
+
+
+
+
