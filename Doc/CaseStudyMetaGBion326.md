@@ -146,7 +146,7 @@ Archive:  bio326NanoStats.Prok.dir.zip
 </details>
 
 
-### Using RStiudio to load these files:
+- **Using RStiudio to load these files:**
 
 ```R
 library(tidyverse)
@@ -493,7 +493,7 @@ color=Color)
 
 We can even add a new object and define some colors for the Methods of DNA extraction
 
-```r
+```R
 ColAnnot <- AbundanceTable %>%
   select(-SpeciesName) %>%
   colnames() %>%
@@ -1383,7 +1383,7 @@ We will use then [dREP](https://drep.readthedocs.io/en/latest/index.html#) tool 
 ## Wall time limit:
 #SBATCH --time=24:00:00
 ###Account
-#SBATCH --account=nn9864k
+#SBATCH --account=nn9987k
 ## Other parameters:
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=120G
@@ -1631,7 +1631,7 @@ evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_2
 
 ![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.png)
 
-#### How many dereplicated MAGs could we obtain if we change the parameters to 50 % Completeness 10 % Contamination?
+- **How many dereplicated MAGs could we obtain if we change the parameters to 50 % Completeness 10 % Contamination?**
 
 ## 6. Taxonomy and functional annotation (Who are there and what can they do?)
 
