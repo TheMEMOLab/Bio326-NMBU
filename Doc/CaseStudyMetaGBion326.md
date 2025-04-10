@@ -1216,6 +1216,7 @@ Popular binning algorithms like the ones used in Metabat2 utilize contig depth a
 Both algorithms relay in extracting the sequencing depth from the assemlby using a table like this:
 
 <details>
+
 ```
 contigName      contigLen       totalAvgDepth   MetaBiningBIO326_25Polished.assembly.sorted     MetaBiningBIO326_25Polished.assembly.sorted-var
 contig_1784     16061   0       0       0
@@ -1223,6 +1224,7 @@ contig_2114     83571   3.45343 3.45343 2.98818
 contig_2646     14442   2.83193 2.83193 0.380264
 contig_1102     3538    2.63017 2.63017 0.516515
 ```
+
 </details>
 
 ### Running Binning tools:
@@ -1415,7 +1417,9 @@ cd /cluster/projects/nn9987k/auve/metaG/results/MetaBiningBIO326_25Polished/Meta
 ls
 ```
 <details>
+
 ```
+
 MetaBiningBIO326_25Polished.assembly.sorted.bam   MetaBiningBIO326_25Polished.MaxBin.out.019.fasta                  MetaBiningBIO326_25Polished.Metabat2.23.fasta
 MetaBiningBIO326_25Polished.depth_maxbin.txt      MetaBiningBIO326_25Polished.MaxBin.out.log                        MetaBiningBIO326_25Polished.Metabat2.24.fasta
 MetaBiningBIO326_25Polished.depth.txt             MetaBiningBIO326_25Polished.MaxBin.out.marker                     MetaBiningBIO326_25Polished.Metabat2.25.fasta
@@ -1436,7 +1440,9 @@ MetaBiningBIO326_25Polished.MaxBin.out.014.fasta  MetaBiningBIO326_25Polished.Me
 MetaBiningBIO326_25Polished.MaxBin.out.015.fasta  MetaBiningBIO326_25Polished.Metabat2.1.fasta                      MetaBiningBIO326_25Polished.Metabat2.lowDepth.fasta
 MetaBiningBIO326_25Polished.MaxBin.out.016.fasta  MetaBiningBIO326_25Polished.Metabat2.20.fasta                     MetaBiningBIO326_25Polished.Metabat2.tooShort.fasta
 MetaBiningBIO326_25Polished.MaxBin.out.017.fasta  MetaBiningBIO326_25Polished.Metabat2.21.fasta                     MetaBiningBIO326_25Polished.Metabat2.unbinned.fasta
+
 ```
+
 </details>
 
 Let's count how many bins did we recover from MaxBin and howmany from Metabat2:
