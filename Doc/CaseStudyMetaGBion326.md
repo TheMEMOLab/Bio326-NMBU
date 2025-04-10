@@ -1633,7 +1633,7 @@ evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_2
 
 #### How many dereplicated MAGs could we obtain if we change the parameters to 50 % Completeness 10 % Contamination?
 
-## Taxonomy and functional annotation (Who are there and what can they do?)
+## 6. Taxonomy and functional annotation (Who are there and what can they do?)
 
 ### Running DRAM: Distilled and Refined Annotation of Metabolism
 
