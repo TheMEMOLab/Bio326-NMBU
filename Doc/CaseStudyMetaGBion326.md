@@ -1877,7 +1877,7 @@ fasta \
 mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/DRAM
 ```
 
->[!Note]
+>[!Warning]
 > DRAM requires a lot of time (~4-6hrs) and resources (~80-500Gb RAM) to run, so plan accordingly for submitting the job.
 
 After finish you will end up with something like:
@@ -2069,6 +2069,29 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6b_CompareM2.SLURM.sh
 mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
 ```
 
->[!Note]
-> As compareM2 also requires a lot of resources and time, so again plan accordingly...
+>[!Warning]
+> compareM2 also requires a lot of resources and time, so again plan accordingly...
 
+When this is done you should end-up with something like:
+
+```bash
+tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
+```
+
+<details>
+
+```
+/cluster/projects/nn9987k/auve/metaG/results/COMPAREM2
+└── CompareM.out.dir
+    ├── assembly-stats
+    ├── benchmarks
+    ├── checkm2
+    ├── gtdbtk
+    ├── samples
+    └── tables
+
+7 directories
+
+```
+
+</details>
