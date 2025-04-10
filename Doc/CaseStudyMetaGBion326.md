@@ -506,6 +506,7 @@ MtrixForPH <- AbundanceTable %>%
   as.matrix()
 ```
 
+</details>
 
 And then create the heatmap:
 
