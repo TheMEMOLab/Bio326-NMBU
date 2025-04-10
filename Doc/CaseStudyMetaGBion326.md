@@ -653,7 +653,7 @@ ggsave(QCK2HM,
 
 ![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
 
-# Working with Bio326 Metagenomes 
+# The Bio326 Metagenomes: A tale of who is there and what are they doing?
 
 Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
 
@@ -2060,7 +2060,7 @@ This script requires the following arguments:
 - dir=$1 ##directory with fasta files
 - OUTDIR=$2 #Outputdirectory
 
-### Running compareM2
+**Running compareM2**
 
 ```bash
 sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6b_CompareM2.SLURM.sh /
