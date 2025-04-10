@@ -1782,7 +1782,7 @@ fasta \
 mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/DRAM
 ```
 
-[!Note]
+>[!Note]
 > DRAM requires a lot of time (~4-6hrs) and resources (~80-500Gb RAM) to run, so plan accordingly for submitting the job.
 
 After finish you will end up with something like:
@@ -1791,7 +1791,7 @@ After finish you will end up with something like:
 tree /cluster/projects/nn9987k/$USER/metaG/results/DRAM
 ```
 
-<>
+<details>
 
 ```
 /cluster/projects/nn9987k/auve/metaG/results/DRAM
@@ -1821,4 +1821,4 @@ tree /cluster/projects/nn9987k/$USER/metaG/results/DRAM
 4 directories, 18 files
 ```
 
-</>
+</details>
