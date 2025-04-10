@@ -1863,9 +1863,9 @@ echo "DRAM results are in: " $OUTDIR/DRAM.Results.dir
 
 DRAM scipt requires the following arguments:
 
-dir=$1 ##directory with fasta files
-ext=$2 #Extension of the fasta files e.g. fasta
-OUTDIR=$3 #Outputdirectory
+- dir=$1 ##directory with fasta files
+- ext=$2 #Extension of the fasta files e.g. fasta
+- OUTDIR=$3 #Outputdirectory
 
 Use the following sbatch line to run:
 
@@ -2057,7 +2057,18 @@ echo "COMPAREM results are in: " $OUTDIR/CompareM.out.dir
 
 This script requires the following arguments:
 
-dir=$1 ##directory with fasta files
-OUTDIR=$2 #Outputdirectory
+- dir=$1 ##directory with fasta files
+- OUTDIR=$2 #Outputdirectory
 
 ### Running compareM2
+
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6b_CompareM2.SLURM.sh /
+/cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes \
+/cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2 && \
+mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
+```
+
+>[!Note]
+> As compareM2 also requires a lot of resources and time, so again plan accordingly...
+
