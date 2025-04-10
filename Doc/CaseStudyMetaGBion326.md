@@ -431,6 +431,7 @@ FastPrep_2.fastq.kraken2.nonames.out
 
 
 We have the results, now let's load the kraken2.species.tsv filtered results into a table object in R:
+
 <details>
 <summary>R code</summary>
 
@@ -480,6 +481,7 @@ AbundanceTable <- reduce(Tables2Abundance, full_join, by = "SpeciesName") %>%
 Now we can use a hierarchical clustering to compare the samples. One of the most useful tool we can use is a heatmap.
 
 Let's use the library pheatmap (prety heatmaps) to do this:
+
 <details>
 <summary>R code</summary>
 
@@ -497,7 +499,7 @@ This is not that prety...
 We can normalize the abundances to log2 to really apreciate the changes and create a matrix for the heatmap
 
 <details>
-<summary>R code</summary>
+<summary>R code </summary>
 
 ```R
 MtrixForPH <- AbundanceTable %>%
