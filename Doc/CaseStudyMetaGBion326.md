@@ -1104,7 +1104,7 @@ We can submit it by:
 sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh FlyAssemblyBIO326_25Polished /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished
 ```
 
-## Comparing Assemblies before and after polishing:
+### Comparing Assemblies before and after polishing:
 
 > [!Important]
 > As we will start working with files let's ask for an interactive session in SAGA:
