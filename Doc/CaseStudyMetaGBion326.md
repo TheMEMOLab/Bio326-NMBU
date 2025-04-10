@@ -421,12 +421,15 @@ ls kraken2Reports|head -4
 ```
 
 <details>
+
 ```
 FastPrep_1.fastq.kraken2.nonames.out
 FastPrep_1.fastq.kraken2.report.tsv
 FastPrep_1.kraken2.species.tsv
 FastPrep_2.fastq.kraken2.nonames.out
+
 ```
+
 </details>
 
 
