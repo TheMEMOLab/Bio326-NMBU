@@ -2630,6 +2630,8 @@ CoverMPHM <- CoverMlog2 %>%
 
 ggsave(CoverMPHM,file="CoverM_heatmap.pdf")
 
+### Use the Wilcoxon Test to see if there is differences in the abundace among treatments
+
 # Pivot the table and set the treatments
 
 CoverM_long <- CoverM %>%
