@@ -2533,7 +2533,7 @@ Let's load the data in R and produce a heatmap to see differences in relative ab
 
 <details>
 
-<summary>The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs </summary>
+<summary>The following R code will summarize the differences in relative abundance of different MAGs in our MetaG samples </summary>
 
 ```R
 library(tidyverse)
