@@ -2669,6 +2669,6 @@ Wilcox_tidy_results <- pairwise_wilcox %>%
 ![COVER](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/COVERM.png)
 
 
-Now you can discuss and write your report!
+# This is the end of the MetaG session, now go, discuss and create a very nice report!
 
 ![END](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/metaomics.webp)
