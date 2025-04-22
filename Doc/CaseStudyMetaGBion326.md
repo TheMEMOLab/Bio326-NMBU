@@ -2138,7 +2138,7 @@ The workflow, utilizes the PhyloPhlAn tool to produce a phylogenetic tree of the
 We can run this into an interactive job:
 
 ```bash
-/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/srun.prarameters.Nonode.Account.sh 16 10G normal,bigmem,hugemem 20G nn9987k 02:00:00
+/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/srun.prarameters.Nonode.Account.sh 16 10G normal,bigmem,hugemem 20G nn9987k 04:00:00
 
 ```
 
