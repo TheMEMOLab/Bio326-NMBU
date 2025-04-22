@@ -2299,6 +2299,7 @@ library(tidyverse)
 library(distillR)
 library(viridis)
 library(Polychrome)
+library(pheatmap)
 
 #Read the annotation from DRAM
 Annot <- read_tsv("annotations.tsv") %>%
@@ -2535,6 +2536,9 @@ Let's load the data in R and produce a heatmap to see differences in relative ab
 <summary>The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs </summary>
 
 ```R
+library(tidyverse)
+library(pheatmap)
+
 CoverM <- read_tsv("Abundance.coverM.tsv")
 
 
