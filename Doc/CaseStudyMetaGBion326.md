@@ -2271,8 +2271,12 @@ Then in our local PC we can do something like:
 ```bash
 scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.tsv .
 ```
+>[!Important]
+> This command must be run in your local PC not in SAGA!
 
-Th
+
+
+Then we can load these in R following the next code:
 
 <details>
 
@@ -2280,6 +2284,7 @@ Th
 
 
 ```r
+
 library(tidyverse)
 library(distillR)
 library(viridis)
@@ -2287,28 +2292,60 @@ library(Polychrome)
 
 #Read the annotation from DRAM
 Annot <- read_tsv("annotations.tsv") %>%
-  rename("Gene_id"=`...1`) %>%
+  rename("GENE"=`...1`) %>%
   rename("Genome"=fasta) %>%
-  select(Genome,Gene_id,ko_id) %>%
+  select(GENE, Genome, ko_id, kegg_hit) %>%
+  mutate(
+    distill = ifelse(
+      grepl("\\[EC:", kegg_hit), # Check if kegg_hit contains [EC:
+      paste(ko_id, sub(".*(\\[EC:.*?])", "\\1", kegg_hit), sep = " "), # Combine ko_id and extracted EC number
+      ko_id # If no [EC:], keep only ko_id
+    )
+  ) %>%
+  select(Genome, distill) %>%
   drop_na()
 
 #use distillR to obtain the GIFTS
 
-GIFTs <- distill(Annot,GIFT_db,genomecol=1,annotcol=3)
+GIFTs <- distill(Annot,GIFT_db,genomecol=1,annotcol=2)
 
 #Aggregate bundle-level GIFTs into the compound level
-GIFTs_elements <- to.elements(GIFTs,GIFT_db)
+GIFTs_elements <- to.elements(GIFTs,GIFT_db) %>%
+  as.data.frame() %>%
+  rownames_to_column("MAGs")
 
-#Aggregate element-level GIFTs into the function level
-GIFTs_functions <- to.functions(GIFTs_elements,GIFT_db)
+#Extract the EC number for some distill vaules use EC numbers and not KO
 
-#Aggregate function-level GIFTs into overall Biosynthesis, Degradation and Structural GIFTs
-GIFTs_domains <- to.domains(GIFTs_functions,GIFT_db)
+AnnotEC <- Annot %>%
+  mutate(distill=str_replace(distill, ".*?\\s+", ""))
 
+
+GIFTSEC <- distill(AnnotEC,GIFT_db,genomecol=1,annotcol=2)  
+
+#Aggregate bundle-level GIFTs into the compound level
+GIFTs_elementsEC <- to.elements(GIFTSEC,GIFT_db)%>%
+  as.data.frame() %>%
+  rownames_to_column("MAGs")
+
+GIFTS_ElementsTotal <- GIFTs_elements %>%
+    bind_rows(GIFTs_elementsEC) %>%
+  pivot_longer(-MAGs, names_to = "Sample", values_to = "Value") %>%
+  group_by(MAGs, Sample) %>%
+  filter(Value == max(Value)) %>%
+  ungroup() %>%
+  distinct(MAGs, Sample, .keep_all = TRUE) %>%  # in case max values tie
+  pivot_wider(names_from = Sample, values_from = Value) %>%
+  select(MAGs, sort(tidyselect::peek_vars()[-1]))
 #Extract the functional trais from the database
 
 Elements <- GIFT_db %>%
   select(Code_element,Domain, Function)
+
+#This DF will help to create an annotad column
+GIFTSannotCol <- Elements %>%
+  select(Code_element,Function) %>%
+  distinct() %>%
+  column_to_rownames("Code_element")
 
 #This DF will help to create an annotad column
 GIFTSannotCol <- Elements %>%
@@ -2398,6 +2435,10 @@ GenoTaxoInfo <- Tax %>%
   mutate(Genus=coalesce(Genus,Order)) %>%
   dplyr::arrange(Phylum)
 
+#Save this table as RDS useful for other propuses
+
+saveRDS(GenoTaxoInfo,file="GenoTaxoInfo.RDS")
+
 #Tibble to get the tax for heatmap
 TaxAnnot <- GenoTaxoInfo %>%
   select(Genome,Order) %>%
@@ -2415,7 +2456,7 @@ ColorAnnot <- list(Order=(TaxAnnot %>%
                                                                            distinct() %>% 
                                                                            deframe()),"Set1")) %>%
                             deframe()),
-                          Function=(Elements %>%
+                   Function=(Elements %>%
                                select(Function) %>%
                                distinct() %>%
                                mutate(Color=palette36.colors(n=21)) %>%
@@ -2425,20 +2466,187 @@ Color <- rev(viridis(10))
 
 #Generate the Heatmap
 
-GIFTSHeatmap <- pheatmap::pheatmap(GIFTs_elements,
-                  cluster_cols = F,
-                  color = Color,
-                  annotation_col = GIFTSannotCol,
-                  annotation_row = TaxAnnot,
-                  annotation_colors = ColorAnnot,
-                  show_colnames = F,
-                  show_rownames = F,
-                  cellwidth = 2,
-                  cellheight = 12)
+GIFTSHeatmap <- GIFTS_ElementsTotal %>% 
+  column_to_rownames("MAGs") %>% pheatmap::pheatmap(,
+                                   cluster_cols = F,
+                                   color = Color,
+                                   annotation_col = GIFTSannotCol,
+                                   annotation_row = TaxAnnot,
+                                   annotation_colors = ColorAnnot,
+                                   show_colnames = F,
+                                   show_rownames = F,
+                                   cellwidth = 2,
+                                   cellheight = 18, 
+                                   border_color = F)
 
 ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
+
+```
+
+</details>
+
+
+![GIFTS](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/GIFTS.png)
+
+### 7.3 Coverage of MAGs in different MetaG samples:
+
+As we build our MAGs from different set of fastq reads from 3 different technical samples (FastPrep, Vortex and Vortex-SRE), we test if there is difference in the abundance of MAGs accross these samples using the coverage of each genome and relative abundance in each sample using the tool CoverM.
+
+CoverM aims to be a configurable, easy to use and fast DNA read coverage and relative abundance calculator focused on metagenomics applications.
+
+CoverM calculates coverage of genomes/MAGs coverm genome or individual contigs coverm contig. Calculating coverage by read mapping, its input can either be BAM files sorted by reference, or raw reads and reference genomes in various formats.
+
+The following script runs coverM
+
+```bash
+cd /cluster/projects/nn9987k/$USER
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/7_CoverM.SLURM.sh /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes fasta /cluster/projects/nn9987k/$USER/metaG/results/COVERM && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/COVERM
+```
+
+This will produce a tsv table: 
+
+```
+/cluster/projects/nn9987k/$USER/metaG/results/COVERM/Abundance.coverM.tsv
+```
+
+We can copy to our computer and use R to see if there is difference in the abundance of MAGs
+
+```bash
+rsync -aLhv auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/COVERM/*.tsv .
+```
+>[!Important]
+> This command must be run in your local PC not in SAGA!
+
+Let's load the data in R and produce a heatmap to see differences in relative abundance:
+
+
+<details>
+
+<summary>The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs </summary>
+
+```R
+CoverM <- read_tsv("Abundance.coverM.tsv")
+
+
+#Lets remove the unmapped and keep pretty names:
+
+CoverM <- CoverM %>%
+  filter(Genome != "unmapped") %>%
+  select(Genome, matches("Relative Abundance")) %>%
+  rename_with(~ str_remove(., "\\.chopper.*$"), 
+              .cols = -Genome)
+
+#Load the Taxonomy
+
+GenoTaxoInfo <- readRDS("GenoTaxoInfo.RDS")
+
+#Tibble to get the tax for heatmap
+TaxAnnot <- GenoTaxoInfo %>%
+  select(Genome,Order) %>%
+  column_to_rownames("Genome")
+
+#Create an Annotation for the column:
+
+ColAnnot <- CoverM %>%
+  select(-Genome) %>%
+  colnames() %>%
+  enframe(value = "Sample") %>%
+  mutate(Method=str_remove(Sample,"_\\d+.*")) %>%
+  select(-name) %>% 
+  column_to_rownames("Sample")
+
+#List of nice colors  for rows (Taxa) and columns (Funcitions)
+
+
+ColorAnnot <- list(Order=(TaxAnnot %>%
+                            select(Order) %>%
+                            distinct() %>%
+                            mutate(Color=RColorBrewer::brewer.pal(length(TaxAnnot %>% 
+                                                                           select(Order) %>% 
+                                                                           distinct() %>% 
+                                                                           deframe()),"Set1")) %>%
+                            deframe()),
+                   Method=(colnames(CoverM %>% 
+                                      select(-Genome)) %>% 
+                             enframe(value = "Sample") %>%
+                             mutate(Method=str_remove(Sample,"_\\d+.*")) %>%
+                             select(-name) %>% 
+  column_to_rownames("Sample") %>%
+    distinct() %>%
+    mutate(Color=RColorBrewer::brewer.pal(3,"Dark2")) %>%
+    deframe()))
+
+#Create the heatmap:
+
+
+Color <- rev(inferno(500))
+
+CoverM %>%
+  column_to_rownames("Genome") %>% 
+  pheatmap::pheatmap(, 
+                     cluster_row=F,
+                     cellwidth = 10,
+                     cellheight = 10,
+                     color=Color,
+                     annotation_col = ColAnnot,
+                     annotation_row = TaxAnnot,
+                     annotation_colors = ColorAnnot)
+
+#Normalize the Abundance using log2
+
+CoverMlog2 <- CoverM %>%
+  mutate(across(where(is.numeric), ~ log2(.x + 1))) %>%
+  column_to_rownames("Genome") %>%
+  as.matrix()
+
+#Use this as a heatmap:
+
+CoverMPHM <- CoverMlog2 %>% 
+  pheatmap::pheatmap(, 
+                     cluster_row=F,
+                     cellwidth = 10,
+                     cellheight = 10,
+                     color=Color,
+                     annotation_col = ColAnnot,
+                     annotation_row = TaxAnnot,
+                     annotation_colors = ColorAnnot,
+                    show_colnames = F,border_color = F)
+
+#Save the heatmap
+
+ggsave(CoverMPHM,file="CoverM_heatmap.pdf")
+
+# Pivot the table and set the treatments
+
+CoverM_long <- CoverM %>%
+  pivot_longer(-Genome, names_to = "Sample", values_to = "Abundance") %>%
+  mutate(Treatment = str_remove(Sample, "_\\d+$"))  #
+
+
+# Run pairwise wilcox test for each genome
+
+pairwise_wilcox <- CoverM_long %>%
+  group_by(Genome) %>%
+  summarise(
+    test = list(pairwise.wilcox.test(Abundance, Treatment, p.adjust.method = "fdr")),
+    .groups = "drop"
+  )
+
+
+# Extract and tidy each pairwise matrix
+
+Wilcox_tidy_results <- pairwise_wilcox %>%
+  mutate(p_matrix = map(test, ~ .x$p.value)) %>%
+  select(Genome, p_matrix) %>%
+  rowwise() %>%
+  mutate(pairs = list(as_tibble(as.table(p_matrix), .name_repair = "unique"))) %>%
+  unnest(pairs) %>%
+  rename(Treatment1 = ...1, Treatment2 = ...2, p_adj = n) %>%
+  filter(!is.na(p_adj))
 
 
 ```
 
 </details>
+
+![COVER](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/COVERM.png)
