@@ -1,9 +1,11 @@
 # Bio326-NMBU
 BIO326 Genome sequencing; tools and analysis.
 
-[HPC-101 Best Practices](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/HPC-101-WorkingWithSigma2.md)
+## Scripts for 2025 sessions:
+1. [HPC basics / Using Saga](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/HPC-101-WorkingWithSigma2.md)
+2. [Metagenome data analysis](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/CaseStudyMetaGBion326.md)
 
-Scripts for the 2024 Prokaryote sessions:
+## Scripts for the 2024 Prokaryote sessions:
 
 1. [Assembly](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/01_Metagenomic_Assembly.md)
 2. [Polishing](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/02_Polishing.md)
