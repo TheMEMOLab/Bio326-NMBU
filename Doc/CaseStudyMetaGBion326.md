@@ -2624,7 +2624,8 @@ CoverMPHM <- CoverMlog2 %>%
                      annotation_col = ColAnnot,
                      annotation_row = TaxAnnot,
                      annotation_colors = ColorAnnot,
-                    show_colnames = F,border_color = F)
+                    show_colnames = F,
+                    border_color = F)
 
 #Save the heatmap
 
