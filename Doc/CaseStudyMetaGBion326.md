@@ -2122,9 +2122,323 @@ assembly-stats  benchmarks  checkm2  gtdbtk  metadata.tsv  report_14391991.html 
 >[!Note]
 > Let's copy the report ot our local PC and take a look.
 
+## 7. Visualization.
+
+### 7.1 Phylogenomics:
+
+> [!Tip]
+> Taken from a book chapter published here at the MEMO group [Long-Read Metagenomics and CAZyme Discovery](https://link.springer.com/protocol/10.1007/978-1-0716-3151-5_19)
+
+After assessment of quality (with CheckM2), taxonomic (with GTDB-Tk) and functional annotation (with DRAM and Prokka) of the MAGs, a visual representation of the phylogenetic clusterization (e.g., phylogenetic tree) and the annotations (e.g., heatmaps) are often desirable.
+
+Different software can be used to generate phylogenetic trees of the MAGs, including PhyloPhlAn, Anv'o, and IQ-TREE. At the MEMO lab we have also created an easy Rscript that can combine the information from GTDBTk, PhyloPhlAn and Checkm2 to produce a phylogenetic tree with different layers. In the GitHub repo [MetaGVisualToolBox](https://github.com/TheMEMOLab/MetaGVisualToolBox) we can find this script.
+
+The workflow, utilizes the PhyloPhlAn tool to produce a phylogenetic tree of the MAGs by searching and aligning 400 single-copy phylogenetic markers followed by the R package GGTree to merge and visualize the tree with quality metrics (completeness and contamination) and taxonomy annotations of each MAG.
+
+We can run this into an interactive job:
+
+```bash
+/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/srun.prarameters.Nonode.Account.sh 16 10G normal,bigmem,hugemem 20G nn9987k 02:00:00
+
+```
+
+Then PhyloPhlAn needs the amminoacid translated sequences from our MAGs. Let's use the ones from CompareM2:
+
+```bash
+mkdir -p $LOCALSCRATCH/ProteinPredictions && cd $LOCALSCRATCH
+rsync -aLhv \
+/cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/samples/MetaBiningBIO326_25Polished.M*/prokka/*.faa \
+ProteinPredictions/
+```
+>[!Note]
+> If you were not able to produce some of the files you can copy from 
+<details>
+
+```
+sending incremental file list
+MetaBiningBIO326_25Polished.MaxBin.out.001.faa
+MetaBiningBIO326_25Polished.Metabat2.21.faa
+MetaBiningBIO326_25Polished.Metabat2.27.faa
+MetaBiningBIO326_25Polished.Metabat2.32.faa
+MetaBiningBIO326_25Polished.Metabat2.5.faa
+
+```
+</details>
+
+Now we can call the PHYLOGENETICS tool box (Conda enviroment)
+
+```bash
+module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/PHYLOGENETICS/
+```
+
+Then run PhyloPhlAn:
+
+```bash
+phylophlan \
+-i ProteinPredictions \
+-d /cluster/projects/nn9987k/.share/db/phylophlanDataBase/phylophlan \
+-t a \
+--diversity high \
+-f /cluster/projects/nn9987k/.share/db/phylophlanDataBase/supermatrix_aa.cfg \
+--verbose \
+--nproc $SLURM_CPUS_ON_NODE
+
+```
+
+This will produce the directory ```ProteinPredictions_phylophlan```
+
+```bash
+ls ProteinPredictions_phylophlan/
+```
+
+<details>
+
+```
+ProteinPredictions_concatenated.aln  RAxML_bestTree.ProteinPredictions_refined.tre  RAxML_result.ProteinPredictions_refined.tre
+ProteinPredictions_resolved.tre      RAxML_info.ProteinPredictions_refined.tre      tmp
+ProteinPredictions.tre               RAxML_log.ProteinPredictions_refined.tre
+```
+
+</details>
 
 
+We can use the the [MetaGVisualToolBox/GenoTaxoTree.R](https://github.com/TheMEMOLab/MetaGVisualToolBox/blob/main/scripts/GenoTaxoTree.R) script to then combine the phylogenetic tree produced by PhyloPhlAn with the Completeness and contamination information:
+
+Let's gather the needed data from COMPAREM2
+
+```bash
+rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/checkm2/quality_report.tsv .
+rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv .
+```
+
+The GenoTaxoTree.R script needs:
+
+```
+Input: CheckM2 tabular results, GTDB-Tk classification tables of Bacteria and Archaea, PhyloPhlAn phylogenetic tree.
+Output: A figure of the phylogenetic tree produced by PhyloPhlAn annotated with taxonomy and quality information from GTDB-Tk and CheckM2 by circular heatmaps
+```
+Like arguments:
+
+```
+CHECK <- args[1] #CheckM2 results table
+BAC <- args[2]  #GTDBTk Bacterial classification
+ARCH <- args[3] #GTDBTk Archeal classification
+TREE <- args[4] #Phyloplhlan RAXMl tree
+OUT <- args[5] #Output name
+```
+
+As we do no have archeas in our experiment lest create a mock file:
+
+```bash
+head -1  gtdbtk.bac120.summary.tsv > gtdbtk.ar53.summary.tsv
+```
+
+The R script is already installed in our PHYLOGENETICS enviroment so we can run it like:
+
+```bash
+Rscript $CONDA_PREFIX/bin/GenoTaxoTree.R quality_report.tsv gtdbtk.bac120.summary.tsv gtdbtk.ar53.summary.tsv ProteinPredictions_phylophlan/ProteinPredictions.tre BIO326Tree
+```
+
+Let's copy the PDF to our results:
+
+```bash
+ rsync -aPLhv BIO326Tree.pdf /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+```
+
+Also the PhyloPLHAN results:
+
+```bash
+rsync -aPLhv --exclude "tmp" ProteinPredictions_phylophlan /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+```
+
+We can now exit the interactive session.
+
+### 7.2 distilR to summarize functional KEGG annotations
+
+[distillR](https://github.com/anttonalberdi/distillR) is an R package for distilling functional annotations of bacterial genomes and metagenomes into meaningful quantitative metrics defined as Genome-Inferred Functional Traits (GIFT). The package relies on a curated database of ~500 metabolic pathways and gene clusters (collectivelly refered to as 'bundles') to calculate standardised genome-inferred functional traits using KEGG and Enzyme Commission (EC) identifiers. 
+
+To do this we do not need a HPC we can run all the distillR commands locally in our PC. But we need some data from DRAM (```anntoations.tsv```) and GTDB-Tk (```gtdbtk.bac120.summary.tsv```). We can put this into a common place and rsync it together to our machine like:
+
+```bash
+ln -s /cluster/projects/nn9987k/auve/metaG/results/DRAM/DRAM.Results.dir/dram.annotation.dir/annotations.tsv /cluster/projects/nn9987k/auve/metaG/results/Visualization/
+ln -s /cluster/projects/nn9987k/auve/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv /cluster/projects/nn9987k/auve/metaG/results/Visualization/
+```
+
+Then in our local PC we can do something like:
+
+```bash
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.tsv .
+```
+
+Th
+
+<details>
+
+<summary>The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs </summary>
 
 
+```r
+library(tidyverse)
+library(distillR)
+library(viridis)
+library(Polychrome)
+
+#Read the annotation from DRAM
+Annot <- read_tsv("annotations.tsv") %>%
+  rename("Gene_id"=`...1`) %>%
+  rename("Genome"=fasta) %>%
+  select(Genome,Gene_id,ko_id) %>%
+  drop_na()
+
+#use distillR to obtain the GIFTS
+
+GIFTs <- distill(Annot,GIFT_db,genomecol=1,annotcol=3)
+
+#Aggregate bundle-level GIFTs into the compound level
+GIFTs_elements <- to.elements(GIFTs,GIFT_db)
+
+#Aggregate element-level GIFTs into the function level
+GIFTs_functions <- to.functions(GIFTs_elements,GIFT_db)
+
+#Aggregate function-level GIFTs into overall Biosynthesis, Degradation and Structural GIFTs
+GIFTs_domains <- to.domains(GIFTs_functions,GIFT_db)
+
+#Extract the functional trais from the database
+
+Elements <- GIFT_db %>%
+  select(Code_element,Domain, Function)
+
+#This DF will help to create an annotad column
+GIFTSannotCol <- Elements %>%
+  select(Code_element,Function) %>%
+  distinct() %>%
+  column_to_rownames("Code_element")
+
+##Taxonomy from GTDBTK
+
+Tax <- read_tsv("gtdbtk.bac120.summary.tsv") %>%
+  dplyr::select(user_genome,classification) %>%
+  rename("Genome"=user_genome)
+
+#Modify the taxonomy
+
+GenoTaxoInfo <- Tax %>%
+  select(Genome,classification) %>%
+  separate(classification,sep=";",
+           into=c("D",
+                  "P",
+                  "C",
+                  "O",
+                  "Fa",
+                  "G",
+                  "S"),
+           remove = FALSE) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = ".*[[:space:]]")) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = "(?<=sp)\\d.*")) %>%
+  mutate_at(.vars = vars(D),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*d__")) %>%
+  mutate_at(.vars = vars(P),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*p__")) %>%
+  mutate_at(.vars = vars(C),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*c__")) %>%
+  mutate_at(.vars = vars(O),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*o__")) %>%
+  mutate_at(.vars = vars(Fa),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*f__")) %>%
+  mutate_at(.vars = vars(G),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*g__")) %>%
+  mutate_at(.vars = vars(S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*s__")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = "_..*")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_replace(.,
+                          pattern = "^$",
+                          replacement = ";")) %>%
+  unite("classification",D:P:C:O:Fa:G:S,sep = "_") %>%
+  mutate_at(.vars = vars(classification),
+            .funs = ~
+              str_replace(.,
+                          pattern = "_;.*",
+                          replacement = ""))%>%
+  separate(classification,sep = "_",
+           remove = FALSE,
+           into = c("Domain",
+                    "Phylum",
+                    "Class",
+                    "Order",
+                    "Family",
+                    "Genus",
+                    "Species")) %>%
+  mutate(Genus=coalesce(Genus,Order)) %>%
+  dplyr::arrange(Phylum)
+
+#Tibble to get the tax for heatmap
+TaxAnnot <- GenoTaxoInfo %>%
+  select(Genome,Order) %>%
+  column_to_rownames("Genome")
 
 
+#List of nice colors  for rows (Taxa) and columns (Funcitions)
+
+
+ColorAnnot <- list(Order=(TaxAnnot %>%
+                            select(Order) %>%
+                            distinct() %>%
+                            mutate(Color=RColorBrewer::brewer.pal(length(TaxAnnot %>% 
+                                                                           select(Order) %>% 
+                                                                           distinct() %>% 
+                                                                           deframe()),"Set1")) %>%
+                            deframe()),
+                          Function=(Elements %>%
+                               select(Function) %>%
+                               distinct() %>%
+                               mutate(Color=palette36.colors(n=21)) %>%
+                               deframe()))
+
+Color <- rev(viridis(10))
+
+#Generate the Heatmap
+
+GIFTSHeatmap <- pheatmap::pheatmap(GIFTs_elements,
+                  cluster_cols = F,
+                  color = Color,
+                  annotation_col = GIFTSannotCol,
+                  annotation_row = TaxAnnot,
+                  annotation_colors = ColorAnnot,
+                  show_colnames = F,
+                  show_rownames = F,
+                  cellwidth = 2,
+                  cellheight = 12)
+
+ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
+
+
+```
+
+</details>
