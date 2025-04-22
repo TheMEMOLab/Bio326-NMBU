@@ -2255,6 +2255,16 @@ rsync -aPLhv --exclude "tmp" ProteinPredictions_phylophlan /cluster/projects/nn9
 
 We can now exit the interactive session.
 
+Transfer the pdf to our local PC and explore:
+
+```bash
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.pdf .
+```
+>[!Important]
+> This command must be run in your local PC not in SAGA!
+
+![PHYL](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/Phylo.png)
+
 ### 7.2 distilR to summarize functional KEGG annotations
 
 [distillR](https://github.com/anttonalberdi/distillR) is an R package for distilling functional annotations of bacterial genomes and metagenomes into meaningful quantitative metrics defined as Genome-Inferred Functional Traits (GIFT). The package relies on a curated database of ~500 metabolic pathways and gene clusters (collectivelly refered to as 'bundles') to calculate standardised genome-inferred functional traits using KEGG and Enzyme Commission (EC) identifiers. 
