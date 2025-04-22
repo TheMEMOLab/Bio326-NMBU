@@ -2667,3 +2667,8 @@ Wilcox_tidy_results <- pairwise_wilcox %>%
 </details>
 
 ![COVER](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/COVERM.png)
+
+
+Now you can discuss and write your report!
+
+![END](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/metaomics.webp)
