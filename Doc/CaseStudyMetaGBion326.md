@@ -2151,7 +2151,7 @@ rsync -aLhv \
 ProteinPredictions/
 ```
 >[!Note]
-> If you were not able to produce some of the files you can copy from 
+> If you were not able to produce some of the files you can copy from ```/cluster/projects/nn9987k/auve/metaG/```
 <details>
 
 ```
