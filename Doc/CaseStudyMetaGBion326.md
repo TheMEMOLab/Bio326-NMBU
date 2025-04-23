@@ -2272,8 +2272,9 @@ scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualizati
 To do this we do not need a HPC we can run all the distillR commands locally in our PC. But we need some data from DRAM (```anntoations.tsv```) and GTDB-Tk (```gtdbtk.bac120.summary.tsv```). We can put this into a common place and rsync it together to our machine like:
 
 ```bash
-ln -s /cluster/projects/nn9987k/auve/metaG/results/DRAM/DRAM.Results.dir/dram.annotation.dir/annotations.tsv /cluster/projects/nn9987k/auve/metaG/results/Visualization/
-ln -s /cluster/projects/nn9987k/auve/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv /cluster/projects/nn9987k/auve/metaG/results/Visualization/
+mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+ln -s /cluster/projects/nn9987k/auve/metaG/results/DRAM/DRAM.Results.dir/dram.annotation.dir/annotations.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+ln -s /cluster/projects/nn9987k/auve/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
 ```
 
 Then in our local PC we can do something like:
