@@ -2539,6 +2539,7 @@ Let's load the data in R and produce a heatmap to see differences in relative ab
 ```R
 library(tidyverse)
 library(pheatmap)
+library(viridis)
 
 CoverM <- read_tsv("Abundance.coverM.tsv")
 
