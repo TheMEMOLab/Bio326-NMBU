@@ -2215,19 +2215,18 @@ rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out
 
 The GenoTaxoTree.R script needs:
 
-```
-Input: CheckM2 tabular results, GTDB-Tk classification tables of Bacteria and Archaea, PhyloPhlAn phylogenetic tree.
+> Input: CheckM2 tabular results, GTDB-Tk classification tables of Bacteria and Archaea, PhyloPhlAn phylogenetic tree.
 Output: A figure of the phylogenetic tree produced by PhyloPhlAn annotated with taxonomy and quality information from GTDB-Tk and CheckM2 by circular heatmaps
-```
+
 Like arguments:
 
-```
-CHECK <- args[1] #CheckM2 results table
-BAC <- args[2]  #GTDBTk Bacterial classification
-ARCH <- args[3] #GTDBTk Archeal classification
-TREE <- args[4] #Phyloplhlan RAXMl tree
-OUT <- args[5] #Output name
-```
+
+- CHECK <- args[1] #CheckM2 results table
+- BAC <- args[2]  #GTDBTk Bacterial classification
+- ARCH <- args[3] #GTDBTk Archeal classification
+- TREE <- args[4] #Phyloplhlan RAXMl tree
+- OUT <- args[5] #Output name
+
 
 As we do no have archeas in our experiment lest create a mock file:
 
