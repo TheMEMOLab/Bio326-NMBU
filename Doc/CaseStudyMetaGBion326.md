@@ -2525,8 +2525,15 @@ We can copy to our computer and use R to see if there is difference in the abund
 ```bash
 rsync -aLhv auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/COVERM/*.tsv .
 ```
+
+We also need the taxonomy:
+
+```bash
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.tsv .
+```
+
 >[!Important]
-> This command must be run in your local PC not in SAGA!
+> These commands must be run in your local PC not in SAGA!
 
 Let's load the data in R and produce a heatmap to see differences in relative abundance:
 
@@ -2551,9 +2558,92 @@ CoverM <- CoverM %>%
   rename_with(~ str_remove(., "\\.chopper.*$"), 
               .cols = -Genome)
 
-#Load the Taxonomy
+##Taxonomy from GTDBTK
 
-GenoTaxoInfo <- readRDS("GenoTaxoInfo.RDS")
+Tax <- read_tsv("gtdbtk.bac120.summary.tsv") %>%
+  dplyr::select(user_genome,classification) %>%
+  rename("Genome"=user_genome)
+
+#Modify the taxonomy
+
+GenoTaxoInfo <- Tax %>%
+  select(Genome,classification) %>%
+  separate(classification,sep=";",
+           into=c("D",
+                  "P",
+                  "C",
+                  "O",
+                  "Fa",
+                  "G",
+                  "S"),
+           remove = FALSE) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = ".*[[:space:]]")) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = "(?<=sp)\\d.*")) %>%
+  mutate_at(.vars = vars(D),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*d__")) %>%
+  mutate_at(.vars = vars(P),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*p__")) %>%
+  mutate_at(.vars = vars(C),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*c__")) %>%
+  mutate_at(.vars = vars(O),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*o__")) %>%
+  mutate_at(.vars = vars(Fa),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*f__")) %>%
+  mutate_at(.vars = vars(G),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*g__")) %>%
+  mutate_at(.vars = vars(S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*s__")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = "_..*")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_replace(.,
+                          pattern = "^$",
+                          replacement = ";")) %>%
+  unite("classification",D:P:C:O:Fa:G:S,sep = "_") %>%
+  mutate_at(.vars = vars(classification),
+            .funs = ~
+              str_replace(.,
+                          pattern = "_;.*",
+                          replacement = ""))%>%
+  separate(classification,sep = "_",
+           remove = FALSE,
+           into = c("Domain",
+                    "Phylum",
+                    "Class",
+                    "Order",
+                    "Family",
+                    "Genus",
+                    "Species")) %>%
+  mutate(Genus=coalesce(Genus,Order)) %>%
+  dplyr::arrange(Phylum)
+
+#Save this table as RDS useful for other propuses
+
+saveRDS(GenoTaxoInfo,file="GenoTaxoInfo.RDS")
+
 
 #Tibble to get the tax for heatmap
 TaxAnnot <- GenoTaxoInfo %>%
