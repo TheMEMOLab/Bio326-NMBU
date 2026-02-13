@@ -1,7 +1,7 @@
 # Bio326-NMBU
 BIO326 Genome sequencing; tools and analysis.
 
-## Scripts for 2025 sessions:
+## Links to sessions:
 1. [HPC basics / Using Saga](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/HPC-101-WorkingWithSigma2.md)
 2. [Metagenome data analysis](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/CaseStudyMetaGBion326.md)
 
