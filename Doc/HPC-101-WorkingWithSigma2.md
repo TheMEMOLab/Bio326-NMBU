@@ -187,11 +187,12 @@ Check the prompt now:
 ```
 (BASICS)[auve@c2-41: ~]$
 ```
-You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node ```c2-41```. Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node you are working on and the number of CPUs requested for this job you can print the values of that by using different SLURM variables and the command "echo" followed by the name of the variable:
+You can notice that now the prompt has changed and shows the node (computer) we are running on. In this case the node ```c2-41```. Also if this is not displayed we can take advantage of the many [SLURM_environment_variables](https://slurm.schedmd.com/pdfs/summary.pdf). These are dynamic values that SLURM uses to control the computers. For example, if you would like to know what is the node you are working on the number of CPUs requested and the RAM in GB for this job. Users can print the values of that by using different SLURM variables and the command "echo" followed by the name of the variable:
 
 ```bash
 echo $SLURM_NODELIST
 echo $SLURM_CPUS_ON_NODE
+echo $((SLURM_MEM_PER_NODE/1024)) "GB"
 ```
 
 In the interactive jobs we can run short parsing scripts, test software with a small datasets, etc. This is super helpful for debugging, testing software, moving data, etc.
