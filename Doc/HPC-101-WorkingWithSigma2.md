@@ -314,7 +314,8 @@ eval "$(conda shell.bash hook)"
 ```
 
 What we are doing here is being sure Conda is loaded and then export all the conda configurations to our shell.  
-**NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
+>[NOTE !]
+>NB! Remember that the aim of this course is not to be a Linux expert so do not worry if this is a bit cryptic for you :-)** 
 
 If everything was OK, you should now see the ```base``` conda environment loaded and the prompt shows this:
 
