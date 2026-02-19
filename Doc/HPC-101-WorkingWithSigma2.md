@@ -233,14 +233,13 @@ This command will start a new tmux session named INTERACTIVE. The following is a
 
 <img src="https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/tmux.png" height="200">
 
-To detach the tmux session press the combination of keys: ```ctrl + b``` and then the key d. This returns into our native session.
+To detach the tmux session press the combination of keys: ```ctrl + b``` and then the key ```d```. This returns into our native session. We can also navigate into the sessions by the combination ```ctrl + b``` and then ```s```
 
 We can list the tmux sessions by typing ```tmux ls```
 
 To attach the session again type the command ```tmux a -t INTERACTIVE```
 
 A full description of tmux and its options can be found [here](https://github.com/tmux/tmux/wiki)
-
 
 
 ### Example of an Interactive job by running BLAST.
