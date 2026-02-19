@@ -224,7 +224,7 @@ By using the SLRUM comand ```squeue``` we can check if our interactive job is si
 squeue -u $USER
 ```
 
->[!Tip] Start an interactive job using tmux to keep the session alive.
+>[!Important] Start an interactive job using tmux to keep the session alive.
 ```bash
 tmux new -s INTERACTIVE
 ```
