@@ -231,7 +231,7 @@ tmux new -s INTERACTIVE
 ```
 This command will start a new tmux session named INTERACTIVE. The following is an example of how our screen looks like with the new multiplexed terminal. Notice that at the bottom a green bar with the name of our session is displayed:
 
-![TMUX](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/tmux.png)
+![TMUX](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/tmux.png =50x50)
 
 To detach the tmux session press the combination of keys: ```ctrl + b``` and then the key d. This returns into our native session.
 
