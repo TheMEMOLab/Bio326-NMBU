@@ -224,23 +224,23 @@ By using the SLRUM comand ```squeue``` we can check if our interactive job is si
 squeue -u $USER
 ```
 
-#### Start an interactive job using tmux to keep the session alive.
+>[!Tip] Start an interactive job using tmux to keep the session alive.
 
-```bash
+>```bash
 tmux new -s INTERACTIVE
-```
-This command will start a new tmux session named INTERACTIVE. The following is an example of how our screen looks like with the new multiplexed terminal. Notice that at the bottom a green bar with the name of our session is displayed:
+>```
+>This command will start a new tmux session named INTERACTIVE. The following is an example of how our screen looks like with the new multiplexed terminal. Notice that at the bottom a green bar with the name of our session is displayed:
 
-<img src="https://raw.githubusercontent.com/TheMEMOLab/Bio326-NMBU/main/images/tmux.png" height=200, width="200">
+><img src="https://raw.githubusercontent.com/TheMEMOLab/Bio326-NMBU/main/images/tmux.png" height=200, width="200">
 
 
-To detach the tmux session press the combination of keys: ```ctrl + b``` and then the key ```d```. This returns into our native session. We can also navigate into the sessions by the combination ```ctrl + b``` and then ```s```
+>To detach the tmux session press the combination of keys: ```ctrl + b``` and then the key ```d```. This returns into our native session. We can also navigate into the sessions by the combination ```ctrl + b``` and then ```s```
 
-We can list the tmux sessions by typing ```tmux ls```
+>We can list the tmux sessions by typing ```tmux ls```
 
-To attach the session again type the command ```tmux a -t INTERACTIVE```
+>To attach the session again type the command ```tmux a -t INTERACTIVE```
 
-A full description of tmux and its options can be found [here](https://github.com/tmux/tmux/wiki)
+>A full description of tmux and its options can be found [here](https://github.com/tmux/tmux/wiki)
 
 
 ### Example of an Interactive job by running BLAST.
