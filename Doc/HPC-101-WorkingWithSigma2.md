@@ -224,7 +224,9 @@ By using the SLRUM comand ```squeue``` we can check if our interactive job is si
 squeue -u $USER
 ```
 
->[!Important] Start an interactive job using tmux to keep the session alive.
+>[!Tip] 
+>Start an interactive job using tmux to keep the session alive.
+
 ```bash
 tmux new -s INTERACTIVE
 ```
@@ -240,7 +242,7 @@ We can list the tmux sessions by typing ```tmux ls```
 To attach the session again type the command ```tmux a -t INTERACTIVE```
 
 A full description of tmux and its options can be found [here](https://github.com/tmux/tmux/wiki)
->
+
 
 ### Example of an Interactive job by running BLAST.
 
