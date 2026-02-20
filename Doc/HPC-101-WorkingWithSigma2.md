@@ -14,7 +14,7 @@ For login open a Command-line interface (CLI) or Terminal  and type something li
 ssh auve@saga.sigma2.no
 ```
 > [!Important]
-> Rember to change your user name
+> Remember to change your user name
 
 This will ask for your password, the one you got from Sigma2 by text. Type it.  
 *Even you don't see anything the password is typed.*
@@ -315,7 +315,7 @@ bash: blastp: command not found
 
 It seems blastp is not installed as a default software in SAGA.
 
-### Conda envrionment:
+### Conda environment:
 
 Conda is an open source package management system and environment management system that runs on Windows, macOS, and Linux. Conda quickly installs, runs and updates packages and their dependencies. Conda easily creates, saves, loads and switches between environments on your local computer. It was created for Python programs, but it can package and distribute software for any language. You can read more about conda [here](https://docs.conda.io/en/latest/).
 
@@ -438,7 +438,7 @@ rsync -aLhv amylase.Bgramini.fasta.blastp.out /cluster/projects/nn9987k/$USER/re
 
 # sbatch scripts.
 
-Most of the time you do not use the interactive way for submiting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
+Most of the time you do not use the interactive way for submitting jobs into the cluster. To submit jobs, you need to write all the instructions you want the computer to execute. This is what a script is.
 
 SLURM can use bash or computer scripting language (e.g. perl, python, etc) base script to read the instructions. The first line #!/bin/bash, called bash shebang, are reserved words that the computer needs to read and interpret in order to launch the program. The following lines, need to start with #SLURM and these are specific instructions SLURM uses to know how many resources and other parameters the job will use while is running. In our interactive job we used some of these SLURM parameters directly in the command line
 
@@ -446,7 +446,7 @@ SLURM can use bash or computer scripting language (e.g. perl, python, etc) base 
 -c 2 --mem=2G -p smallmem,hugemem-avx2,test -t 01:00:00
 ```
 
-SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read inorder to launch the program:
+SLURM uses a [bash](https://www.gnu.org/software/bash/) (computer language) base script to read the instructions. The first lines, are reserved words that SLURM needs to read in order to launch the program:
 
 ```console
 -p --partition <partition-name>       --pty <software-name/path>
@@ -550,11 +550,11 @@ squeue -u $USER
 ```
 
 
-Now it is runing (R). 
+Now it is running (R). 
 
 When the job starts it produces an out and and err file ```slurm-JOBNAME-$JOB_ID.out  slurm-JOBNAME-$JOB_ID.err``` These are all the log files and possible errors.
 
-And after 10 seconds it will finish and we should ended up with 3 files.
+And after 10 seconds it will finish and we should have ended up with 3 files.
 
 ```console
 slurm-MySbatchScript_$JOBID.err  slurm-MySbatchScript_$JOBID$.out 10.txt
@@ -618,7 +618,7 @@ more 10.txt
 I slept for 10 seconds
 ```
 
-### Debunging errors during sbatch execution:
+### Debugging errors during sbatch execution:
 
 Let's run the following script ```/cluster/projects/nn9987k/BIO326-2025/HPC101/SLURM/mysecondbath.SLURM.sh ``` that launches a job to sleep for 20 seconds and then create a text file ```20.txt```
 
@@ -940,11 +940,11 @@ This guide covers the basics of using SFTP to transfer files between your comput
 ## Remarks
 
 * Do not use the login node to run process (e.g. BLAST, SPADES, HMMER) **Do not get naked in the lobby**.
-* Do not use the $HOME partition for storag.
+* Do not use the $HOME partition for storage.
 * Always use the /cluster/projects/ to work.
 * Use interactive jobs for testing and debugging.
 * Use the $LOCALSCRATCH for faster computation.
-* Monitoring your jobs by squeue.
+* Monitor your jobs by squeue.
 * Use sbatch command to submit your "final" jobs scripts.
 
 ## Welcome to the world of HPC environment:
