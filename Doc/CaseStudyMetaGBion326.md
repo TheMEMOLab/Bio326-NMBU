@@ -14,7 +14,7 @@ In the wetlab samples were divided as follow:
 These samples were sequenced using the PromethION and it produced something like this:
 
 ```bash
-(base) prom@PC24B170:/data/20250319_Bio326_PROK/20250319_Bio326_PROK/20250319_1452_3C_PAY86999_d557822e$ ls fastq_pass/
+ls fastq_pass/
 barcode01  barcode03  barcode05  barcode07  barcode09  barcode11  barcode13  barcode15  barcode17  barcode19  barcode21  barcode23
 barcode02  barcode04  barcode06  barcode08  barcode10  barcode12  barcode14  barcode16  barcode18  barcode20  barcode22  unclassified
 ```
@@ -22,7 +22,7 @@ barcode02  barcode04  barcode06  barcode08  barcode10  barcode12  barcode14  bar
 As you see there are multiple folders with different barcodes and inside a lot of fastqfiles:
 
 ```bash
-(base) prom@PC24B170:/data/20250319_Bio326_PROK/20250319_Bio326_PROK/20250319_1452_3C_PAY86999_d557822e/fastq_pass/barcode01$ ls |head -3
+ls /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/fastq_pass/barcode01|head -3
 PAY86999_pass_barcode01_d557822e_20eb73bc_0.fastq.gz
 PAY86999_pass_barcode01_d557822e_20eb73bc_100.fastq.gz
 PAY86999_pass_barcode01_d557822e_20eb73bc_101.fastq.gz
@@ -31,7 +31,7 @@ PAY86999_pass_barcode01_d557822e_20eb73bc_101.fastq.gz
 We can use the information from the Lysis method, Group and Barcode and merge these fastq files into single fastq files for each lyisis method and Group using a loop as follow, having a text file like:
 
 ```bash
-less barcodes.tsv
+less /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/fastq_pass/barcodes.tsv
 ```
 
 <details>
@@ -56,15 +56,67 @@ Vortex_SRE_4    barcode13
 
 </details>
 
-and use a loop:
+Let's start an interactive session and perform some statistics on these data:
+>[!Important]
+>Remember use Tmux to have an interactive session in case there is internet disruptions.
 
 ```bash
- cat barcodes.tsv |while read -r line; do NAME=$(echo $line|awk '{print $1}'); BC=$(echo $line|awk '{print $2}'); echo $BC; zcat fastq_pass/$BC/*fastq.gz |pigz -p 12 >  rawdata/$NAME.fastq.gz; done
+tmux new -s METAG 
 ```
+Interactive session:
+
+```bash
+srun \
+--account=nn9987k \
+--partition=normal \
+--gres=localscratch:20G \
+--cpus-per-task 6 \
+--nodes 1 \
+--mem=10G \
+--time=02:00:00 \
+--pty bash \
+-i
+```
+
+Let's put create some variables we all can use:
+
+```bash
+BARCODES=/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/fastq_pass/barcodes.tsv
+FASTQPASS=/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/fastq_pass/
+```
+Then we can create a directory to put the data and add it to a variable:
+
+```bash
+
+mkdir -p $LOCALSCRATCH/metaG/rawdata
+
+cd $LOCALSCRATCH/metaG/rawdata
+
+RAWDATADIR=$(pwd)
+
+pwd
+
+```
+
+
+```bash
+
+cat $BARCODES |\
+ while read -r line; 
+  do 
+  NAME=$(echo $line|awk '{print $1}'); 
+  BC=$(echo $line|awk '{print $2}'); 
+  echo "Gathering and compressing" $BC "into $NAME.fastq.gz" ; 
+  zcat $FASTQPASS/$BC/*fastq.gz |\
+  pigz -p $SLURM_CPUS_ON_NODE >  $RAWDATADIR/$NAME.fastq.gz;
+done
+
+```
+
 Then we will end with something like:
 
 ```bash
-ls -1 rawdata/
+ls -1 $RAWDATADIR
 ```
 <details>
 
@@ -84,13 +136,150 @@ Vortex_SRE_4.fastq.gz
 ```
 </details>
 
-Then using the usefull NanoPlot:
+
+The same as in the Euk part, we can explore the main quality metrics. Do we remember this chunk:
 
 ```bash
- parallel -j 12 "NanoPlot --fastq {} --N50 --loglength -o {}.Nanoplot.dir" ::: *.gz
+LINES=$(zcat yoursample.fq.gz | wc -l)
+echo $((LINES / 4))
+
 ```
 
-And as we have been working we can collect the NanoStats.txt
+But now we have plenty of files so we can use the command ```parallel``` which allow us to run a command in multiple files  at once:
+
+
+```bash
+printf "FILE\tREADS\n"
+
+parallel --no-notice -j $SLURM_CPUS_ON_NODE 'LINES=$(gzip -cd {} | wc -l);
+          printf "%s\t%d\n" "{}" "$((LINES/4))"' ::: *.fastq.gz
+
+```
+
+Same we can extract the the quality in ASCII values for the first five nucleotides in each file:
+
+```bash
+printf "FILE\tQuality values\n"
+
+parallel --no-notice -j $SLURM_CPUS_ON_NODE 'QVAL=$(gzip -cd {} | sed -n 4p | cut -c 1-5);
+          printf "%s\t%s\n" "{}" "$QVAL"' ::: *.fastq.gz
+
+```
+
+Let's check the first file:
+
+<details>
+
+```console
+FILE    Quality values
+Vortex_1.fastq.gz       %&()2
+
+```
+
+</details>
+
+
+>[!Note]
+> Phred score: Q=−10log10​(Perror​)
+> Error probility: Perror​=10−Q/10
+> Probaility base is correct: Pcorrect​=1−Perror
+> Quality score from a FASTQ character: Q=ASCII(character)−33
+
+
+| char | ASCII | Q = ASCII-33 |
+| ---- | ----- | ------------ |
+| %    | 37    | 4            |
+| &    | 38    | 5            |
+| (    | 40    | 7            |
+| )    | 41    | 8            |
+| 2    | 50    | 17           |
+
+
+We can then use a one-liner Perl script to extract the probailit of a base is correct:
+
+```bash
+perl -E '$q="%&()2"; say "Char\tQ\tP_error\tP_correct\tCorrect_%"; for(split//,$q){$Q=ord($_)-33;$pe=10**(-$Q/10);$pc=1-$pe;printf "%s\t%d\t%.2f\t%.2f\t%.2f%%\n",$_,$Q,$pe,$pc,$pc*100}'
+```
+
+Trying to do all this for all the values in all the files is quite extensive. But we can use ```Nanoplot``` as we did in the Euk part to get the complete statistics overview of these files:
+
+Load the Conda environment:
+
+```bash
+module load Anaconda3/2022.10
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/EUK_DRY
+
+```
+
+Then let's use NanoPlot to get the information of each file:
+
+
+```bash
+OUTDIR="$LOCALSCRATCH/metaG"
+
+parallel -j "$SLURM_CPUS_ON_NODE" --no-notice --eta --halt now,fail=1 \
+  'base={= s:.*/::; s/\.(fastq|fq)(\.gz)?$//i =}; \
+   NanoPlot --fastq {} --N50 --loglength -o "'"$OUTDIR"'/$base.Nanoplot.dir"' \
+  ::: *.gz
+
+```
+
+This should produce something like:
+
+```bash
+
+ls -1 $OUTDIR
+
+```
+
+And as we have been working we can collect the NanoStats.txt which is the file that contains the information of the quality metrics. Let's take a look of one of this:
+
+```bash
+head -5 $OUTDIR/FastPrep_1.Nanoplot.dir/NanoStats.txt
+```
+
+<details>
+
+```console
+General summary:
+Mean read length:                 840.7
+Mean read quality:                 11.0
+Median read length:               302.0
+Median read quality:               11.3
+```
+
+</details>
+
+We can then copy all these files to our "permament" folder in the ```/cluster/projects/nn9987k/``` space:
+
+
+Create a directory to put the data:
+
+```bash
+mkdir -p /cluster/projects/nn9987k/$USER/metaG/bio326NanoStats.Prok.dir
+FINALDIR=/cluster/projects/nn9987k/$USER/metaG/bio326NanoStats.Prok.dir
+```
+
+The following loop will move the data:
+
+```bash
+
+ls -1 $OUTDIR| grep -v rawdata|\
+while read -r line;
+  do
+  BASE=$(echo $line| sed 's/.Nanoplot.dir//g');
+  cp $OUTDIR/$line/NanoStats.txt $FINALDIR/$BASE.NanoStats.txt
+done
+
+```
+
+Something like this should be created:
+
+```bash
+ls -1 $FINALDIR
+```
+
 
 <details>
 
@@ -111,7 +300,15 @@ Vortex_SRE_4.NanoStats.txt
 
 </details>
 
-Let's work with these files. Download the files from 
+We can then compress the file to export it to our PC:
+
+
+```bash
+cd $FINALDIR/../
+tar cf - bio326NanoStats.Prok.dir |pigz -p 6 > bio326NanoStats.Prok.dir.tar.gz
+```
+
+You can download the file from SAGA or from if you haven't finish:
 
 https://arken.nmbu.no/~auve/BIO326/bio326NanoStats.Prok.dir.zip
 
