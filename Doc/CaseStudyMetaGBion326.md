@@ -98,6 +98,7 @@ pwd
 
 ```
 
+This loop will gather all the data and compress into individual fastqfiles each per treatment:
 
 ```bash
 
