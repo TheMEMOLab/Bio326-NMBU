@@ -181,9 +181,13 @@ Vortex_1.fastq.gz       %&()2
 
 
 >[!Note]
+
 > Phred score: Q=−10log10​(Perror​)
+
 > Error probility: Perror​=10−Q/10
+
 > Probaility base is correct: Pcorrect​=1−Perror
+
 > Quality score from a FASTQ character: Q=ASCII(character)−33
 
 
