@@ -7,8 +7,12 @@ DNA extraction in BIO326 for metagenomics
 ![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/bio326metag.JPG)
 
 
+
 In the wetlab samples were divided as follow:
 
+<details>
+
+<summary> Table 1. DNA conenctrations per group </summary>
 
 | Name | Group | Sample ID | Barcode | Lysis method | Qubit ng/μl¹ | Qubit ng/μl² | Nanodrop ng/μl | 260/280 | 260/230 |
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
@@ -33,6 +37,8 @@ In the wetlab samples were divided as follow:
 | Haug, Anne-Marie Hjelle | Group 7 | 7-1 | 19 | FastPrep | 163 |  | 146.3 | 1.86 | 1.9 |
 | Odei, Derrick Kwame | Group 7 | 7-2 | 20 | Vortex + SRE | 175 | 24.7 | 39.6 | 1.90 | 1.68 |
 | Ostovari, Fatemeh | Group 7 | 7-3 | 21 | Vortex | 199 |  | 212.4 | 1.88 | 1.79 |
+
+</details>
 
 These samples were sequenced using the PromethION and it produced something like this:
 
