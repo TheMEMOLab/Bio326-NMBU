@@ -9,7 +9,6 @@ DNA extraction in BIO326 for metagenomics
 
 In the wetlab samples were divided as follow:
 
-<! ![SAMPLES](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DNAsamples.JPG)
 
 | Name | Group | Sample ID | Barcode | Lysis method | Qubit ng/μl¹ | Qubit ng/μl² | Nanodrop ng/μl | 260/280 | 260/230 |
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
