@@ -9,7 +9,31 @@ DNA extraction in BIO326 for metagenomics
 
 In the wetlab samples were divided as follow:
 
-![SAMPLES](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DNAsamples.JPG)
+<! ![SAMPLES](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/DNAsamples.JPG)
+
+| Name | Group | Sample ID | Barcode | Lysis method | Qubit ng/μl¹ | Qubit ng/μl² | Nanodrop ng/μl | 260/280 | 260/230 |
+|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| Halvorsen, Ronja Aurora | Group 1 | 1-1 | 1 | FastPrep | 110 |  | 144.7 | 1.84 | 1.41 |
+| Larsen, Axel Heintz | Group 1 | 1-2 | 2 | Vortex + SRE | 148 | 26.8 | 36.6 | 1.78 | 2.97 |
+| Soderstrand-Hanssen, Amanda Kristin | Group 1 | 1-3 | 3 | Vortex | 111 |  | 168.6 | 1.84 | 0.49 |
+| Lægland, Oskar Solberg | Group 2 | 2-1 | 4 | FastPrep | 66.2 |  | 144.2 | 1.86 | 0.75 |
+| Lund, Lena Alexandra | Group 2 | 2-2 | 5 | Vortex + SRE | 97.8 | 28.8 | 66.8 | 1.89 | 1.99 |
+| Nekemwene, Gloria John | Group 2 | 2-3 | 6 | Vortex | 62.7 |  | 166.6 | 1.88 | 2.01 |
+| Gulhaugen, Sofie | Group 3 | 3-1 | 7 | FastPrep | 119 |  | 170 | 1.85 | 1.33 |
+| Hamza, Amir | Group 3 | 3-2 | 8 | Vortex + SRE | 123 | 12.6 | 20.5 | 1.79 | 1 |
+| Lam, Iselin Xuan Thanh | Group 3 | 3-3 | 9 | Vortex | 80.4 |  | 128.4 | 1.86 | 2.09 |
+| Pettersen, Anne Marie Øydne | Group 4 | 4-1 | 10 | Vortex + SRE | 177 | 33.4 | 56.1 | 1.87 | 1.97 |
+| Risholt, Daniel Emil | Group 4 | 4-2 | 11 | FastPrep | 104 |  | 156.9 | 1.87 | 1.84 |
+| Tharmarajah, Luxmiga | Group 4 | 4-3 | 12 | Vortex | 129 |  | 169.2 | 1.86 | 0.69 |
+| Henriksen, Martin | Group 5 | 5-1 | 13 | FastPrep | 12.1 |  | 76.5 | 1.87 | 0.64 |
+| Plioplys, Rytis | Group 5 | 5-2 | 14 | Vortex | 10.1 |  | 95.7 | 1.90 | 0.22 |
+| Timraz, Sarah | Group 5 | 5-3 | 15 | Vortex + SRE | 13.4 | 10.3 | 17.5 | 1.88 | 1.15 |
+| Naustvik, Tuva Anine | Group 6 | 6-1 | 16 | FastPrep | 81.5 |  | 103.9 | 1.88 | 2.06 |
+| Nicholson, Daniel James | Group 6 | 6-2 | 17 | Vortex | 115 |  | 130.7 | 1.88 | 0.34 |
+| Zhan, Lihui | Group 6 | 6-3 | 18 | Vortex + SRE | 176 | 2.61 | 13.8 | 1.76 | 0.85 |
+| Haug, Anne-Marie Hjelle | Group 7 | 7-1 | 19 | FastPrep | 163 |  | 146.3 | 1.86 | 1.9 |
+| Odei, Derrick Kwame | Group 7 | 7-2 | 20 | Vortex + SRE | 175 | 24.7 | 39.6 | 1.90 | 1.68 |
+| Ostovari, Fatemeh | Group 7 | 7-3 | 21 | Vortex | 199 |  | 212.4 | 1.88 | 1.79 |
 
 These samples were sequenced using the PromethION and it produced something like this:
 
