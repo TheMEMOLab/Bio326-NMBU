@@ -98,10 +98,10 @@ Interactive session:
 srun \
 --account=nn9987k \
 --partition=normal \
---gres=localscratch:20G \
---cpus-per-task 6 \
+--gres=localscratch:40G \
+--cpus-per-task 12 \
 --nodes 1 \
---mem=10G \
+--mem=18G \
 --time=02:00:00 \
 --pty bash \
 -i
@@ -131,15 +131,23 @@ This loop will gather all the data and compress into individual fastqfiles each 
 
 ```bash
 
-cat $BARCODES |\
- while read -r line; 
-  do 
-  NAME=$(echo $line|awk '{print $1}'); 
-  BC=$(echo $line|awk '{print $2}'); 
-  echo "Gathering and compressing" $BC "into $NAME.fastq.gz" ; 
-  zcat $FASTQPASS/$BC/*fastq.gz |\
-  pigz -p $SLURM_CPUS_ON_NODE >  $RAWDATADIR/$NAME.fastq.gz;
+echo "⏳ Moving data ... 🚀"
+
+cat $BARCODES | \
+while read -r line;
+do 
+  NAME=$(echo $line | awk '{print $1}');
+  BC=$(echo $line | awk '{print $2}');
+
+  echo "📦 Gathering & compressing 🔬 $BC ➡️ $NAME.fastq.gz 🚀";
+
+  zcat $FASTQPASS/$BC/*fastq.gz | \
+  pigz -p $SLURM_CPUS_ON_NODE > $RAWDATADIR/$NAME.fastq.gz;
+
+  echo "✅ Done processing $NAME 🎉";
 done
+
+echo "🏁 All files processed! 🥳"
 
 ```
 
@@ -574,6 +582,21 @@ ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
 
 ```
 </details>
+
+## Comparison with 2026 data:
+
+Using the code above replicate the quality control (QC plots) using Nanoplot. The rawdata and barcodes information for BIO326-2026 are here:
+
+```bash
+
+FASTQPASS=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/fastq_pass
+BARCODES=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/fastq_pass/barcodes.tsv
+
+```
+
+>[!NOTE]
+>Are there changes in the QC comparing the 2025 and 2026 data? How can we know?
+
 
 ## Taxonomy classification using Kraken2
 
