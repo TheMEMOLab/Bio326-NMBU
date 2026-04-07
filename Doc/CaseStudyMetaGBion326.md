@@ -597,6 +597,8 @@ BARCODES=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/fastq_pass/barcodes.ts
 >[!NOTE]
 >Are there changes in the QC comparing the 2025 and 2026 data? How can we know?
 
+>[!Tip]
+> [Bio326NanoStatsCompare.R]()
 
 ## Taxonomy classification using Kraken2
 
@@ -604,31 +606,79 @@ What is Kraken2? According to [Wood and Salzberg, GEnome Biology 2014](https://g
 
 ![K2ALG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/k2algo.JPG)
 
-We can run Kraken2 something like this:
+We can run Kraken2 in SAGA by doing the following:
+
+>[!IMPORTANT]
+> Remember always ask for an interactive job. Kraken2 DB requires at least 20Gb of RAM!
 
 ```bash
-kraken2 --db shared_databases/kraken2/PlusPF-8/ --threads 10 --output FastPrep_1.kraken2.nonames.out --report FastPrep_1.kraken2.report.tsv FastPrep_1.fastq.gz
+srun \
+--account=nn9987k \
+--partition=normal \
+--gres=localscratch:40G \
+--cpus-per-task 12 \
+--nodes 1 \
+--mem=20G \
+--time=04:00:00 \
+--pty bash \
+-i
+
 ```
+
+copy rawdata to ```$LOCALSCRATCH``` using variables:  
+
+
+```bash
+RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/
+cd $LOCALSCRATCH
+
+rsync -aLhv $RAWDATA/*.gz .
+
+
+```
+
+Load the conda environment:
+
+```bash
+module load Anaconda3/2022.10
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/KRAKEN2
+
+
+```
+
+Run Kraken2 in parallel:
+
+```bash
+parallel -j 2 --no-notice --eta --halt now,fail=1 \
+'base=$(basename "{}" | sed -E "s/\.(fastq|fq)(\.gz)?$//I");
+ kraken2 --db /cluster/projects/nn9987k/.share/db/kraken2/PlusPF-8/ \
+   --threads 6 --gzip-compressed \
+   --output "${base}.nonames.out" \
+   --report "${base}.kraken2.report.tsv" \
+   "{}"' ::: *.fastq.gz 
+```
+
 It will produce a report like this:
 
 ```bash
-head -11 FastPrep_1.fastq.kraken2.report.tsv
+head -11 FastPrep_1.kraken2.report.tsv
 ```
 
 <details>
 
 ```
- 89.13  77005   77005   U       0       unclassified
- 10.87  9389    15      R       1       root
- 10.84  9369    148     R1      131567    cellular organisms
- 10.22  8827    1623    D       2           Bacteria
-  5.01  4329    157     K       1783272       Bacillati
-  3.47  2994    92      P       1239            Bacillota
-  1.28  1102    70      C       186801            Clostridia
-  0.78  673     6       O       3085636             Lachnospirales
-  0.77  664     58      F       186803                Lachnospiraceae
-  0.32  279     0       G       3031933                 Chordicoccus
-  0.32  279     279     S       2709410                   Chordicoccus furentiruminis
+ 92.93  80287   80287   U       0       unclassified
+  7.07  6107    6       R       1       root
+  7.06  6099    178     R1      131567    cellular organisms
+  6.05  5227    1654    D       2           Bacteria
+  2.61  2255    34      K       1783272       Bacillati
+  2.09  1806    43      P       1239            Bacillota
+  0.74  639     31      C       186801            Clostridia
+  0.43  375     6       O       3085636             Lachnospirales
+  0.43  369     41      F       186803                Lachnospiraceae
+  0.20  174     0       G       3031933                 Chordicoccus
+  0.20  174     174     S       2709410                   Chordicoccus furentiruminis
 ```
 
 </details>
@@ -636,26 +686,38 @@ head -11 FastPrep_1.fastq.kraken2.report.tsv
 We can parse this report and only keep the organisms with > 0.1 % of reads classified:
 
 ```bash
-head  FastPrep_1.kraken2.species.tsv
+parallel -j $SLURM_CPUS_ON_NODE --no-notice --eta --halt now,fail=1 \
+'base=$(basename "{}"|sed "s/.report.tsv//g"); k2fq_species_table.pl "{}" "$base.species.tsv"' \
+::: *.report.tsv
  
 ```
+
+Let's inspect one:
+
+```bash
+less FastPrep_1.kraken2.species.tsv
+```
+
 <details>
 
 ```
- 0.32  2709410 Chordicoccus_furentiruminis
-  0.69  2487118 Intestinibaculum_porci
-  0.66  907     Megasphaera_elsdenii
-  0.12  1064535 Megasphaera_elsdenii_DSM_20460
-  0.20  1280    Staphylococcus_aureus
-  0.54  2903756 Streptomyces_sp_NBC_01167
-  0.17  2913620 Prevotella_sp_E2-28
-  0.26  2913614 Prevotella_communis
-  0.41  839     Xylanibacter_ruminicola
-  0.15  264731  Xylanibacter_ruminicola_23
+0.20    2709410 Chordicoccus_furentiruminis
+0.55    2487118 Intestinibaculum_porci
+0.41    907     Megasphaera_elsdenii
+0.14    2913614 Prevotella_communis
+0.24    839     Xylanibacter_ruminicola
+0.10    9606    Homo_sapiens
 ```
 
 </details>
 
+Now let's move these results to our project folder:
+
+```bash
+mkdir -p /cluster/projects/nn9987k/$USER/metaG/kraken2/2025
+rsync -aLhv *kraken2* /cluster/projects/nn9987k/$USER/metaG/kraken2/2025/
+exit
+```
 
 ## Comparing changes in the microbial composition in the different treatments (FastPrep, Vortex, Vortex + SRE)
 
