@@ -598,7 +598,7 @@ BARCODES=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/fastq_pass/barcodes.ts
 >Are there changes in the QC comparing the 2025 and 2026 data? How can we know?
 
 >[!Tip]
-> [Bio326NanoStatsCompare.R]()
+> [Bio326NanoStatsCompare.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Bio326.NanoStatsCompare.r)
 
 ## Taxonomy classification using Kraken2
 
