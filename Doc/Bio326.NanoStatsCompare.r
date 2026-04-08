@@ -103,7 +103,8 @@ overview_metrics <- c(
 qc_metrics <- c(
   "Mean read length",
   "Read length N50",
-  "Mean read quality"
+  "Mean read quality",
+  "Number of reads"
 )
 
 metric_colors <- setNames(
