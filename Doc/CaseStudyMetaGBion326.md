@@ -584,7 +584,7 @@ ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
 </details>
 
 >[!Tip]
-> The complete script is here: [Bio326NanoStatsCompare.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/NanoStatsCompare2025.r)
+> The complete script is here: [NanoStatsCompare.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/NanoStatsCompare2025.r)
 
 ## Comparison with 2026 data:
 
@@ -601,7 +601,7 @@ BARCODES=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/fastq_pass/barcodes.ts
 >Are there changes in the QC comparing the 2025 and 2026 data? How can we know?
 
 >[!Tip]
-> [Bio326NanoStatsCompare.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Bio326.NanoStatsCompare.r)
+> [Bio326NanoStatsCompare2025.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Bio326.NanoStatsCompare.r)
 
 ## Taxonomy classification using Kraken2
 
