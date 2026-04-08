@@ -583,6 +583,9 @@ ggsave(MergeQCPlot,file="MergedPlot.QualityScores.pdf")
 ```
 </details>
 
+>[!Tip]
+> The complete script is here: [Bio326NanoStatsCompare.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/NanoStatsCompare2025.r)
+
 ## Comparison with 2026 data:
 
 Using the code above replicate the quality control (QC plots) using Nanoplot. The rawdata and barcodes information for BIO326-2026 are here:
