@@ -978,6 +978,9 @@ ggsave(QCK2HM,
 
 ![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
 
+>[!Tip]
+>The script is here: [krakenheatmap.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Krakenheatmap.r)
+
 # The Bio326 Metagenomes: A tale of who is there and what are they doing?
 
 Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
