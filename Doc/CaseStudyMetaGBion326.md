@@ -617,11 +617,11 @@ We can run Kraken2 in SAGA by doing the following:
 ```bash
 srun \
 --account=nn9987k \
---partition=normal \
---gres=localscratch:40G \
---cpus-per-task 12 \
+--partition=normal,bigmem,hugemem \
+--gres=localscratch:20G \
+--cpus-per-task 24 \
 --nodes 1 \
---mem=20G \
+--mem=80G \
 --time=04:00:00 \
 --pty bash \
 -i
@@ -653,7 +653,7 @@ conda activate /cluster/projects/nn9987k/.share/conda_environments/KRAKEN2
 Run Kraken2 in parallel:
 
 ```bash
-parallel -j 2 --no-notice --eta --halt now,fail=1 \
+parallel -j 4 --no-notice --eta --halt now,fail=1 \
 'base=$(basename "{}" | sed -E "s/\.(fastq|fq)(\.gz)?$//I");
  kraken2 --db /cluster/projects/nn9987k/.share/db/kraken2/PlusPF-8/ \
    --threads 6 --gzip-compressed \
@@ -982,6 +982,13 @@ ggsave(QCK2HM,
 >[!Tip]
 >The script is here: [krakenheatmap.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Krakenheatmap.r)
 
+## Now let's use data from 2026:
+
+```bash
+RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/rawdata
+
+```
+
 # The Bio326 Metagenomes: A tale of who is there and what are they doing?
 
 Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
@@ -1145,6 +1152,10 @@ FastPrep_2.chopper.fq.gz  FastPrep_4.chopper.fq.gz  Vortex_2.chopper.fq.gz  Vort
 </details>
 
 ## 2. Co-Assembly reads with MetaFlye
+
+### What does assemlby mean? 
+
+Let's take a look into this [MetaG-Assembly.pdf](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/BIO326_MetaG_AssemblyAndPolish.pdf)
 
 To extend the ONT reads we will use the [Flye]() assembler with the ```--meta``` flag:
 
