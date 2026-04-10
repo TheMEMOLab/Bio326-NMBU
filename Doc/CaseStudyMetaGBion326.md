@@ -632,7 +632,7 @@ copy rawdata to ```$LOCALSCRATCH``` using variables:
 
 
 ```bash
-RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/
+RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/2025/rawdata/dataBIO326_2025/rawdata/
 cd $LOCALSCRATCH
 
 rsync -aLhv $RAWDATA/*.gz .
@@ -992,6 +992,9 @@ RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/rawdata
 # The Bio326 Metagenomes: A tale of who is there and what are they doing?
 
 Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
+
+>[!Important]
+> **A copy of all the results of the following protocols are located here ```
 
 ## 1. Cleanning the reads with Chopper:
 
