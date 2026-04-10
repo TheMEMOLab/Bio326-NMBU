@@ -980,7 +980,7 @@ ggsave(QCK2HM,
 ![PP](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ViolinAndHeatmap.png)
 
 >[!Tip]
->The script is here: [krakenheatmap.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/Krakenheatmap.r)
+>The script is here: [krakenheatmap.R](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/krakenheatmap.r)
 
 ## Now let's use data from 2026:
 
