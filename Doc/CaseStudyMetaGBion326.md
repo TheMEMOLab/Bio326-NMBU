@@ -1156,7 +1156,7 @@ FastPrep_2.chopper.fq.gz  FastPrep_4.chopper.fq.gz  Vortex_2.chopper.fq.gz  Vort
 
 ## 2. Co-Assembly reads with MetaFlye
 
-### What does assemlby mean? 
+### What does perform an assemlby mean? 
 
 Let's take a look into this [MetaG-Assembly.pdf](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/Doc/BIO326_MetaG_AssemblyAndPolish.pdf)
 
