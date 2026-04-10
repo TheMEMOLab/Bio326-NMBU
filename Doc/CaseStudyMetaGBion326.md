@@ -994,7 +994,7 @@ RAWDATA=/cluster/projects/nn9987k/BIO326-2025/metaG/2026/rawdata
 Last session we found the data generated in this course BIO326_2025 it is indeed usable. So now we can follow the following pipeline to recover MAGs and predict Taxonomy (who is there?) and Functional annotation (What are they doing?).
 
 >[!Important]
-> **A copy of all the results of the following protocols are located here ```
+> **A copy of all the results of the following protocols are located here ```/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results```**
 
 ## 1. Cleanning the reads with Chopper:
 
