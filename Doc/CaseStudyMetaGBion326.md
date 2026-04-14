@@ -1756,7 +1756,7 @@ Let's run it:
 After running for 20 min you will end up with a folder like:
 
 ```bash
-cd /cluster/projects/nn9987k/auve/metaG/results/MetaBiningBIO326_25Polished/MetaBiningBIO326_25Polished.Binning.dir
+cd /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/MetaBiningBIO326_25Polished/MetaBiningBIO326_25Polished.Binning.dir
 ls
 ```
 <details>
@@ -1953,14 +1953,14 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/5_drep.SLURM.sh DEREP
 After running we should end with a file structure like this:
 
 ```bash
-tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
+tree -d -L 2 /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ```
 
 <details>
 
 ```
 
-/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
+/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out
 ├── data
 │   ├── checkM
 │   ├── Clustering_files
@@ -1984,14 +1984,14 @@ let's check how many MAGs were Dereplicated with > 70 % completeness and < 5 % c
 
 ```bash
 
-tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
+tree  /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 
 ```
 
 <details>
 
 ```
-/cluster/projects/nn9987k/auve/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
+/cluster/projects/nn9987k/BIO326-2025/metaG/2025/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/dereplicated_genomes
 ├── MetaBiningBIO326_25Polished.MaxBin.out.001.fasta
 ├── MetaBiningBIO326_25Polished.Metabat2.11.fasta
 ├── MetaBiningBIO326_25Polished.Metabat2.14.fasta
@@ -2006,7 +2006,7 @@ tree  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25
 We can go deeper and check how the DREPLICATION selected these Five genomes. First, let's check the CHECKM results:
 
 ```bash
-ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir
+ls  /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir
 
 ```
 
@@ -2020,13 +2020,13 @@ bins  Chdb.tsv  checkm.log  lineage.ms  results.tsv  storage
 we can take a look on the results by ```less results.tsv```
 
 ```bash
-less  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv
+less  /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv
 ```
 
 This is a huge table, so let's just extract the fields we need the GenomeID (1), taxonomy (2), completeness (12) and contamination (13), and ask to retrieve only those that are > 70 % complete and < 5 % contaminated:
 
 ```bash
- cat /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 5) print $1,$2,$12,$13}'
+ cat /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/data/checkM/checkM_outdir/results.tsv |awk -F "\t" '{if($12 > 70  && $13 < 5) print $1,$2,$12,$13}'
 ```
 <details>
 ```
@@ -2051,7 +2051,7 @@ Here we have more than 5 (n=9) genomes, but dRep says only 5. Well check the ANI
 > We can open PDF directly in SAGA using the ```evince``` command. However, for this the X11 Display should be on in your computers. You can read more how to enable this in VS-code here [VS-CODE X Server](https://x410.dev/cookbook/enabling-ssh-x11-forwarding-in-visual-studio-code-for-remote-development/)
 
 ```bash
-ls  /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures
+ls  /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures
 ```
 
 <details>
@@ -2064,7 +2064,7 @@ Cluster_scoring.pdf          Secondary_clustering_dendrograms.pdf  Winning_genom
 Then using ```evince``` command to open the Primary_clustering_dendrogram.pdf file
 
 ```bash
-evince /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures/Primary_clustering_dendrogram.pdf
+evince /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DREPLICATION/DEREP_BIO326_25.DREP.70.5.out/figures/Primary_clustering_dendrogram.pdf
 ```
 
 ![METAG](https://github.com/TheMEMOLab/Bio326-NMBU/blob/main/images/ANI.png)
@@ -2226,13 +2226,13 @@ mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/DRAM
 After finish you will end up with something like:
 
 ```bash
-tree /cluster/projects/nn9987k/$USER/metaG/results/DRAM
+tree /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DRAM
 ```
 
 <details>
 
 ```
-/cluster/projects/nn9987k/auve/metaG/results/DRAM
+/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DRAM
 └── DRAM.Results.dir
     ├── dram.annotation.dir
     │   ├── annotate.log
@@ -2418,13 +2418,13 @@ mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
 When this is done you should end-up with something like:
 
 ```bash
-tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
+tree -d -L 2 /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/COMPAREM2
 ```
 
 <details>
 
 ```
-/cluster/projects/nn9987k/auve/metaG/results/COMPAREM2
+/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/COMPAREM2
 └── CompareM.out.dir
     ├── assembly-stats
     ├── benchmarks
@@ -2442,8 +2442,8 @@ tree -d -L 2 /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2
 
 The main important result is the html report, that is here:
 
-```
-cd /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/ CompareM.out.dir/
+```bash
+cd /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/COMPAREM2/CompareM.out.dir/
 ls
 ```
 
