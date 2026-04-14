@@ -1458,17 +1458,20 @@ sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/3_Medaka.GPU.SLURM.sh
 
 Now we are logged into a computing node.
 
+>[!Important]
+> As the jobs can take up to 10 hrs to complete we can use the data from:  ```/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results```
+
 Display the content of the Flye assembly folder:
 
 ```bash
-ls /cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir
+ls /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir
 ```
 
 And the ones in MEDAKA:
 
 ```bash
 
-ls /cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir
+ls /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir
 
 ```
 
@@ -1481,8 +1484,8 @@ As we can see these are fasta files, let's corroborate these are fasta files:
 1) Let's assign this into a variables to easy manipulate files:
 
 ```bash
-FLYE="/cluster/projects/nn9987k/$USER/metaG/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta"
-MEDAKA="/cluster/projects/nn9987k/$USER/metaG/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta"
+FLYE="/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/FlyAssemblyBIO326_25/MetaAssBIO326_25.flye.outdir/assembly.fasta"
+MEDAKA="/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/MedakaPolished/FlyAssemblyBIO326_25Polished.medaka.dir/FlyAssemblyBIO326_25Polished.medaka.consensus.fasta"
 ```
 
 To check we can use ```less```
@@ -1513,20 +1516,17 @@ assembly-stats -t $FLYE $MEDAKA
 We can save this into a file:
 
 ```bash
-assembly-stats -t $FLYE $MEDAKA > /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
+assembly-stats -t $FLYE $MEDAKA > /cluster/projects/nn9987k/$USER/metaG/Flye.Medaka.2025.stats.tsv
 cat !$
-```
-
-```
-cat /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
 ```
 
 We can plot this result table:
 
 ```bash
 conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
-cd /cluster/projects/nn9987k/$USER/metaG/results/
-Rscript /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/assemblyStats.r  /cluster/projects/nn9987k/$USER/metaG/results/Flye.Medaka.stats.tsv
+cd /cluster/projects/nn9987k/$USER/metaG/
+Rscript /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/assemblyStats.r \
+/cluster/projects/nn9987k/$USER/metaG/Flye.Medaka.2025.stats.tsv
 ```
 
 This producess the plot:
