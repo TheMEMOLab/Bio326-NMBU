@@ -2458,6 +2458,15 @@ assembly-stats  benchmarks  checkm2  gtdbtk  metadata.tsv  report_14391991.html 
 >[!Note]
 > Let's copy the report ot our local PC and take a look.
 
+>[!Important]
+> As 2026 there has been changes in Saga so COMPAREM2 cannot be pulled from docker repository, to run GTBDTK and CheckM2 we can do:
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6c_GTDBTK.SLURM.sh /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326.DREP.70.5.out/dereplicated_genomes/ fasta /cluster/projects/nn9987k/$USER/metaG/results/GTDBTK/
+```
+```bash
+sbatch /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/6d_checkM2.SLURM.sh checkm2Bio326 /cluster/projects/nn9987k/$USER/metaG/results/DREPLICATION/DEREP_BIO326.DREP.70.5.out/dereplicated_genomes/ fasta /cluster/projects/nn9987k/$USER/metaG/results/CheckM2
+```
+
 ## 7. Visualization.
 
 ### 7.1 Phylogenomics:
@@ -2478,28 +2487,27 @@ We can run this into an interactive job:
 
 ```
 
-Then PhyloPhlAn needs the amminoacid translated sequences from our MAGs. Let's use the ones from CompareM2:
+Then PhyloPhlAn needs the amminoacid translated sequences from our MAGs. Let's use the ones from DRAM:
+
+>[!NOTE]
+>DRAM produce a single genes.faa file, the following lines split this file into the annotated faa file per MAGs recovered in dREP:
 
 ```bash
-mkdir -p $LOCALSCRATCH/ProteinPredictions && cd $LOCALSCRATCH
-rsync -aLhv \
-/cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/samples/MetaBiningBIO326_25Polished.M*/prokka/*.faa \
-ProteinPredictions/
+awk -v outdir="$LOCALSCRATCH/ProteinPredictions" '
+BEGIN { OFS="\n"; system("mkdir -p " outdir) }
+/^>/ {
+    header = substr($1, 2)
+    split(header, a, "_")
+    if (length(a) < 3) next
+    genome = a[1] "_" a[2] "_" a[3]
+    file = outdir "/" genome ".genes.faa"
+}
+{ print >> file }
+' /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DRAM/DRAM.Results.dir/dram.annotation.dir/genes.faa
+cd $LOCALSCRATCH/
 ```
->[!Note]
-> If you were not able to produce some of the files you can copy from ```/cluster/projects/nn9987k/auve/metaG/```
-<details>
 
-```
-sending incremental file list
-MetaBiningBIO326_25Polished.MaxBin.out.001.faa
-MetaBiningBIO326_25Polished.Metabat2.21.faa
-MetaBiningBIO326_25Polished.Metabat2.27.faa
-MetaBiningBIO326_25Polished.Metabat2.32.faa
-MetaBiningBIO326_25Polished.Metabat2.5.faa
 
-```
-</details>
 
 Now we can call the PHYLOGENETICS tool box (Conda enviroment)
 
