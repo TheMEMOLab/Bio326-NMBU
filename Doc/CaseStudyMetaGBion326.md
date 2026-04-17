@@ -2501,7 +2501,7 @@ BEGIN { OFS="\n"; system("mkdir -p " outdir) }
     split(header, a, "_")
     if (length(a) < 3) next
     genome = a[1] "_" a[2] "_" a[3]
-    file = outdir "/" genome ".genes.faa"
+    file = outdir "/" genome ".faa"
 }
 { print >> file }
 ' $GENES
