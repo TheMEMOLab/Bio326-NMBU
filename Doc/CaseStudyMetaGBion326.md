@@ -2550,7 +2550,7 @@ ProteinPredictions.tre               RAxML_log.ProteinPredictions_refined.tre
 
 We can use the the [MetaGVisualToolBox/GenoTaxoTree.R](https://github.com/TheMEMOLab/MetaGVisualToolBox/blob/main/scripts/GenoTaxoTree.R) script to then combine the phylogenetic tree produced by PhyloPhlAn with the Completeness and contamination information:
 
-Let's gather the needed data from COMPAREM2
+Let's gather the needed data from GTDBTk and ChemckM2
 
 ```bash
 rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/checkm2/quality_report.tsv .
