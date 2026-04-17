@@ -2493,6 +2493,7 @@ Then PhyloPhlAn needs the amminoacid translated sequences from our MAGs. Let's u
 >DRAM produce a single genes.faa file, the following lines split this file into the annotated faa file per MAGs recovered in dREP:
 
 ```bash
+GENES="/cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DRAM/DRAM.Results.dir/dram.annotation.dir/genes.faa"
 awk -v outdir="$LOCALSCRATCH/ProteinPredictions" '
 BEGIN { OFS="\n"; system("mkdir -p " outdir) }
 /^>/ {
@@ -2503,7 +2504,7 @@ BEGIN { OFS="\n"; system("mkdir -p " outdir) }
     file = outdir "/" genome ".genes.faa"
 }
 { print >> file }
-' /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/DRAM/DRAM.Results.dir/dram.annotation.dir/genes.faa
+' $GENES
 cd $LOCALSCRATCH/
 ```
 
@@ -2553,8 +2554,8 @@ We can use the the [MetaGVisualToolBox/GenoTaxoTree.R](https://github.com/TheMEM
 Let's gather the needed data from GTDBTk and ChemckM2
 
 ```bash
-rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/checkm2/quality_report.tsv .
-rsync -aLhv /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv .
+rsync -aLhv /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/CheckM2/checkm2Bio326.MAGs.checkm2.dir/quality_report.tsv .
+rsync -aLhv /cluster/projects/nn9987k/BIO326-2025/metaG/2025/results/GTDBTK/gtdbtk.bac120.summary.tsv .
 ```
 
 The GenoTaxoTree.R script needs:
