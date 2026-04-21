@@ -1139,8 +1139,8 @@ And we can run as follow:
 
 ```bash
 cd /cluster/projects/nn9987k/$USER/
-ls -1 /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/|sed 's/.fastq.gz//g' > SampleList.txt
-sbatch -a 1-12 /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/1_chopper.SLURM.sh /cluster/projects/nn9987k/BIO326-2025/metaG/SampleList.txt /cluster/projects/nn9987k/BIO326-2025/metaG/rawdata/dataBIO326_2025/rawdata/  /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25
+ls -1 /cluster/projects/nn9987k/BIO326-2025/metaG/2025/rawdata/dataBIO326_2025/rawdata|sed 's/.fastq.gz//g' > SampleList.txt
+sbatch -a 1-12 /cluster/projects/nn9987k/BIO326-2025/metaG/scripts/1_chopper.SLURM.sh /cluster/projects/nn9987k/BIO326-2025/metaG/SampleList.txt /cluster/projects/nn9987k/BIO326-2025/metaG/2025/rawdata/dataBIO326_2025/rawdata  /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25 && mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/ChopperBio326_25
 ```
 
 This will produce a directory With the following files:
