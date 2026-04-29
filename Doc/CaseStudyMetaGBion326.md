@@ -2868,13 +2868,13 @@ This will produce a tsv table:
 We can copy to our computer and use R to see if there is difference in the abundance of MAGs
 
 ```bash
-rsync -aLhv auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/COVERM/*.tsv .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/COVERM/*.tsv .
 ```
 
 We also need the taxonomy:
 
 ```bash
-scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.tsv .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/GTDBTK/MAGs_gtdbk.dir/*.tsv .
 ```
 
 >[!Important]
