@@ -2602,7 +2602,7 @@ We can now exit the interactive session.
 Transfer the pdf to our local PC and explore:
 
 ```bash
-scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.pdf .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/$USER/metaG/results/Visualization/*.pdf .
 ```
 >[!Important]
 > This command must be run in your local PC not in SAGA!
@@ -2617,14 +2617,14 @@ To do this we do not need a HPC we can run all the distillR commands locally in 
 
 ```bash
 mkdir -p /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
-ln -s /cluster/projects/nn9987k/auve/metaG/results/DRAM/DRAM.Results.dir/dram.annotation.dir/annotations.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
-ln -s /cluster/projects/nn9987k/auve/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+ln -s /cluster/projects/nn9987k/$USER/metaG/results/DRAM/DRAM.Results.dir/dram.annotation.dir/annotations.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
+ln -s /cluster/projects/nn9987k/$USER/metaG/results/COMPAREM2/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv /cluster/projects/nn9987k/$USER/metaG/results/Visualization/
 ```
 
 Then in our local PC we can do something like:
 
 ```bash
-scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/Visualization/*.tsv .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/$USER/metaG/results/Visualization/*.tsv .
 ```
 >[!Important]
 > This command must be run in your local PC not in SAGA!
@@ -2868,13 +2868,13 @@ This will produce a tsv table:
 We can copy to our computer and use R to see if there is difference in the abundance of MAGs
 
 ```bash
-scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/COVERM/*.tsv .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/$USER/metaG/results/COVERM/*.tsv .
 ```
 
 We also need the taxonomy:
 
 ```bash
-scp auve@saga.sigma2.no:/cluster/projects/nn9987k/auve/metaG/results/GTDBTK/MAGs_gtdbk.dir/*.tsv .
+scp auve@saga.sigma2.no:/cluster/projects/nn9987k/$USER/metaG/results/GTDBTK/MAGs_gtdbk.dir/*.tsv .
 ```
 
 >[!Important]
